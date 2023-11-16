@@ -17,10 +17,10 @@ jobs:
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
-        pip install jupyter nbconvert
+
     - name: "Test ML-Model"
       run: |
-        python model/model.ipynb
+        python model/model.py
     - name: Execute notebook
       run: |
         jupyter nbconvert --execute path/to/your/notebook.ipynb
