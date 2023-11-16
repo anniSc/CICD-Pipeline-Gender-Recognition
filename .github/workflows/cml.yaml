@@ -21,4 +21,4 @@ jobs:
       run: |
         jupyter nbconvert --execute path/to/your/notebook.ipynb
       env: 
-        repo_token: ${{secrets.GITHUB_TOKEN}}
+        repo_token: ${{secrets.GITHUB_TOKEN}} 
