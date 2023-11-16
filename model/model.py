@@ -14,7 +14,7 @@ import os
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 from tqdm.notebook import tqdm 
 warnings.filterwarnings('ignore')
-%matplotlib inline
+
 
 # %%
 import pandas as pd
