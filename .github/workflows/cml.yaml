@@ -1,0 +1,24 @@
+name: ML-Test
+on: [push]
+jobs:
+  run: 
+    runs-on: [ubuntu-latest]
+    container: docker://dvcorg/cml-py3:latest
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.10.13'
+    - name: Install dependencies
+      run: |
+        pip install -r requirements.txt
+        pip install jupyter nbconvert
+    - name: "Test ML-Model"
+      run: |
+        python model/model.ipynb
+    - name: Execute notebook
+      run: |
+        jupyter nbconvert --execute path/to/your/notebook.ipynb
+      env: 
+        repo_token: ${{secrets.GITHUB_TOKEN}}
