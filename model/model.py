@@ -70,7 +70,7 @@ while i != 10:
 
 
 
-# %%
+
 sns.displot(df["Gender"])
 
 # %%
