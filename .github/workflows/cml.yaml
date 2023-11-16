@@ -10,6 +10,8 @@ jobs:
       uses: actions/setup-python@v2
       with:
         python-version: '3.10.13'
+    - name: Fix permissions
+      run: sudo chown -R $(whoami) /github/home/.cache/pip
     - name: Install dependencies
       run: |
         pip install -r requirements.txt
