@@ -20,7 +20,7 @@ warnings.filterwarnings('ignore')
 import pandas as pd
 
 # Pfad zur CSV-Datei
-csv_path = 'C:/Users/busse/CICDPipeline/BA-CICD-Pipeline/model/gender.csv'
+csv_path = 'C :/Users/busse/CICDPipeline/BA-CICD-Pipeline/model/gender.csv'
 
 # Laden der CSV-Datei in einen DataFrame
 df = pd.read_csv(csv_path)
