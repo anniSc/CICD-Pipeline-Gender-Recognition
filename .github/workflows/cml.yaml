@@ -1,25 +1,15 @@
-name: ML-Test
+name: TEST Gender Recognition
 on: [push]
 jobs:
-  run: 
-    runs-on: [ubuntu-latest]
+  run:
+    runs-on: ubuntu-latest
     container: docker://dvcorg/cml-py3:latest
     steps:
-    - uses: actions/checkout@v2
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.10'
-      env: 
-        repo_token: ${{secrets.GITHUB_TOKEN}} 
-    - name: Create and fix permissions
-      run: |
-        mkdir -p /github/home/.cache/pip
-        sudo chown -R $(whoami) /github/home/.cache/pip
-    - name: Install dependencies
-      run: |
-        python3 -m pip install --upgrade pip
-        pip install -r requirements.txt
-    - name: "Test ML-Model"
-      run: |
-        python model/model.py
+      - uses: actions/checkout@v3
+      - name: "Train model"  
+        env:
+           repo_token : ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          
+          pip install -r requirements.txt
+          python model/train.py
