@@ -18,9 +18,10 @@ jobs:
         sudo chown -R $(whoami) /github/home/.cache/pip
     - name: Install dependencies
       run: |
+        python3 -m pip install --upgrade pip
         pip install -r requirements.txt
 
     - name: "Test ML-Model"
       run: |
         python model/model.py
-     
+      
