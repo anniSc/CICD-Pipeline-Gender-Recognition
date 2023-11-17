@@ -12,4 +12,4 @@ jobs:
         run: |
           
           # pip install -r requirements.txt
-          python model/train.py
+          python model/model.py
