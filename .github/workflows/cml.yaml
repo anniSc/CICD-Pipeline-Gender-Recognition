@@ -7,17 +7,25 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: "Train model"  
+      - name: Cache pip and run script
+        run: |
+          pip install -r requirements.txt &&
+          python model/train.py
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+      - name: Train model
         env:
-           repo_token : ${{ secrets.GITHUB_TOKEN }}
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install -r requirements.txt
           python model/train.py
 
       - name: Commit and push
         run: |
-          git config --local user.email "action@github.com"
-          git config --local user.name "GitHub Action"
+          git config --local user.email "Aseuc@github.com"
+          git config --local user.name "Aseuc"
           git add .
-          git commit -m "Add generated file" -a
+          git commit -m "Add generated file" -a || echo "No changes to commit"
           git push
