@@ -18,7 +18,7 @@ jobs:
       
       - name: Train model
         env:
-          GITHUB_TOKEN: ${{ secrets.Aseuc: my key is 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}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install -r requirements.txt
           python model/train.py
