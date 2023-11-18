@@ -1,21 +1,13 @@
 # Importieren der benötigten Bibliotheken
-import os
-import sys
-import random
-import warnings
 import numpy as np
 import pandas as pd
-import matplotlib.pyplot as plt
-import seaborn as sns
-from logging import warning
 from PIL import Image
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
-from tensorflow.keras.utils import load_img
-from tensorflow.keras.callbacks import Callback, EarlyStopping
-from tensorflow.keras.preprocessing.image import load_img, img_to_array
-from keras.models import Sequential, Model, load_model
-from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D, Input
+from tensorflow.keras.preprocessing.image import load_img
+from tensorflow.keras.callbacks import EarlyStopping
+from tensorflow.keras.models import Model
+from tensorflow.keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D, Input
 
 def extract_image_features(images):
     features = list()
@@ -31,10 +23,10 @@ def extract_image_features(images):
     features = features.reshape(len(features), 178, 218, 1)
     return features
     
-n = 500
+n = 200
 directory = '/model'
 filename = f'trained_{n}_model.h5'  
-df = pd.read_csv("model/Gender.csv")
+df = pd.read_csv("Gender.csv")
 df_sample = df.groupby('Gender', group_keys=False).apply(lambda x: x.sample(n=n, random_state=42))
 df_sample = df_sample.sample(frac=1, random_state=42).reset_index(drop=True)
 df_sample.to_excel(f'Gender_{n}.xlsx', index=False)
@@ -60,3 +52,4 @@ model = Model(inputs=[inputs], outputs=[output_1])
 early_stop = EarlyStopping(monitor='val_accuracy', min_delta=0, patience=10, verbose=1, mode='auto')
 model.compile(loss=['binary_crossentropy', 'mae'],optimizer='adam', metrics=['accuracy'])
 model.fit(x=X_train, y=y_train,batch_size=32, epochs=30, validation_data=(X_test,y_test))
+model.save(f"trained_{n}_model.h5")
