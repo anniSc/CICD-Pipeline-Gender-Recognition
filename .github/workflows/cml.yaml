@@ -7,14 +7,15 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - name: Cache pip and run script
-        run: |
-          pip install -r requirements.txt &&
-          python model/train.py
+ 
+      - name: Cache pip dependencies
+        uses: actions/cache@v2
+        with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
+      
       - name: Train model
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
