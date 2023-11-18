@@ -34,7 +34,7 @@ image_paths
 
 
 
-list_attr_celebaCSV = 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/list_attr_celeba.csv'
+list_attr_celebaCSV = 'data/list_attr_celeba.csv'
 df = pd.read_csv(list_attr_celebaCSV)
 df_Male = df["Male"]
 df_Male = df_Male.replace(-1, 0)
