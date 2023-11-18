@@ -9,7 +9,7 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 from logging import warning
 from PIL import Image
-from tqdm.notebook import tqdm
+from tqdm.notebook import tqdm as tqdm
 from sklearn.model_selection import train_test_split
 import tensorflow as tf
 from tensorflow.keras.utils import load_img
