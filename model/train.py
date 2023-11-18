@@ -19,7 +19,7 @@ from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D, Input
 os.environ['KMP_DUPLICATE_LIB_OK']='True'
 warnings.filterwarnings('ignore')
 
-
+print("Test")
 
 BASE_DIR = 'data/img_align_celeba'
 image_paths = []
