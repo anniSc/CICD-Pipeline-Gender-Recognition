@@ -30,7 +30,7 @@ filename = f'trained_{n}_model.h5'
 df = pd.read_csv("model/Gender.csv")
 df_sample = df.groupby('Gender', group_keys=False).apply(lambda x: x.sample(n=n, random_state=42))
 df_sample = df_sample.sample(frac=1, random_state=42).reset_index(drop=True)
-df_sample.to_excel(f'model/exel_sheets/Gender_{n}.xlsx', index=False)
+df_sample.to_excel(f'model/excel_sheets/Gender_{n}.xlsx', index=False)
 X = extract_image_features(df_sample['Images'])
 X = X / 255.0
 y_gender = np.array(df_sample['Gender'])
