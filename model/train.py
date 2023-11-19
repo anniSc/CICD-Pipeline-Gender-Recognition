@@ -22,9 +22,8 @@ def extract_image_features(images):
     features = np.array(features)
     features = features.reshape(len(features), 178, 218, 1)
     return features
-print("Model Trained")
 
-n = 200
+n = 3000
 directory = '/model'
 filename = f'trained_{n}_model.h5'  
 df = pd.read_csv("model/Gender.csv")
