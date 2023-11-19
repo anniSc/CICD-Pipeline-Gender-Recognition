@@ -23,6 +23,8 @@ def extract_image_features(images):
     features = features.reshape(len(features), 178, 218, 1)
     return features
 print("Model Trained")
+with open ("test.txt", "w") as f:
+    f.write("Model Trained")
 # n = 200
 # directory = '/model'
 # filename = f'trained_{n}_model.h5'  
