@@ -18,7 +18,7 @@ jobs:
       
       - name: Train model
         env:
-            repo-token: ${{secrets.GITHUB_TOKEN}}
+          GITHUB_TOKEN: ${{ secrets.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 }}
         run: |
           pip install -r requirements.txt
           python model/train.py
@@ -29,4 +29,5 @@ jobs:
           git config --local user.name "Aseuc"
           git add .
           git commit -m "Add generated file" -a || echo "No changes to commit"
+          git remote set-url origin https://$GITHUB_TOKEN@github.com/Aseuc/CICD-Pipeline-Gender-Recognition.git
           git push
