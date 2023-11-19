@@ -22,6 +22,8 @@ jobs:
         run: |
           pip install -r requirements.txt
           python model/train.py
+          python model/train_torch.py
+        
   
       - name: Commit and push
         run: |
