@@ -22,7 +22,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           python model/train.py
-
+  
       - name: Commit and push
         run: |
           git config --local user.email "Aseuc@github.com"
