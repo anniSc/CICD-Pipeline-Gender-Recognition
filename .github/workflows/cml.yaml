@@ -1,5 +1,9 @@
 name: TEST Gender Recognition
-on: [push]
+on: 
+  workflow_run:
+    workflows: ["Data Preparation Workflow"]
+    types:
+      - completed
 jobs:
   run:
     runs-on: ubuntu-latest
