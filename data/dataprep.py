@@ -12,7 +12,7 @@ n = 10
 # with open("test/n.txt", "w") as f:
 #      f.write(str(n))
 
-with open(r"C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\test\test.py", "w") as f:
+with open(r"test\test.py", "w") as f:
      f.write(str(n))
 
 
@@ -23,12 +23,12 @@ df = pd.read_csv("data/Gender.csv")
 df_sample = df.groupby('Gender', group_keys=False).apply(lambda x: x.sample(n=n, random_state=42))
 df_sample = df_sample.sample(frac=1, random_state=42).reset_index(drop=True)
 # df_sample.to_excel(f'model/excel_sheets/Gender_{n}.xlsx', index=False)
-df_sample.to_excel(fr'model\excel_sheets\Gender_{n}.xlsx', index=False)
+file_names = df_sample['Images'].tolist()
 # Liste der Dateipfade erstellen
 df_sample['Images'] = df_sample['Images'].str.replace('data/img_align_celeba', 'data/selected_images')
-file_names = df_sample['Images'].tolist()
+df_sample.to_excel(fr'model\excel_sheets\Gender_{n}.xlsx', index=False)
 for file_name in file_names:
-    source = os.path.join('data/selected_images', file_name)
+    source = os.path.join('data/img_align_celeba', file_name)
     destination = 'data/selected_images'
     shutil.copy(source, destination) 
 
