@@ -24,6 +24,9 @@ def extract_image_features(images):
     return features
 
 n = 3000
+with open("CICD-Pipeline-Gender-Recognition/test/n.txt", "w") as f:
+    f.write(str(n))
+
 directory = '/model'
 filename = f'trained_{n}_model.h5'  
 df = pd.read_csv("model/Gender.csv")
