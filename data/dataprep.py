@@ -6,6 +6,7 @@ import pandas as pd
 # Change to the directory that contains your Git repository
 # os.chdir(r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition')
 
+
 # Speichern der Anzahl der zu trainierenden Bilder in einer Textdatei
 n = 1000
 with open("test/n.txt", "w") as f:
