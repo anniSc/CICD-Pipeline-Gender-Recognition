@@ -26,11 +26,7 @@ jobs:
     - name: Run dataprep.py and push selected images
       run: |
         python data/dataprep.py
-        folder_name=$(date +%Y%m%d%H%M%S)
-        mkdir $folder_name
-        mv selected_images/* $folder_name/
         git config --local user.email "Aseuc@github.com"
         git config --local user.name "Aseuc"
-        git add $folder_name/*
         git commit -m "Add selected images"
         git push origin main
