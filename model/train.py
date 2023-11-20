@@ -23,9 +23,9 @@ def extract_image_features(images):
     features = features.reshape(len(features), 178, 218, 1)
     return features
 
-n = 3000
-with open("CICD-Pipeline-Gender-Recognition/test/n.txt", "w") as f:
-    f.write(str(n))
+n = 100
+# with open("CICD-Pipeline-Gender-Recognition/test/n.txt", "w") as f:
+#     f.write(str(n))
 
 directory = '/model'
 filename = f'trained_{n}_model.h5'  
