@@ -4,11 +4,8 @@ import pandas as pd
 
 
 # Change to the directory that contains your Git repository
-<<<<<<< HEAD
 # os.chdir(r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition')
-=======
-os.chdir(r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition')
->>>>>>> e98a613ae857e276745e80277c5581ec70160d1d
+
 
 # Speichern der Anzahl der zu trainierenden Bilder in einer Textdatei
 n = 1000
