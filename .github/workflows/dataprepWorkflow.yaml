@@ -25,7 +25,7 @@ jobs:
 
     - name: Run dataprep.py and push selected images
       run: |
-        python dataprep.py
+        python data/dataprep.py
         folder_name=$(date +%Y%m%d%H%M%S)
         mkdir $folder_name
         mv selected_images/* $folder_name/
