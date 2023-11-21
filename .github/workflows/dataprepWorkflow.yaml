@@ -28,6 +28,6 @@ jobs:
         python data/dataprep.py
         git config --local user.email "Aseuc@github.com"
         git config --local user.name "Aseuc"
-        git add .
+        git add selected_images/*
         git commit -m "Add selected images"
         git push origin main
