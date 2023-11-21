@@ -6,6 +6,9 @@ import shutil
 # Speichern der Anzahl der zu trainierenden Bilder in einer Textdatei
 n = 5000
 
+with open("test/n.txt", "w") as f:
+     f.write(str(n))
+
 # CSV lesen und für ML-Training vorbereiten
 df = pd.read_csv("data/Gender.csv")
 df_sample = df.groupby('Gender', group_keys=False).apply(lambda x: x.sample(n=n, random_state=42))
