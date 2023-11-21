@@ -28,7 +28,7 @@ df_sample.to_excel(f'model/excel_sheets/Gender_{n}.xlsx', index=False)
 file_names = df_sample['Images'].tolist()
 
 # Liste der Dateipfade erstellen
-df_sample['Images'] = df_sample['Images'].str.replace('data/img_align_celeba', 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/selected_images')
+df_sample['Images'] = df_sample['Images'].str.replace('data/img_align_celeba', 'data/selected_images')
 
 # df_sample.to_excel(f'model/excel_sheets/Gender_{n}.xlsx', index=False)
 # source_folder = "C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/img_align_celeba"
