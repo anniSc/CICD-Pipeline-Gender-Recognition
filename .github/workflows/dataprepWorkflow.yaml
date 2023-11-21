@@ -36,7 +36,9 @@ jobs:
       - name: Run data preparation
         run: |
           python data/dataprep.py
-
+          python model/train.py
+          
+        
       - name: Commit and push
         run: |
             git config --local user.email "Aseuc@github.com"
