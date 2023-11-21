@@ -8,7 +8,7 @@ import shutil
 
 
 # Speichern der Anzahl der zu trainierenden Bilder in einer Textdatei
-n = 1000
+n = 2
 # with open("test/n.txt", "w") as f:
 #      f.write(str(n))
 
