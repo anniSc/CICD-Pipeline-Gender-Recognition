@@ -4,7 +4,7 @@ import pandas as pd
 import shutil
 
 # Speichern der Anzahl der zu trainierenden Bilder in einer Textdatei
-n = 10000
+n = 5000
 
 # CSV lesen und für ML-Training vorbereiten
 df = pd.read_csv("data/Gender.csv")
