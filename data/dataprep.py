@@ -24,16 +24,16 @@ print(file_names)
 df_sample['Images'] = df_sample['Images'].str.replace('data/img_align_celeba', 'data/selected_images')
 # df_sample.to_excel(f'model/excel_sheets/Gender_{n}.xlsx', index=False)
 
-source_folder = "data/img_align_celeba"
+# source_folder = "data/img_align_celeba"
 destination_folder = 'data/selected_images'
 
 # Erstelle eine Liste der Dateipfade der Bilder in "selected_images" basierend auf den Dateinamen in "df_sample"
-selected_image_paths = [os.path.join(source_folder, file) for file in file_names]
-for file in selected_image_paths:
-     print(file)
+# selected_image_paths = [os.path.join(source_folder, file) for file in file_names]
+# for file in selected_image_paths:
+#      print(file)
 
 # Überprüfe, ob der Dateipfad existiert und kopiere die Datei in den Zielordner
-for image_path in selected_image_paths:
+for image_path in file_names:
      if os.path.exists(image_path):
           print(image_path)
           shutil.copy(image_path, destination_folder)
