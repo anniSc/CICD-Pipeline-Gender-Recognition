@@ -45,3 +45,9 @@ jobs:
             git commit -m "Add generated file" -a || echo "No changes to commit"
             git remote set-url origin https://$GITHUB_TOKEN@github.com/Aseuc/CICD-Pipeline-Gender-Recognition.git
             git push
+
+      - name: Create new branch and push
+        run: |
+          BRANCH_NAME=branch-$(date +'%Y%m%d%H%M%S')
+          git checkout -b $BRANCH_NAME
+          git push origin $BRANCH_NAME
