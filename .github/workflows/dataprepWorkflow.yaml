@@ -29,5 +29,5 @@ jobs:
         git config --local user.email "Aseuc@github.com"
         git config --local user.name "Aseuc"
      
-        git commit -m "Add selected images"
+        git commit -a "Add selected images"
         git push origin main
