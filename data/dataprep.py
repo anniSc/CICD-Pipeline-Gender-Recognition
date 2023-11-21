@@ -4,7 +4,7 @@ import pandas as pd
 import shutil
 
 # Speichern der Anzahl der zu trainierenden Bilder in einer Textdatei
-n = 100
+n = 10000
 
 # CSV lesen und für ML-Training vorbereiten
 df = pd.read_csv("data/Gender.csv")
@@ -26,7 +26,7 @@ if os.listdir(destination_folder):
           file_path = os.path.join(destination_folder, file_name)
           os.remove(file_path)
 
-          
+
 # Überprüfe, ob der Dateipfad existiert und kopiere die Datei in den Zielordner
 for image_path in file_names:
       if os.path.exists(image_path):
