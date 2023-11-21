@@ -33,7 +33,7 @@ with open("test/n.txt", "r") as f:
 # df_sample = df.groupby('Gender', group_keys=False).apply(lambda x: x.sample(n=n, random_state=42))
 # df_sample = df_sample.sample(frac=1, random_state=42).reset_index(drop=True)
 # df_sample.to_excel(f'model/excel_sheets/Gender_{n}.xlsx', index=False)
-df_sample = pd.read_excel(fr'model\excel_sheets\Gender_{n}.xlsx')
+df_sample = pd.read_excel(f'model/excel_sheets/Gender_{n}.xlsx')
 
 X = extract_image_features(df_sample['Images'])
 X = X / 255.0
