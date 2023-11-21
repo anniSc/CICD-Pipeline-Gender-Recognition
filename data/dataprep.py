@@ -19,7 +19,7 @@ n = 10
 
 # CSV lesen und für ML-Training vorbereiten
 # df = pd.read_csv("data/Gender.csv")
-#df = pd.read_csv(r"C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\data\local_image_path_Gender.csv")
+# df = pd.read_csv(r"C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\data\local_image_path_Gender.csv")
 df = pd.read_csv("data/Gender.csv")
 df_sample = df.groupby('Gender', group_keys=False).apply(lambda x: x.sample(n=n, random_state=42))
 df_sample = df_sample.sample(frac=1, random_state=42).reset_index(drop=True)
@@ -34,7 +34,7 @@ df_sample['Images'] = df_sample['Images'].str.replace('data/img_align_celeba', '
 # source_folder = "C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/img_align_celeba"
 # destination_folder = 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/selected_images/'
 source_folder = "data/img_align_celeba"
-destination_folder = 'data/selected_images'
+destination_folder = 'data/selected_images/'
 # Erstelle eine Liste der Dateipfade der Bilder in "selected_images" basierend auf den Dateinamen in "df_sample"
 selected_image_paths = [os.path.join(source_folder, file) for file in file_names]
 
