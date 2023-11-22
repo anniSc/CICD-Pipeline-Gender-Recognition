@@ -25,7 +25,7 @@ def extract_image_features(images):
 
 def train_model():
     with open("test/n.txt", "r") as f:
-        n = int(f.read())
+         n = int(f.read())
 
     # directory = '/model'
     # filename = f'trained_{n}_model.h5'  
