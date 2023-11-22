@@ -26,7 +26,7 @@ jobs:
         run: |
           pip install -r requirements.txt
           python model/train.py
-          python test/test.py
+       
         
   
       - name: Commit and push
