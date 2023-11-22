@@ -1,2 +1,12 @@
 pandas
 openpyxl
+numpy
+pandas
+matplotlib
+seaborn
+Pillow
+tqdm
+scikit-learn
+tensorflow
+keras
+torch
