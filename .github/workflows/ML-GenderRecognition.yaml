@@ -1,4 +1,4 @@
-name: TEST Gender Recognition
+name: ML-Train Gender Recognition
 on: 
   workflow_run:
     workflows: ["Data Preparation Workflow"]
