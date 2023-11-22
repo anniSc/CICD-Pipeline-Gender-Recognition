@@ -10,7 +10,10 @@ jobs:
 
     steps:
       - uses: actions/checkout@v3
-
+      - name: Remove unnecessary files
+        run: |
+          rm -rf data/img_align_celeba
+     
  
       - name: Cache pip dependencies
         uses: actions/cache@v2
