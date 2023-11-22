@@ -3,7 +3,7 @@ name: ML CI/CD Pipeline
 on:
   push:
     branches:
-      - main
+      - test
 
 jobs:
   code-check:
