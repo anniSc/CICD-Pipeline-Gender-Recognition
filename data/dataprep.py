@@ -18,7 +18,7 @@ file_names = df_sample['Images'].tolist()
 print(file_names)
 
 # Liste der Dateipfade erstellen
-df_sample['Images'] = df_sample['Images'].str.replace('data/img_align_celeba', 'data/selected_images')
+df_sample['Images'] = #df_sample['Images'].str.replace('data/img_align_celeba', #'data/selected_images')
 
 # source_folder = "data/img_align_celeba"
 destination_folder = 'data/selected_images'
