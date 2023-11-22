@@ -23,16 +23,18 @@
 # if __name__ == '__main__':
 #     unittest.main()
 
-
+# Import the necessary modules
 from tensorflow.keras.preprocessing.image import load_img, img_to_array
 import numpy as np
 from tensorflow.keras.models import load_model
 import pandas as pd
 from PIL import Image
+
+
 with open("test/n.txt", "r") as f:
     n = int(f.read())
 # print(n)
-# Import the necessary modules
+
 # df_test = pd.read_excel(f'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/excel_sheets/Gender_{n}.xlsx')
 df_test = pd.read_excel(f'model/excel_sheets/Gender_{n}.xlsx')
 X_test = df_test['Images']

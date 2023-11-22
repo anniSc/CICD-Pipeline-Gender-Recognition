@@ -1,4 +1,4 @@
-name: ML-Train Gender Recognition
+name: ML-Workflow
 on: 
   workflow_run:
     workflows: ["Data Preparation Workflow"]
@@ -9,26 +9,21 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-
       - name: Cache pip dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements-train.txt') }}
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
           restore-keys: |
             ${{ runner.os }}-pip-
-      
-      - name: Train model
         env:
           GITHUB_TOKEN: ${{ secrets.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 }}
+      - name: Run data preparation
         run: |
-          pip install -r requirements-train.txt
-          python model/train.py
-       
-        
-  
-      - name: Commit and push
+          pip install -r requirements.txt
+          python data/dataprep.py
+
+      - name: Commit and push data from dataprep.py
         run: |
           git config --local user.email "Aseuc@github.com"
           git config --local user.name "Aseuc"
@@ -36,3 +31,22 @@ jobs:
           git commit -m "Add generated file" -a || echo "No changes to commit"
           git remote set-url origin https://$GITHUB_TOKEN@github.com/Aseuc/CICD-Pipeline-Gender-Recognition.git
           git push origin main
+     
+     
+      - name: Train model
+        run: |
+          python model/train.py
+      
+      - name: Commit and push model from train.py
+        run: |
+          git config --local user.email "Aseuc@github.com"
+          git config --local user.name "Aseuc"
+          git add .
+          git commit -m "Add generated file" -a || echo "No changes to commit"
+          git remote set-url origin https://$GITHUB_TOKEN@github.com/Aseuc/CICD-Pipeline-Gender-Recognition.git
+          git push origin main
+    
+  
+      - name: Test model
+        run: |
+          python model/test.py
