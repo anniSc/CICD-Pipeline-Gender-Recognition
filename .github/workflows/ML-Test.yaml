@@ -7,11 +7,10 @@ on:
 jobs:
   run:
     runs-on: ubuntu-latest
-
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     steps:
       - uses: actions/checkout@v3
 
- 
       - name: Cache pip dependencies
         uses: actions/cache@v2
         with:
@@ -27,13 +26,9 @@ jobs:
           pip install -r requirements-train.txt
           python model/test.py
        
-        
-  
       - name: Commit and push
         run: |
           git config --local user.email "Aseuc@github.com"
           git config --local user.name "Aseuc"
           git add .
           git commit -m "Add generated file" -a || echo "No changes to commit"
-          git remote set-url origin https://$GITHUB_TOKEN@github.com/Aseuc/CICD-Pipeline-Gender-Recognition.git
-          git push origin main
