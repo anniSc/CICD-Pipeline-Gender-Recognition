@@ -4,7 +4,7 @@ import pandas as pd
 import shutil
 
 # Speichern der Anzahl der zu trainierenden Bilder in einer Textdatei
-n = 200
+n = 20000
 
 with open("test/n.txt", "w") as f:
      f.write(str(n))

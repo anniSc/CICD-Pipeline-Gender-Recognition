@@ -58,4 +58,4 @@ jobs:
   
       - name: Test model
         run: |
-          python model/test.py
+          python test/test.py
