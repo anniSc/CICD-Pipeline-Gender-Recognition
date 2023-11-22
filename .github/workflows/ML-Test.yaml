@@ -1,7 +1,7 @@
 name: ML-Test Gender Recognition
 on: 
   workflow_run:
-    workflows: ["Data Preparation Workflow"]
+    workflows: ["ML-Train Gender Recognition"]
     types:
       - completed
 jobs:
