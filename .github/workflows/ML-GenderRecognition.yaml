@@ -22,10 +22,14 @@ jobs:
             ${{ runner.os }}-pip-
         env:
           GITHUB_TOKEN: ${{ secrets.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 }}
-      - name: Run data preparation
+  
+      - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
           pip install -r requirements.txt
+      
+      - name: Run data preparation
+        run: |
           python data/dataprep.py
 
       - name: Commit and push data from dataprep.py
