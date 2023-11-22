@@ -36,4 +36,4 @@ jobs:
           git add .
           git commit -m "Add generated file" -a || echo "No changes to commit"
           git remote set-url origin https://$GITHUB_TOKEN@github.com/Aseuc/CICD-Pipeline-Gender-Recognition.git
-          git push
+          git push origin main
