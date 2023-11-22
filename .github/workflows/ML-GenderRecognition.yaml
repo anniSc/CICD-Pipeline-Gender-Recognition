@@ -1,9 +1,9 @@
 name: ML-Workflow
-on: 
-  workflow_run:
-    workflows: ["Data Preparation Workflow"]
-    types:
-      - completed
+on:
+  push:
+    branches:
+      - main
+
 jobs:
   run:
     runs-on: ubuntu-latest
