@@ -4,7 +4,7 @@ import numpy as np
 from tensorflow.keras.models import load_model
 import pandas as pd
 from PIL import Image
-
+import matplotlib.pyplot as plt
 
 
 # df_test = pd.read_excel(f'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/excel_sheets/Gender_{n}.xlsx')
@@ -37,6 +37,30 @@ for image in image_list:
     else:
         print(f'Mann:{predictions}')
   
+
+
+with open("test/val_acc_values.txt", "r") as f:
+        val_acc_values=f.read()
+
+val_acc_values = val_acc_values.replace('[', '')
+val_acc_values = val_acc_values.replace(']', '')
+val_acc_values = [float(val) for val in val_acc_values.split(',')]
+# acc = acc.replace('[', '')
+# acc = acc.replace(']', '')
+# acc = [float(val) for val in acc.split(',')]
+
+# val_acc_values = sorted(val_acc_values, reverse=False)
+
+# Erstellen Sie das Diagramm
+epochs = range(1, len(val_acc_values) + 1)
+
+plt.plot(epochs, val_acc_values, label='Validation Accuracy')
+plt.title('Training and validation accuracy')
+plt.xlabel('Epochs')
+plt.ylabel('Accuracy')
+plt.legend()
+
+plt.show()
 
 
 
