@@ -132,7 +132,7 @@ def prepare_excel_list(selected_labels=[], n=10):
           print(csv_files)
 
           # Read the CSV file
-          csv_file_path = os.path.join(r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\data\attribute_list_labels', csv_files)
+          csv_file_path = os.path.join('data/attribute_list_labels', csv_files)
           df = pd.read_csv(csv_file_path)
 
           # Drop columns not in selected_labels
