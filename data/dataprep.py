@@ -108,7 +108,10 @@ def prepare_training_data(n=10):
                print(image_path)
                shutil.copy(image_path, destination_folder)
 
-def prepare_excel_list(selected_labels=[], n=10):
+def prepare_excel_list(selected_labels=[], n=10): 
+     with open("test/n.txt", "w") as f:
+          f.write(str(n))
+          
      BASE_DIR = 'data/img_align_celeba'
      image_paths = []
      image_filenames = os.listdir(BASE_DIR)
