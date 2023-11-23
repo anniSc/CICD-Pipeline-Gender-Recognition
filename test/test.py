@@ -85,13 +85,19 @@ import matplotlib.pyplot as plt
 from tensorflow.keras.models import load_model
 
 # Laden Sie das Modell
-model = load_model(r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\model\saved_trained_Models\trained_2000_model.h5')
+# model = load_model(r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\model\saved_trained_Models\trained_10_model.h5')
 
 # # Trainieren Sie das Modell
 # # history = model.fit(train_data, train_labels, validation_data=(val_data, val_labels), epochs=10)
 
 # `history.history` ist ein Wörterbuch, das die Verlust- und Genauigkeitswerte für jede Epoche enthält
-val_acc_values = history.history['val_accuracy']
+with open("test/val_acc_values.txt", "r") as f:
+        val_acc_values=f.read()
+
+val_acc_values = val_acc_values.replace('[', '')
+val_acc_values = val_acc_values.replace(']', '')
+val_acc_values = [float(val) for val in val_acc_values.split(',')]
+# val_acc_values = sorted(val_acc_values, reverse=False)
 
 # Erstellen Sie das Diagramm
 epochs = range(1, len(val_acc_values) + 1)

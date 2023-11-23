@@ -57,8 +57,17 @@ def train_model():
     model.compile(loss=['binary_crossentropy', 'mae'],optimizer='adam', metrics=['accuracy'])
     history = model.fit(x=X_train, y=y_train,batch_size=32, epochs=30, validation_data=(X_test,y_test))
     val_acc_values = history.history['val_accuracy']
+    acc = history.history['accuracy']
+    loss = history.history['loss']
+    val_loss = history.history['val_loss']
     with open("test/val_acc_values.txt", "w") as f:
         f.write(str(val_acc_values))
+    with open ("test/acc.txt", "w") as f:
+        f.write(str(acc))
+    with open("test/loss.txt", "w") as f:   
+        f.write(str(loss))
+    with open("test/val_loss.txt", "w") as f:
+        f.write(str(val_loss))  
     model.save(f"model/saved_trained_Models/trained_{n}_model.h5")
 
 
