@@ -165,9 +165,3 @@ df["Images"] = df["Images"].str.replace('\\', '/')
 print(df)
 
 df.to_excel(f'model/excel_sheets/Gender_{n}.xlsx', index=False)
-df["No_Beard"].replace({-1: 0}, inplace=True)
-df["Images"] = df["Images"].str.replace('\\', '/')
-print(df)
-
-
-df.to_excel(f'model/excel_sheets/Gender_{n}.xlsx', index=False)
