@@ -121,7 +121,7 @@ def prepare_excel_list(selected_labels=[], n=10):
 
      # Liste aller Dateien im Verzeichnis
      # files = os.listdir('data/attribute_list_label')
-     files = os.listdir(r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\data\attribute_list_labels')
+     files = os.listdir('data/attribute_list_labels')
      # Filtern Sie die Liste, um nur CSV-Dateien zu behalten
      csv_files = [file for file in files if file.endswith('.csv')]
 
