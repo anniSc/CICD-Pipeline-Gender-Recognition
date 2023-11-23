@@ -20,7 +20,6 @@ from keras.layers import Dense, Conv2D, Dropout, Flatten, MaxPooling2D, Input
 import os
 import pandas as pd
 import shutil
-from tqdm.notebook import tqdm
 
 
 
