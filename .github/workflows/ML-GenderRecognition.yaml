@@ -52,7 +52,7 @@ jobs:
     
       - name: Create new branch
         run: |
-          BRANCH_NAME={date +%Y%m%d%H%M%S}
-          git checkout -b BRANCH_NAME
-          git push origin BRANCH_NAME
+          BRANCH_NAME=$(date +%Y%m%d%H%M%S)
+          git checkout -b $BRANCH_NAME
+          git push origin $BRANCH_NAME
           

@@ -55,7 +55,10 @@ def train_model():
     model = Model(inputs=[inputs], outputs=[output_1])
     early_stop = EarlyStopping(monitor='val_accuracy', min_delta=0, patience=10, verbose=1, mode='auto')
     model.compile(loss=['binary_crossentropy', 'mae'],optimizer='adam', metrics=['accuracy'])
-    model.fit(x=X_train, y=y_train,batch_size=32, epochs=30, validation_data=(X_test,y_test))
+    history = model.fit(x=X_train, y=y_train,batch_size=32, epochs=30, validation_data=(X_test,y_test))
+    val_acc_values = history.history['val_accuracy']
+    with open("test/val_acc_values.txt", "w") as f:
+        f.write(str(val_acc_values))
     model.save(f"model/saved_trained_Models/trained_{n}_model.h5")
 
 
