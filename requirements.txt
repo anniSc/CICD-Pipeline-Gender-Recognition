@@ -10,5 +10,4 @@ keras
 openpyxl
 torch
 seaborn 
-tqdm 
 scikit-learn 

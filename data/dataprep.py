@@ -111,12 +111,12 @@ def prepare_training_data(n=10):
 def prepare_excel_list(selected_labels=[], n=10): 
      with open("test/n.txt", "w") as f:
           f.write(str(n))
-          
+
      BASE_DIR = 'data/img_align_celeba'
      image_paths = []
      image_filenames = os.listdir(BASE_DIR)
 
-     for image in tqdm(image_filenames):
+     for image in image_filenames:
           image_path = os.path.join(BASE_DIR, image)
           image_paths.append(image_path)
 
