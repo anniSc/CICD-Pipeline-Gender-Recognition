@@ -31,31 +31,28 @@ jobs:
       - name: Run data preparation
         run: |
           python data/dataprep.py
-
-      - name: Commit and push data from dataprep.py
-        run: |
-          git config --local user.email "Aseuc@github.com"
-          git config --local user.name "Aseuc"
-          git add .
-          git commit -m "Add generated file" -a || echo "No changes to commit"
-          git remote set-url origin https://$GITHUB_TOKEN@github.com/Aseuc/CICD-Pipeline-Gender-Recognition.git
-          git push origin main
-     
      
       - name: Train model
         run: |
           python model/train.py
-      
+  
+      - name: Test model
+        run: |
+          python test/test.py
+
+
       - name: Commit and push model from train.py
         run: |
           git config --local user.email "Aseuc@github.com"
           git config --local user.name "Aseuc"
           git add .
           git commit -m "Add generated file" -a || echo "No changes to commit"
-          git remote set-url origin https://$GITHUB_TOKEN@github.com/Aseuc/CICD-Pipeline-Gender-Recognition.git
           git push origin main
+      
     
-  
-      - name: Test model
+      - name: Create new branch
         run: |
-          python test/test.py
+          BRANCH_NAME={date +%Y%m%d%H%M%S}
+          git checkout -b BRANCH_NAME
+          git push origin BRANCH_NAME
+          

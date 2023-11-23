@@ -35,20 +35,21 @@ with open("test/n.txt", "r") as f:
     n = int(f.read())
 # print(n)
 
-# df_test = pd.read_excel(f'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/excel_sheets/Gender_{n}.xlsx')
+df_test = pd.read_excel(f'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/excel_sheets/Gender_{n}.xlsx')
 df_test = pd.read_excel(f'model/excel_sheets/Gender_{n}.xlsx')
 X_test = df_test['Images']
-# X_test = X_test.replace('data/img_align_celeba/', 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/selected_images/', regex=True)
+X_test = X_test.replace('data/img_align_celeba/', 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/selected_images/', regex=True)
 # print(X_test)
 
 image_list = X_test.tolist()
-model = load_model(f'model/saved_trained_Models/trained_{n}_model.h5')
-# model = load_model(f'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/saved_trained_Models/trained_{n}_model.h5')
+# model = load_model(f'model/saved_trained_Models/trained_{n}_model.h5')
+model = load_model(f'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/saved_trained_Models/trained_{n}_model.h5')
 # print(image_list)
 counter = 0
+
 for image in image_list:
-    # if counter == 10: 
-    #     break
+    if counter == 10: 
+        break
     img = load_img(image, target_size=(178, 218), color_mode="grayscale")
     # Image.open(image).show()
     # Convert the image to a numpy array
@@ -59,10 +60,12 @@ for image in image_list:
 
     predictions = model.predict(img_array)
     if predictions[0] < 0.5:
+        print(image)
         print(f'Frau:{predictions}')
     else:
+        print(image)
         print(f'Mann:{predictions}')
-    # counter += 1
+    counter += 1
 # #     Load the model from a .h5 file
 #     model = load_model(f'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/saved_trained_Models/trained_{n}_model.h5')
 
