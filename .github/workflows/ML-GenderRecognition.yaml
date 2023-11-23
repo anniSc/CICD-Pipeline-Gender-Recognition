@@ -38,7 +38,7 @@ jobs:
   
       - name: Test model
         run: |
-          python test/test.py
+          python test/validate_model.py
 
 
       - name: Commit and push model from train.py
