@@ -39,8 +39,10 @@ jobs:
       - name: Test model
         run: |
           python test/validate_model.py
+      - name: Show Plot in Workflow
+        run: |
           python test/validate.ipynb
-          
+
       - name: Upload plot
         uses: actions/upload-artifact@v2
         with:
