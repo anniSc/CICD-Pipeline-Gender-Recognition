@@ -39,16 +39,17 @@ jobs:
       - name: Test model
         run: |
           python test/validate_model.py
-      - name: Show Plot in Workflow
-        run: |
-          python test/validate.ipynb
 
       - name: Upload plot
         uses: actions/upload-artifact@v2
         with:
           name: Validate Plot
           path: test/plot.png
-
+      
+      - name: Set Up report.md
+        run: |
+          echo "## Model Performance"
+          cml-publish plot.png --md >> report.md
 
 
       - name: Commit and push model from train.py
