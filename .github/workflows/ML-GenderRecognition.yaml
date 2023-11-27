@@ -25,7 +25,10 @@ jobs:
       
       - name: Install CML
         run: |
-          curl -s https://cml.dev/install | sh
+          curl -s -O https://cml.dev/install
+          sh install
+        shell: bash
+
 
       - name: Install dependencies
         run: |
@@ -53,8 +56,11 @@ jobs:
       - name: Generate and publish report
         run: |
           echo "## Model Performance" >> report.md
-          cml-publish plot.png --md >> report.md
+          cml-publish test/plot.png --md >> report.md
 
+      - name: Comment report
+        run: |
+          cml-send-comment report.md
 
       - name: Commit and push model from train.py
         run: |
