@@ -39,7 +39,7 @@ jobs:
           echo "\n## Model Performance" >> report.md
           echo "Model performance metrics are on the plot below." >> report.md
           
-          cml-publish model_results.png --md >> report.md
+          cml-publish test/plot.png --md >> report.md
           
           cml-send-comment report.md
           
