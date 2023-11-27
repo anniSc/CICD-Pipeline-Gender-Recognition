@@ -9,5 +9,6 @@ tensorflow
 keras
 openpyxl
 torch
+torchvision
 seaborn 
 scikit-learn 

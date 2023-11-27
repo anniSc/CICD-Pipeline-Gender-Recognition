@@ -1,5 +1,9 @@
 name: CML
-on: [push]
+on:
+  push:
+    branches:
+      - test
+
 jobs:
   train-and-report:
     runs-on: ubuntu-latest
