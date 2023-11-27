@@ -59,6 +59,7 @@ plt.legend()
 
 plt.show()
 
+plt.savefig("test/plot.png")
 
 with open("test/n.txt", "r") as f:
     n = int(f.read())

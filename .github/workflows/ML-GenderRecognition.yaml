@@ -40,6 +40,13 @@ jobs:
         run: |
           python test/validate_model.py
 
+      - name: Upload plot
+        uses: actions/upload-artifact@v2
+        with:
+          name: Validate Plot
+          path: test/plot.png
+
+
 
       - name: Commit and push model from train.py
         run: |
