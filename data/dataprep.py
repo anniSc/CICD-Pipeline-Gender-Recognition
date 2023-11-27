@@ -167,3 +167,9 @@ df["Images"] = df["Images"].str.replace('\\', '/')
 print(df)
 
 df.to_excel(f'model/excel_sheets/Gender_{n}.xlsx', index=False)
+# Ausgewählte Features in eine Textdatei schreiben
+
+
+df.drop(['Images'], axis=1, inplace=True)
+df.columns.to_series().to_csv('model/selected_features.txt', index=False, header=False)
+     
