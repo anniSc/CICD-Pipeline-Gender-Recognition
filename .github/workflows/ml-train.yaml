@@ -32,6 +32,17 @@ jobs:
         run: |
           jupyter nbconvert --to script model/pytorch_train.ipynb
           python model/pytorch_train.py
+  
 
+  
+    
+      - name: Commit and push changes
+        run: |
+          git config --local user.email "Aseuc@github.com"
+          git config --local user.name "Aseuc"
+          git add .
+          git commit -m "Add generated file" -a || echo "No changes to commit"
+          git push origin ${{ github.ref }}
+        
 
           
