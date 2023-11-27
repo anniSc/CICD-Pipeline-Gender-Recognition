@@ -2,7 +2,7 @@ name: ML-Train
 on:
   push:
     branches:
-      - main
+      - test_torch-new-workflow
 
 jobs:
   run:
