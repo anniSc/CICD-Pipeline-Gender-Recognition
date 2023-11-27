@@ -22,13 +22,6 @@ jobs:
             ${{ runner.os }}-pip-
         env:
           GITHUB_TOKEN: ${{ secrets.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 }}
-      
-      - name: Install CML
-        run: |
-          curl -s -O https://cml.dev/install
-          sh install
-        shell: bash
-
 
       - name: Install dependencies
         run: |
@@ -52,15 +45,6 @@ jobs:
         with:
           name: Validate Plot
           path: test/plot.png
-  
-      - name: Generate and publish report
-        run: |
-          echo "## Model Performance" >> report.md
-          cml-publish test/plot.png --md >> report.md
-
-      - name: Comment report
-        run: |
-          cml-send-comment report.md
 
       - name: Commit and push model from train.py
         run: |
