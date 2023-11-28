@@ -20,7 +20,7 @@ jobs:
         run: |
           echo "\n## Model Performance" >> report.md
           echo "Model performance metrics are on the plot below." >> report.md
-          cml-publish model/plot_truelabelVSpredictions.jpg --md >> report.md
+          cml-publish model/plot.jpg --md >> report.md
           cml-send-comment report.md
 
       - name: Commit and push changes
