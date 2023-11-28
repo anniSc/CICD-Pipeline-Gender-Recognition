@@ -21,10 +21,12 @@ jobs:
           cat metrics.txt >> report.md
           
           echo "\n## Model Performance" >> report.md
-          echo "Model performance metrics are on the plot below." >> report.md
+          echo "Modell Performance in eine Scatter Plot dargestellt" >> report.md
           
-          cml-publish model/plot.jpg --md >> report.md
-          
+          cml-publish model/plot_scatter.jpg --md >> report.md
+          cml-publish model/plot_plt.jpg --md >> report.md
+
+
           cml-send-comment report.md
         
           
