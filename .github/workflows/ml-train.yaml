@@ -12,7 +12,7 @@ jobs:
       - name: Setup Git
         run: |
           git init
-          git remote add origin https://github.com/<username>/<repo>.git
+          git remote add origin https://github.com/Aseuc/CICD-Pipeline-Gender-Recognition.git
 
       - name: Test CML
         env:
