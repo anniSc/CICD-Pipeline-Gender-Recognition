@@ -1,14 +1,8 @@
 numpy
 pandas
 matplotlib
-seaborn
-Pillow
 tqdm
-scikit-learn
-tensorflow
-keras
 openpyxl
 torch
 torchvision
-seaborn 
-scikit-learn 
+
