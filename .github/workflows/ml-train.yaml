@@ -17,13 +17,19 @@ jobs:
           jupyter nbconvert --to script model/pytorch_train.ipynb
           python model/pytorch_train.py
 
-          echo "## Model Metrics" > report.md
+          echo "## Model Metriken" > report.md
           cat metrics.txt >> report.md
           
           echo "\n## Model Performance" >> report.md
           echo "Modell Performance in eine Scatter Plot dargestellt" >> report.md
           
           cml-publish model/plot_scatter.jpg --md >> report.md
+
+
+
+           
+          echo "\n## Model Performance" >> report.md
+          echo "Modell Performance in einem normalen Plot dargestellt" >> report.md
           cml-publish model/plot_plt.jpg --md >> report.md
 
 
