@@ -33,6 +33,12 @@ jobs:
 
 
           cml-send-comment report.md
-        
-          
+      - name: Commit and push model from train.py
+        run: |
+          git config --local user.email "Aseuc@github.com"
+          git config --local user.name "Aseuc"
+          git add .
+          git commit -m "Add generated file" -a || echo "No changes to commit"
+          git push origin test_torch-new-workflow
+            
           
