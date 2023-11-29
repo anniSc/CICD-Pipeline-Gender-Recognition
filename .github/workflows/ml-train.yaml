@@ -23,14 +23,14 @@ jobs:
           echo "\n## Model Performance" >> report.md
           echo "Modell Performance in eine Scatter Plot dargestellt" >> report.md
           
-          cml-publish model/plot_scatter.jpg --md >> report.md
+          cml-publish model/plot.jpg --md >> report.md
 
 
 
            
           echo "\n## Model Performance" >> report.md
           echo "Modell Performance in einem normalen Plot dargestellt" >> report.md
-          cml-publish model/plot_plt.jpg --md >> report.md
+          cml-publish model/plot.jpg --md >> report.md
 
 
           cml-send-comment report.md
