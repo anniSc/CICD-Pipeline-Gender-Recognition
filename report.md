@@ -1,5 +1,5 @@
 ## Model Metriken
-Modellmetriken: Genauigkeit: 0.9095, Präzision: 0.9096478828857218, Recall: 0.9095, F1-Score: 0.9094918316378052
+Modellmetriken: Genauigkeit: 0.924, Präzision: 0.924001696006784, Recall: 0.924, F1-Score: 0.923999923999924
 ## Model Performance
 Modell Performance bzw. das Matching zwischen Predictions und True-Labels in einer Heatmap dargestellt!
 ![](https://asset.cml.dev/815255019b1be57c39b0b4405af9589afa5a0637?cml=jpeg)
