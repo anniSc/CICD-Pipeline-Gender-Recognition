@@ -1,4 +1,4 @@
-name: mlops-exaple-tensorflow-regression
+name: ML-Train mit Performance-Report
 on: [push]
 jobs:
   run:
