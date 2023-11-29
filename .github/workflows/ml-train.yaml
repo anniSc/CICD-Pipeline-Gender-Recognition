@@ -23,15 +23,10 @@ jobs:
           echo "Modell Performance bzw. das Matching zwischen Predictions und True-Labels in einer Heatmap dargestellt!" >> report.md
           cml-publish model/heatmap.jpg --md >> report.md
           
-          cml-send-comment report.md
-
           echo "\n## Model Performance" >> report.md
           echo "Modell Performance in einem Scatter-Plot dargestellt" >> report.md
           cml-publish model/plot_scatter.jpg --md >> report.md
-          
-          cml-send-comment report.md
-
-           
+        
           echo "\n## Model Performance" >> report.md
           echo "Modell Performance in einem normalen Plot dargestellt" >> report.md
           cml-publish model/plot_plt.jpg --md >> report.md
