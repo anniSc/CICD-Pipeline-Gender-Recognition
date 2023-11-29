@@ -34,7 +34,7 @@ from torch.utils.data import DataLoader
 
 
 
-epochs = 30
+epochs = 50
 batch_size = 64
 
 transform = transforms.Compose([
