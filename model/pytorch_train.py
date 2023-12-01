@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[30]:
+# In[ ]:
 
 
 import os
@@ -20,6 +20,25 @@ import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
 import torch
 from torch.utils.data import DataLoader
+import os
+import torch
+import pandas as pd
+import matplotlib.pyplot as plt
+from torch import nn, cuda
+from torchvision import datasets, transforms, models
+from torchvision.transforms import ToTensor
+from torchvision.io import read_image
+from torch.utils.data import Dataset, DataLoader
+import torch.nn.functional as F
+import torch
+from torch.utils.data import DataLoader
+import numpy as np
+from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
+import torch
+from torch.utils.data import DataLoader
+# from skimage import io
+from torch.utils.data import Dataset
+from torch.optim import Adam
 
 # In[ ]:
 
@@ -34,7 +53,7 @@ from torch.utils.data import DataLoader
 
 
 
-epochs = 50
+epochs = 1
 batch_size = 64
 
 transform = transforms.Compose([
@@ -45,17 +64,25 @@ transform = transforms.Compose([
 # img_dir_val = 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/val'
 # train_dataset = datasets.ImageFolder(root=img_dir_train,transform=transform)
 # test_dataset = datasets.ImageFolder(root= img_dir_val,transform=transform)
+
+
+
+
 # Apply the transformation to your dataset
-train_dataset = datasets.ImageFolder(root='data/train',transform=transform)
-test_dataset = datasets.ImageFolder(root= 'data/val',transform=transform)
-df_men_train = pd.read_csv("model/excel_sheets/git_image_paths_men.csv")
-df_women_train = pd.read_csv("model/excel_sheets/git_image_paths_women.csv")
-df_women_test = pd.read_csv("model/excel_sheets/git_image_paths_val_women.csv")
-df_men_test = pd.read_csv("model/excel_sheets/git_image_paths_val_men.csv")
-merged_df_train = pd.concat([df_men_train, df_women_train], ignore_index=True)
-merged_df_test = pd.concat([df_men_test, df_women_test], ignore_index=True)
-merged_df_test.to_csv("model/git_merged_df_test.csv")
-merged_df_train.to_csv("model/git_merged_df_train.csv")
+# train_dataset = datasets.ImageFolder(root='data/train',transform=transform)
+# test_dataset = datasets.ImageFolder(root= 'data/val',transform=transform)
+
+
+
+
+# df_men_train = pd.read_csv("model/excel_sheets/git_image_paths_men.csv")
+# df_women_train = pd.read_csv("model/excel_sheets/git_image_paths_women.csv")
+# df_women_test = pd.read_csv("model/excel_sheets/git_image_paths_val_women.csv")
+# df_men_test = pd.read_csv("model/excel_sheets/git_image_paths_val_men.csv")
+# merged_df_train = pd.concat([df_men_train, df_women_train], ignore_index=True)
+# merged_df_test = pd.concat([df_men_test, df_women_test], ignore_index=True)
+# merged_df_test.to_csv("model/git_merged_df_test.csv")
+# merged_df_train.to_csv("model/git_merged_df_train.csv")
 
 # In[ ]:
 
@@ -80,22 +107,51 @@ class CustomImageDataset(Dataset):
         if self.target_transform:
             label = self.target_transform(label)
         return image, label
+    
+class GenderRecognitionDataset(Dataset):
+    def __init__(self, csv_file, img_dir, transform=None):
+        self.annotations = pd.read_csv(csv_file)
+        self.img_dir = img_dir
+        self.transform = transform
 
+    def __len__(self):
+        return len(self.annotations)
 
-train_data = CustomImageDataset(annotations_file='model/git_merged_df_train.csv',img_dir='data/train')
-test_data =  CustomImageDataset(annotations_file='model/git_merged_df_test.csv',img_dir='data/val')
+    def __getitem__(self, idx):
+        img_path = os.path.join(self.img_dir, self.annotations.iloc[idx, 1])
+        image = io.imread(img_path)
+        y_label = torch.tensor(int(self.annotations.iloc[idx, 2]))
+        if self.transform:
+            image = self.transform(image)
+        return (image,y_label)
+
+# train_data = CustomImageDataset(annotations_file='model/git_merged_df_train.csv',img_dir='data/train')
+# test_data =  CustomImageDataset(annotations_file='model/git_merged_df_test.csv',img_dir='data/val')
 
 # train_data = CustomImageDataset(annotations_file='C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/csv_sheets/merged_df_train.csv',img_dir='C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/train')
 # test_data =  CustomImageDataset(annotations_file='C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/csv_sheets/merged_df_test.csv',img_dir='C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/val')
 
-# In[ ]:
+
+
+# train_dataset_gender = GenderRecognitionDataset(csv_file=r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\model\csv_sheets\merged_df_train.csv',img_dir='data/train',transform=transforms.ToTensor())
+# test_dataset_gender = GenderRecognitionDataset(csv_file=r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\model\csv_sheets\merged_df_test.csv',img_dir='data/val',transform=transforms.ToTensor())
+
+# train_dataset_gender = GenderRecognitionDataset(csv_file=r'model\csv_sheets\git_merged_df_train.csv',img_dir='data/train',transform=transforms.ToTensor())
+# test_dataset_gender = GenderRecognitionDataset(csv_file=r'model\csv_sheets\git_merged_df_test.csv',img_dir='data/val',transform=transforms.ToTensor())
 
 
 
-
+train_dataset = datasets.ImageFolder(root='data/train',transform=transform)
+test_dataset = datasets.ImageFolder(root= 'data/val',transform=transform)
 train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
 test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
- 
+
+
+
+
+
+
+
 
 
 # In[ ]:
@@ -151,12 +207,117 @@ class SimpleCNN(nn.Module):
 import torch.optim as optim
 from tqdm import tqdm
 
-# Instantiate the model, loss function and optimizer
 model = SimpleCNN()
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+patience = 10  # Number of epochs to wait for improvement before stopping
+best_accuracy = 0.0  # Best accuracy value. Initialized to 0 for now
+early_stopping_counter = 0  # Counter to keep track of the number of epochs without improvement
 
-# Assume `val_dataloader` is your DataLoader for the validation set
+for epoch in range(epochs):  # loop over the dataset multiple times
+    running_loss = 0.0
+    for i, data in enumerate(tqdm(train_dataloader), 0):
+        # get the inputs; data is a list of [inputs, labels]
+        inputs, labels = data
+
+        # zero the parameter gradients
+        optimizer.zero_grad()
+
+        # forward + backward + optimize
+        outputs = model(inputs)
+        loss = criterion(outputs, labels)
+        loss.backward()
+        optimizer.step()  
+
+        # print statistics
+        running_loss += loss.item()
+
+    # Calculate accuracy after each epoch
+    correct = 0
+    total = 0
+    if i % 10 == 9:  # print every 100 mini-batches
+        print('[%d, %5d] loss: %.3f' %
+              (epoch + 1, i + 1, running_loss / 100))
+        running_loss = 0.0
+        
+    with torch.no_grad():
+        for val_data in test_dataloader:
+            val_images, val_labels = val_data
+            val_outputs = model(val_images)
+            _, predicted = torch.max(val_outputs.data, 1)
+            total += val_labels.size(0)
+            correct += (predicted == val_labels).sum().item()
+    accuracy = correct / total
+
+
+    if accuracy > 0.9:  # Only save if accuracy is above 90%
+        torch.save(model.state_dict(), f'model_epoch_{epoch+1}_accuracy_{accuracy:.2f}.pth')
+    # If the current accuracy is better than the best accuracy
+    if accuracy > best_accuracy:
+        best_accuracy = accuracy
+        early_stopping_counter = 0
+        print(f"Genauigkeit: {accuracy:.2f}")
+    else:
+        early_stopping_counter += 1
+
+    # If the counter has reached patience, stop the training
+    if early_stopping_counter >= patience:
+        print('Early stopping')
+        break
+
+print('Finished Training')
+
+# In[ ]:
+
+
+# import torch.optim as optim
+# from tqdm import tqdm
+
+# # Instantiate the model, loss function and optimizer
+# model = SimpleCNN()
+# criterion = nn.CrossEntropyLoss()
+# optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
+
+# # Assume `val_dataloader` is your DataLoader for the validation set
+# # for epoch in range(epochs):  # loop over the dataset multiple times
+# #     running_loss = 0.0
+# #     for i, data in enumerate(tqdm(train_dataloader), 0):
+# #         # get the inputs; data is a list of [inputs, labels]
+# #         inputs, labels = data
+
+# #         # zero the parameter gradients
+# #         optimizer.zero_grad()
+
+# #         # forward + backward + optimize
+# #         outputs = model(inputs)
+# #         loss = criterion(outputs, labels)
+# #         loss.backward()
+# #         optimizer.step()  
+         
+
+# #         # Trainingsverlauf ausgeben
+# #         running_loss += loss.item()
+
+# #         #Alle 10 Batches wird der Loss ausgegeben
+# #         if i % 10 == 9:    
+# #             # Berechnung der Accuracy
+# #             correct = 0
+# #             total = 0
+# #             with torch.no_grad():
+# #                 for val_data in test_dataloader:
+# #                     val_images, val_labels = val_data
+# #                     val_outputs = model(val_images)
+# #                     _, predicted = torch.max(val_outputs.data, 1)
+# #                     total += val_labels.size(0)
+# #                     correct += (predicted == val_labels).sum().item()
+# #             val_accuracy = correct / total
+
+# #             print(f'Epoch: {epoch + 1}, Batch: {i + 1}, Loss: {running_loss / 10}, Validation Accuracy: {val_accuracy * 100}%')
+# #             running_loss = 0.0
+
+# # print('Finished Training')
+
+
 # for epoch in range(epochs):  # loop over the dataset multiple times
 #     running_loss = 0.0
 #     for i, data in enumerate(tqdm(train_dataloader), 0):
@@ -171,7 +332,6 @@ optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 #         loss = criterion(outputs, labels)
 #         loss.backward()
 #         optimizer.step()  
-         
 
 #         # Trainingsverlauf ausgeben
 #         running_loss += loss.item()
@@ -193,79 +353,37 @@ optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
 #             print(f'Epoch: {epoch + 1}, Batch: {i + 1}, Loss: {running_loss / 10}, Validation Accuracy: {val_accuracy * 100}%')
 #             running_loss = 0.0
 
+#             # Wenn die Validation Accuracy 95% erreicht, wird das Training beendet
+#             if val_accuracy >= 0.95:
+#                 print('Early stopping, validation accuracy reached 95%')
+#                 break
+
 # print('Finished Training')
 
-
-for epoch in range(epochs):  # loop over the dataset multiple times
-    running_loss = 0.0
-    for i, data in enumerate(tqdm(train_dataloader), 0):
-        # get the inputs; data is a list of [inputs, labels]
-        inputs, labels = data
-
-        # zero the parameter gradients
-        optimizer.zero_grad()
-
-        # forward + backward + optimize
-        outputs = model(inputs)
-        loss = criterion(outputs, labels)
-        loss.backward()
-        optimizer.step()  
-
-        # Trainingsverlauf ausgeben
-        running_loss += loss.item()
-
-        #Alle 10 Batches wird der Loss ausgegeben
-        if i % 10 == 9:    
-            # Berechnung der Accuracy
-            correct = 0
-            total = 0
-            with torch.no_grad():
-                for val_data in test_dataloader:
-                    val_images, val_labels = val_data
-                    val_outputs = model(val_images)
-                    _, predicted = torch.max(val_outputs.data, 1)
-                    total += val_labels.size(0)
-                    correct += (predicted == val_labels).sum().item()
-            val_accuracy = correct / total
-
-            print(f'Epoch: {epoch + 1}, Batch: {i + 1}, Loss: {running_loss / 10}, Validation Accuracy: {val_accuracy * 100}%')
-            running_loss = 0.0
-
-            # Wenn die Validation Accuracy 95% erreicht, wird das Training beendet
-            if val_accuracy >= 0.95:
-                print('Early stopping, validation accuracy reached 95%')
-                break
-
-print('Finished Training')
-
 # In[ ]:
 
 
-# model_path_local = 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/'
-# torch.save(model.state_dict(), f'{model_path_local}model/model{batch_size}' + '-' + f'{epochs}' + '.pth')
+# model_path_local = 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/PyTorch_Trained_Models/'
+model_path_git = f'model/PyTorch_Trained_Models/'
+torch.save(model.state_dict(), f'{model_path_git}model_git{batch_size}' + '-' + f'{epochs}' + '.pth')
 
-torch.save(model.state_dict(), f'model/model{batch_size}' + '-' + f'{epochs}' + '.pth')
+# torch.save(model.state_dict(), f'model/model{batch_size}' + '-' + f'{epochs}' + '.pth')
 
 
 # In[ ]:
 
 
+model_path = f'{model_path_git}model_git{batch_size}' + '-' + f'{epochs}' + '.pth'
 
-
-# In[ ]:
-
-
-model_path = f'model/model{batch_size}' + '-' + f'{epochs}' + '.pth'
-# model_path = f'{model_path_local}model/model{batch_size}' + '-' + f'{epochs}' + '.pth'
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 
 model = SimpleCNN()
 # model.load_state_dict(torch.load(f'model/model{batch_size}' + '-' + f'{epochs}' + '.pth'))
 model.load_state_dict(torch.load(model_path))
 
-test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
+# test_loader = DataLoader(test_dataset, batch_size=batch_size, shuffle=False)
 
-for inputs, _ in test_loader:
+for inputs, _ in test_dataloader:
     inputs = inputs.to(device) 
     output = model(inputs)
     probabilities = torch.nn.functional.softmax(output, dim=1)
@@ -287,7 +405,7 @@ test_loader = DataLoader(test_dataset, batch_size=64, shuffle=False)
 correct = 0
 total = 0
 
-for inputs, labels in test_loader:
+for inputs, labels in test_dataloader:
     inputs = inputs.to(device)
     labels = labels.to(device)
     
@@ -346,13 +464,16 @@ labels_list = []
 with torch.no_grad():
     for data, labels in test_loader:
         outputs = model(data)
+        
         # Flatten the outputs and convert to numpy array
         predictions.extend(outputs.view(-1).cpu().numpy())
         labels_list.extend(labels.cpu().numpy())
-
+        
 # Flatten the arrays
 predictions = np.array(predictions).ravel()
 labels_list = np.array(labels_list).ravel()
+print(predictions)
+print(labels_list)
 
 # Ensure both arrays have the same length
 min_length = min(len(predictions), len(labels_list))
@@ -372,7 +493,7 @@ plt.xlabel('True Labels',color='blue')
 plt.ylabel('Predictions',color='red')
 plt.title('True Labels vs Predictions')
 
-plt.savefig("plot_scatter.jpg",dpi=300)
+plt.savefig("plot_scatter.jpg",dpi=100)
 plt.show()
 
 
@@ -383,11 +504,12 @@ plt.ylabel('Predictions')
 plt.xlabel('True Labels',color='blue')
 plt.ylabel('Predictions',color='red')
 plt.title('True Labels vs Predictions')
-plt.savefig("plot_plt.jpg",dpi=300)
+plt.savefig("plot_plt.jpg",dpi=100)
 plt.show()
 
 # Create a 2D histogram from the data
 heatmap_data, xedges, yedges = np.histogram2d(labels_list, predictions, bins=50)
+
 
 # Plot the heatmap
 plt.imshow(heatmap_data, origin='lower', cmap='hot', interpolation='nearest')
@@ -395,5 +517,5 @@ plt.colorbar(label='Anzahl')
 plt.xlabel('True Labels')
 plt.ylabel('Predictions')
 plt.title('Heatmap of True Labels vs Predictions')
-plt.savefig("heatmap.jpg", dpi=300)
+plt.savefig("heatmap.jpg", dpi=100)
 plt.show()
