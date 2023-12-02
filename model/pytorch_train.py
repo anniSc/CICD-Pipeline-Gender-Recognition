@@ -419,7 +419,7 @@ for inputs, labels in test_dataloader:
 
 # Calculate accuracy
 accuracy = correct / total
-print('Accuracy of the model on the test images: {}%'.format(100 * accuracy))
+print('Genauigkeit des Modells auf Testbilder: {}%'.format(100 * accuracy))
 
 # In[ ]:
 
