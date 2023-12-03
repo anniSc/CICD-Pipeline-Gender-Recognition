@@ -6,16 +6,18 @@ jobs:
     container: docker://dvcorg/cml-py3:latest
     steps:
       - uses: actions/checkout@v2
-      - name: 'Train my model'
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
-          pip install nbconvert
+          pip install -r model/requirements.txt          
+          jupyter nbconvert --to script data/dataprep_git.ipynb 
+          python data/dataprep_git.py 
 
-          python data/dataprep_git.ipynb
-
+      - name: 'Train my model'
+        run: |
           jupyter nbconvert --to script model/pytorch_train.ipynb
           python model/pytorch_train.py
 
@@ -33,15 +35,19 @@ jobs:
           echo "\n## Model Performance" >> report.md
           echo "Modell Performance in einem normalen Plot dargestellt" >> report.md
           cml-publish model/plot_plt.jpg --md >> report.md
-
-
+      
           cml-send-comment report.md
+
       - name: Commit and push model from train.py
         run: |
           git config --local user.email "Aseuc@github.com"
           git config --local user.name "Aseuc"
           git add .
           git commit -m "Add generated file" -a || echo "No changes to commit"
-          git push origin test_torch-new-workflow
-            
+          git push origin test_torch-new-workflow  
+  
+
+
+
+      
           
