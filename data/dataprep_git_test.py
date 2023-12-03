@@ -34,20 +34,20 @@ import numpy as np
 # ##### Dies wird gemacht um die Pfade aus der Source-CSV: list_attr_celeba.csv in der Spalte image_id mit den richtigen Pfaden zu ersetzen. Somit sind die Pfade den Bildern richtig zugeordnet. 
 
 # %%
-source_csv = r" data\source_csv\list_attr_celeba.csv"
-csv_path=r" data\local_image_path_Gender.csv"
-source_train_path = r" data\train"
-men_image_source_path_train = r" data\train\men"
-women_image_source_path_train = r" data\train\women"
-men_image_source_path_test = r" data\val\men"
-women_image_source_path_test = r" data\val\women"
-merged_csv_test = r" model\csv_sheets\git_merged_df_test.csv"
-merged_csv_train = r" model\csv_sheets\git_merged_df_train.csv"
+source_csv = r"data\source_csv\list_attr_celeba.csv"
+csv_path=r"data\local_image_path_Gender.csv"
+source_train_path = r"data\train"
+men_image_source_path_train = r"data\train\men"
+women_image_source_path_train = r"data\train\women"
+men_image_source_path_test = r"data\val\men"
+women_image_source_path_test = r"data\val\women"
+merged_csv_test = r"model\csv_sheets\git_merged_df_test.csv"
+merged_csv_train = r"model\csv_sheets\git_merged_df_train.csv"
 required_directories = [source_train_path, women_image_source_path_test,men_image_source_path_test,men_image_source_path_train,women_image_source_path_train]
 
 
 # Hauptpfad zu den Bildern
-base_path = r" data\img_align_celeba"
+base_path = r"data\img_align_celeba"
 
 # Extrahiert aus dem Source Pfad die Bildpfade
 def get_image_paths(source_path):
@@ -76,7 +76,7 @@ def test_image_extensions_in_csv(csv_path, column_name_of_image_paths="image_id"
 image_paths_array = get_image_paths(base_path)
 
 # Erstellen eines Dataframes mit der Source CSV 
-df = pd.read_csv(r" data\source_csv\list_attr_celeba.csv")
+df = pd.read_csv(r"data\source_csv\list_attr_celeba.csv")
 
 # Alte image_id Spalte löschen.
 df = df.drop(columns=["image_id"])
@@ -105,13 +105,13 @@ cols.insert(0, cols.pop(cols.index('image_id')))
 df = df.reindex(columns=cols)
 
 # Speichern der neuen CSV
-df.to_csv(r" data\source_csv\list_attr_celeba.csv", index=False)
+df.to_csv(r"data\source_csv\list_attr_celeba.csv", index=False)
 
 # %% [markdown]
 # ## 2.2 Testen ob die Bildpfade in der CSV-Datei die richtige Dateiendung haben. 
 
 # %%
-csv_path = r" data\source_csv\list_attr_celeba.csv"
+csv_path = r"data\source_csv\list_attr_celeba.csv"
 test_image_extensions_in_csv(csv_path=csv_path, column_name_of_image_paths="image_id")
 
 # %% [markdown]
