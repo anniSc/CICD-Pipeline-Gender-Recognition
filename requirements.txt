@@ -7,6 +7,5 @@ torch
 torchvision
 scikit-learn
 pytest
-pydqc
 seaborn
 scipy
