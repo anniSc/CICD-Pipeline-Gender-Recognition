@@ -6,3 +6,11 @@ openpyxl
 torch
 torchvision
 scikit-learn
+glob
+pytest
+pydqc
+joblib
+seaborn
+scipy
+subprocess
+shutil
