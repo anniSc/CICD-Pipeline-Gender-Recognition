@@ -11,5 +11,3 @@ pydqc
 joblib
 seaborn
 scipy
-subprocess
-shutil
