@@ -6,7 +6,6 @@ openpyxl
 torch
 torchvision
 scikit-learn
-glob
 pytest
 pydqc
 joblib
