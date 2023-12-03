@@ -19,7 +19,21 @@ jobs:
         run: |
           jupyter nbconvert --to script data/dataprep_git.ipynb 
           python data/dataprep_git.py 
-        
+      - name: Generate and publish plots
+        run: |
+          # Read the column names from the CSV file
+          columns=$(head -n 1 data/source.csv | tr ',' '\n')
+      
+          # Iterate over each column
+          for column in $columns; do
+            # Update the report
+            echo "\n## Model Performance for $column" >> report.md
+            echo "Modell Performance in einem normalen Plot dargestellt" >> report.md
+            cml-publish model/plot_${column}.png --md >> report.md
+          done
+      
+          # Send the report
+          cml-send-comment report.md
       - name: 'Train my model'
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
