@@ -13,6 +13,9 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
           pip install nbconvert
+
+          python data/dataprep_git_test.py
+
           jupyter nbconvert --to script model/pytorch_train.ipynb
           python model/pytorch_train.py
 
