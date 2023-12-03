@@ -19,6 +19,7 @@ jobs:
         run: |
           jupyter nbconvert --to script data/dataprep_git.ipynb 
           python data/dataprep_git.py 
+
       - name: Generate and publish plots
         run: |
           # Read the column names from the CSV file
@@ -34,6 +35,7 @@ jobs:
       
           # Send the report
           cml-send-comment report.md
+          
       - name: 'Train my model'
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
