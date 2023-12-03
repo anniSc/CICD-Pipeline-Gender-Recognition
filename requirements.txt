@@ -9,3 +9,4 @@ scikit-learn
 pytest
 seaborn
 scipy
+pydqc
