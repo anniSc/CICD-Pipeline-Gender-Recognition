@@ -30,8 +30,8 @@ jobs:
           # Iterate over each column
           for column in $columns; do
             # Update the report
-            echo "\n## Model Performance for $column" >> report.md
-            echo "Modell Performance in einem normalen Plot dargestellt" >> report.md
+            echo "\n## Datenvisualisierung für $column" >> report.md
+          
             cml-publish data/plot_data/${column}.png --md >> report.md
           done
       
