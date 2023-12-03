@@ -8,6 +8,5 @@ torchvision
 scikit-learn
 pytest
 pydqc
-joblib
 seaborn
 scipy
