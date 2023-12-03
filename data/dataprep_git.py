@@ -47,6 +47,9 @@ merged_csv_test = "model/csv_sheets/merged_df_test.csv"
 merged_csv_train = "model/csv_sheets/merged_df_train.csv"
 required_directories = [source_train_path, women_image_source_path_test,men_image_source_path_test,men_image_source_path_train,women_image_source_path_train]
 
+df = pd.read_csv(source_csv)
+df.to_csv("source.csv", index=False)
+
 
 # Hauptpfad zu den Bildern
 base_path = "data/img_align_celeba"
@@ -213,7 +216,9 @@ def plot_balance_all_columns(csv_path):
         if np.issubdtype(df[column_name].dtype, np.number):  # Überprüfe, ob die Spalte numerisch ist
             counts = df[column_name].value_counts()
             counts.plot(kind='bar', title=f"Verteilung der Werte in der Spalte '{column_name}'")
+            plt.savefig(f"data/plot_data/{column_name}.png")
             plt.show()
+            
         
 test_balance_all_columns(source_csv)
 plot_balance_all_columns(source_csv)

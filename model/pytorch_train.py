@@ -56,6 +56,10 @@ from torch.optim import Adam
 epochs = 1
 batch_size = 64
 
+with open("test/epochs.txt", "w") as f:
+    f.write(str(epochs))
+
+    
 transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
