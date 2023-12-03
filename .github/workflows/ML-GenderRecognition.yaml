@@ -31,6 +31,7 @@ jobs:
 
       - name: Run data preparation
         run: |
+          python data/dataprep_git_test.py
           python data/dataprep.py
      
       - name: Train model
