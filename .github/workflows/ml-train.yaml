@@ -19,11 +19,21 @@ jobs:
         run: |
           jupyter nbconvert --to script data/dataprep_git.ipynb 
           python data/dataprep_git.py 
-
-      - name: Generate and publish plots Data Tests
+     
+      - name: 'Train and Test model'
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          jupyter nbconvert --to script model/pytorch_train.ipynb
+          python model/pytorch_train.py
+
+
+
+      - name: Generate and publish plots Model Tests
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+
           # Read the column names from the CSV file
           columns=$(head -n 1 data/source.csv | tr ',' '\n')
       
@@ -33,16 +43,10 @@ jobs:
             echo "\n## Datenvisualisierung für $column" >> report.md
           
             cml-publish data/plot_data/${column}.png --md >> report.md
-          done
-      
-          
-          
-      - name: 'Train my model'
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          jupyter nbconvert --to script model/pytorch_train.ipynb
-          python model/pytorch_train.py
+          done  
+
+
+
 
           echo "## Model Metriken" > report.md
           cat metrics.txt >> report.md
