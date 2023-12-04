@@ -1,1 +1,1 @@
-Modellmetriken: Genauigkeit: 0.5175, Präzision: 0.6351236574499464, Recall: 0.5175, F1-Score: 0.3832902328830287
+Modellmetriken: Genauigkeit: 0.6335, Präzision: 0.7155621327572093, Recall: 0.6335, F1-Score: 0.5949505306396715
