@@ -29,11 +29,11 @@ from tqdm import tqdm
 # In[ ]:
 
 
-epochs = 1
+epochs = 50
 batch_size = 64
 
 # Epochen speichern um diese für das Testen zu verwenden
-with open("test/epochs.txt", "w") as f:
+with open("test/epochs/epochs.txt", "w") as f:
     f.write(str(epochs))
 
 # Transformation der Daten für das Training und Testen  
@@ -323,7 +323,7 @@ f1 = f1_score(true_labels, predictions, average='weighted')
 
 print(f'Genauigkeit: {accuracy}, Präzision: {precision}, Recall: {recall}, F1-Score: {f1}')
 
-with open('metrics.txt', 'w') as outfile:
+with open('model/metrics/metrics.txt', 'w') as outfile:
     outfile.write(f'Modellmetriken: Genauigkeit: {accuracy}, Präzision: {precision}, Recall: {recall}, F1-Score: {f1}')
 
 
@@ -368,7 +368,7 @@ plt.xlabel('True Labels',color='blue')
 plt.ylabel('Predictions',color='red')
 plt.title('True Labels vs Predictions')
 
-plt.savefig("plot_scatter.jpg",dpi=100)
+plt.savefig("model/plots/plot_scatter.jpg",dpi=100)
 plt.show()
 
 
@@ -379,7 +379,7 @@ plt.ylabel('Predictions')
 plt.xlabel('True Labels',color='blue')
 plt.ylabel('Predictions',color='red')
 plt.title('True Labels vs Predictions')
-plt.savefig("plot_plt.jpg",dpi=100)
+plt.savefig("model/plots/plot_plt.jpg",dpi=100)
 plt.show()
 
 # Create a 2D histogram from the data
@@ -392,5 +392,5 @@ plt.colorbar(label='Anzahl')
 plt.xlabel('True Labels')
 plt.ylabel('Predictions')
 plt.title('Heatmap of True Labels vs Predictions')
-plt.savefig("heatmap.jpg", dpi=100)
+plt.savefig("model/plots/heatmap.jpg", dpi=100)
 plt.show()
