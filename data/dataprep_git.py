@@ -5,7 +5,7 @@
 # 
 # 
 
-# In[1]:
+# In[ ]:
 
 
 import os
@@ -33,7 +33,7 @@ import numpy as np
 # ## 2.1 Extrahieren der Bildpfade aus dem Ordner img_align_celeba 
 # ##### Dies wird gemacht um die Pfade aus der Source-CSV: list_attr_celeba.csv in der Spalte image_id mit den richtigen Pfaden zu ersetzen. Somit sind die Pfade den Bildern richtig zugeordnet. 
 
-# In[19]:
+# In[ ]:
 
 
 source_csv = "data/source_csv/list_attr_celeba.csv"
@@ -113,7 +113,7 @@ df.to_csv("data/source_csv/list_attr_celeba.csv", index=False)
 
 # ## 2.2 Testen ob die Bildpfade in der CSV-Datei die richtige Dateiendung haben. 
 
-# In[20]:
+# In[ ]:
 
 
 csv_path = "data/source_csv/list_attr_celeba.csv"
@@ -122,7 +122,7 @@ test_image_extensions_in_csv(csv_path=csv_path, column_name_of_image_paths="imag
 # ## 2.3 Überprüfen ob die Source_CSV im Dateiformat CSV ist. 
 # 
 
-# In[21]:
+# In[ ]:
 
 
 def check_csv_extension(csv_path):
@@ -133,7 +133,7 @@ check_csv_extension(csv_path)
 
 # ## 2.4 Überprüfen ob die benötigten Ordner vorhanden sind zum trainieren, testen, speichern der ML-Modelle
 
-# In[22]:
+# In[ ]:
 
 
 def check_required_directories_data_exists(directories):
@@ -146,7 +146,7 @@ check_required_directories_data_exists(required_directories)
 
 # ## 3.1 Überprüfen ob Bilddateien fehlen, Duplicate vorhanden sind, Überprüfen ob die Bildpfade gültig sind in der CSV. 
 
-# In[23]:
+# In[ ]:
 
 
 def test_quality_of_csv(csv_path,column_name_of_image_paths="image_id"):
@@ -165,7 +165,7 @@ test_quality_of_csv(source_csv, column_name_of_image_paths=df.columns[0])
 
 # ## 3.2 Überprüfen ob es in allen Spalten Werte gibt die null bzw. leer sind.
 
-# In[24]:
+# In[ ]:
 
 
 def check_missing_values(csv_path):
@@ -178,7 +178,7 @@ check_missing_values(source_csv)
 
 # ## 3.3 Überprüfen ob es Anomalien, Ausreißer gibt
 
-# In[25]:
+# In[ ]:
 
 
 def test_outliers_all_columns(csv_path):
@@ -193,7 +193,7 @@ test_outliers_all_columns(source_csv)
 
 # ## 3.4 Überprüfen ob die Daten ausgeglichen sind
 
-# In[26]:
+# In[ ]:
 
 
 def test_balance_all_columns(csv_path):
@@ -243,7 +243,7 @@ plot_balance_all_columns(source_csv)
 
 # ## 3.5 Datensatz auf Ausreißer überprüfen
 
-# In[27]:
+# In[ ]:
 
 
 def detect_all_outliers(df):
@@ -294,7 +294,7 @@ detect_all_outliers(df)
 
 # ## 4.1 Anpassen der Unausgeglichenheit zwischen Frauen und Mann Datensätzen
 
-# In[28]:
+# In[ ]:
 
 
 def plot_gender_histogram(df):
@@ -336,13 +336,13 @@ def balance_column(csv_path, column_name):
 balanced_df = balance_column(source_csv, "Male")
 balanced_df.to_csv("balanced_gender.csv", index=False)
 
-balanced_csv_path =r"data/balanced_gender.csv"
+balanced_csv_path ="data/balanced_gender.csv"
 plot_gender_histogram(balanced_df)
 
 
 # ## 4.2 Unausgeglichenheit zwischen Jungen und Alten Personendatensätzen ausgleichen
 
-# In[29]:
+# In[ ]:
 
 
 def plot_young_histogram(df):
@@ -373,7 +373,7 @@ plot_young_histogram(df_young_balanced)
 
 # ## 5.1 Daten auf Normalverteilung testen
 
-# In[36]:
+# In[ ]:
 
 
 from scipy.stats import shapiro
@@ -404,7 +404,7 @@ for column_name in df.columns:
 
 # ## 5.2 Daten auf Uniformverteilung testen
 
-# In[38]:
+# In[ ]:
 
 
 def test_uniform_distribution(data, column_name):
@@ -427,7 +427,7 @@ for column_name in df.columns:
 
 # ## 5.3 Daten auf Binomialverteilung testen
 
-# In[40]:
+# In[ ]:
 
 
 from scipy.stats import chisquare, binom
@@ -454,11 +454,31 @@ for column_name in df.columns:
     if pd.api.types.is_numeric_dtype(df[column_name]):
         test_binomial_distribution(df[column_name], column_name, p=0.5)
 
+# ## 5.4 Daten auf Exponentialverteilung testen
+
+# In[ ]:
+
+
+from scipy.stats import kstest
+
+def test_exponential_distribution(data, column_name):
+    stat, p_value = kstest(data, 'expon')
+    if p_value > 0.05:
+        print(f'Die Daten in der Spalte {column_name} folgen wahrscheinlich einer Exponentialverteilung.')
+    else:
+        print(f'Die Daten in der Spalte {column_name} folgen wahrscheinlich nicht einer Exponentialverteilung.')
+
+for column_name in df.columns:
+    if pd.api.types.is_numeric_dtype(df[column_name]):
+        # Entfernen Sie nicht-numerische Werte
+        data = df[column_name].dropna()
+        test_exponential_distribution(data, column_name)
+
 # # 6. Hier werden die Daten nun visualisiert. Dabei werden Datenvielfalt, Datenverteilung visualisiert. 
 
 # 
 
-# In[31]:
+# In[ ]:
 
 
 def detect_outliers_iqr_all_columns(csv_path):
@@ -478,7 +498,7 @@ def detect_outliers_iqr_all_columns(csv_path):
 
 detect_outliers_iqr_all_columns(csv_path=csv_path)
 
-# In[32]:
+# In[ ]:
 
 
 def check_duplicates(csv_path):
@@ -491,7 +511,7 @@ def check_duplicates(csv_path):
 
 check_duplicates(csv_path=csv_path)
 
-# In[33]:
+# In[ ]:
 
 
 def check_null_values(csv_path):
@@ -504,7 +524,7 @@ def check_null_values(csv_path):
 
 check_null_values(csv_path=csv_path)
 
-# In[34]:
+# In[ ]:
 
 
 # from great_expectations.data_context import DataContext
