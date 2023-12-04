@@ -181,14 +181,15 @@ check_missing_values(source_csv)
 # In[25]:
 
 
-# def test_outliers_all_columns(csv_path):
-#     df = pd.read_csv(csv_path)
-#     for column_name in df.columns:
-#         if np.issubdtype(df[column_name].dtype, np.number):  # Überprüfe, ob die Spalte numerisch ist
-#             z_scores = np.abs((df[column_name] - df[column_name].mean()) / df[column_name].std())
-#             assert not any(z_scores > 3), f"Es gibt Ausreißer in der Spalte '{column_name}'"
+def test_outliers_all_columns(csv_path):
+    df = pd.read_csv(csv_path)
+    for column_name in df.columns:
+        if np.issubdtype(df[column_name].dtype, np.number):  # Überprüfe, ob die Spalte numerisch ist
+            z_scores = np.abs((df[column_name] - df[column_name].mean()) / df[column_name].std())
+            if any(z_scores > 3):
+                print(f"::warning::Es gibt Ausreißer in der Spalte '{column_name}'")
 
-# test_outliers_all_columns(source_csv)
+test_outliers_all_columns(source_csv)
 
 # ## 3.4 Überprüfen ob die Daten ausgeglichen sind
 
@@ -207,6 +208,23 @@ def test_balance_all_columns(csv_path):
 
     if imbalance_report:
         print("Es gibt unausgeglichene Spalten:/n" + "/n".join(imbalance_report))
+
+def is_numeric(column):
+    try:
+        pd.to_numeric(column)
+        return True
+    except ValueError:
+        return False
+
+# Load your DataFrame
+df = pd.read_csv('data/source.csv')
+
+# Filter the columns to only those with numeric data
+numeric_columns = [col for col in df.columns if is_numeric(df[col])]
+
+df = df[numeric_columns]
+df.to_csv("data/source.csv", index=False)
+
 
 
 def plot_balance_all_columns(csv_path):
