@@ -35,8 +35,7 @@ jobs:
             cml-publish data/plot_data/${column}.png --md >> report.md
           done
       
-          # Send the report
-          cml-send-comment report.md
+          
           
       - name: 'Train my model'
         env:
