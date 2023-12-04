@@ -5,7 +5,7 @@
 # 
 # 
 
-# In[ ]:
+# In[6]:
 
 
 import os
@@ -33,22 +33,24 @@ import numpy as np
 # ## 2.1 Extrahieren der Bildpfade aus dem Ordner img_align_celeba 
 # ##### Dies wird gemacht um die Pfade aus der Source-CSV: list_attr_celeba.csv in der Spalte image_id mit den richtigen Pfaden zu ersetzen. Somit sind die Pfade den Bildern richtig zugeordnet. 
 
-# In[ ]:
+# In[14]:
 
 
 source_csv = "data/source_csv/list_attr_celeba.csv"
 csv_path="data/source_csv/list_attr_celeba.csv"
-source_train_path = "data/train"
-men_image_source_path_train = "data/train/men"
-women_image_source_path_train = "data/train/women"
-men_image_source_path_test = "data/val/men"
-women_image_source_path_test = "data/val/women"
+source_train_path = "data/output/train"
+men_image_source_path_train = "data/output/train/men"
+women_image_source_path_train = "data/output/train/women"
+men_image_source_path_test = "data/output/val/men"
+women_image_source_path_test = "data/output/val/women"
 merged_csv_test = "model/csv_sheets/merged_df_test.csv"
 merged_csv_train = "model/csv_sheets/merged_df_train.csv"
 required_directories = [source_train_path, women_image_source_path_test,men_image_source_path_test,men_image_source_path_train,women_image_source_path_train]
 
+
+# Erstellen der source.csv um automatisch die benötigten Spalten für die Visualisierung der Daten herauszuziehen.
 df = pd.read_csv(source_csv)
-df.to_csv("source.csv", index=False)
+df.to_csv("data/column_source_csv/source.csv", index=False)
 
 
 # Hauptpfad zu den Bildern
@@ -193,7 +195,7 @@ test_outliers_all_columns(source_csv)
 
 # ## 3.4 Überprüfen ob die Daten ausgeglichen sind
 
-# In[ ]:
+# In[1]:
 
 
 def test_balance_all_columns(csv_path):
@@ -217,13 +219,13 @@ def is_numeric(column):
         return False
 
 # Load your DataFrame
-df = pd.read_csv('data/source.csv')
+df = pd.read_csv('data/column_source_csv/source.csv')
 
 # Filter the columns to only those with numeric data
 numeric_columns = [col for col in df.columns if is_numeric(df[col])]
 
 df = df[numeric_columns]
-df.to_csv("data/source.csv", index=False)
+df.to_csv("data/column_source_csv/source.csv", index=False)
 
 
 
@@ -334,9 +336,9 @@ def balance_column(csv_path, column_name):
 
 # Call the function with your csv file
 balanced_df = balance_column(source_csv, "Male")
-balanced_df.to_csv("balanced_gender.csv", index=False)
+balanced_df.to_csv("data/balanced_source_csv/balanced_gender.csv", index=False)
 
-balanced_csv_path ="data/balanced_gender.csv"
+balanced_csv_path ="data/balanced_source_csv/balanced_gender.csv"
 plot_gender_histogram(balanced_df)
 
 
@@ -360,9 +362,9 @@ def plot_young_histogram(df):
     plt.ylabel('Count')
     plt.show()
 
-young_balanced_csv = "data/balanced_young.csv"
+young_balanced_csv = "data/balanced_source_csv/balanced_young.csv"
 df_young_balanced = balance_column(source_csv, "Young")
-df_young_balanced.to_csv("balanced_young.csv", index=False)
+df_young_balanced.to_csv("data/balanced_source_csv/balanced_young.csv", index=False)
 df_young_balanced = pd.read_csv(young_balanced_csv)
 
 plot_young_histogram(df_young_balanced)
@@ -540,3 +542,51 @@ check_null_values(csv_path=csv_path)
 # # Print the results
 # print(results)
 
+
+# In[20]:
+
+
+# import pandas as pd
+# import shutil
+# import os
+
+# def prepare_images(n, splits, label_file, img_dir, output_dir):
+#     # Lesen Sie die CSV-Datei
+#     df = pd.read_csv(label_file)
+
+#     # Filtern Sie die Daten
+#     df_male = df[df['Male'] == 1].sample(n//2)
+#     df_female = df[df['Male'] == -1].sample(n//2)
+#     df = pd.concat([df_male, df_female])
+
+#     # Teilen Sie die Daten auf
+#     train_df = df.sample(splits[0])
+#     val_df = df.drop(train_df.index)
+
+#     # Erstellen Sie die Ausgabeordner
+#     os.makedirs(os.path.join(output_dir, 'train', 'men'), exist_ok=True)
+#     os.makedirs(os.path.join(output_dir, 'train', 'women'), exist_ok=True)
+#     os.makedirs(os.path.join(output_dir, 'val', 'men'), exist_ok=True)
+#     os.makedirs(os.path.join(output_dir, 'val', 'women'), exist_ok=True)
+
+#     # Kopieren Sie die Bilder
+#     for idx, row in train_df.iterrows():
+#         if row['Male'] == 1:
+#             shutil.copy(os.path.join(img_dir, row['image_id']), os.path.join(output_dir, 'train', 'men'))
+#         else:
+#             shutil.copy(os.path.join(img_dir, row['image_id']), os.path.join(output_dir, 'train', 'women'))
+
+#     for idx, row in val_df.iterrows():
+#         if row['Male'] == 1:
+#             shutil.copy(os.path.join(img_dir, row['image_id']), os.path.join(output_dir, 'val', 'men'))
+#         else:
+#             shutil.copy(os.path.join(img_dir, row['image_id']), os.path.join(output_dir, 'val', 'women'))
+
+# In[23]:
+
+
+# prepare_images(12000, [10000, 2000], 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/source_csv/list_attr_celeba loca.csv', 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/img_align_celeba', 'output')
+
+# 
+
+# 

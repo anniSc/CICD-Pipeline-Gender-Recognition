@@ -1,7 +1,9 @@
 #!/usr/bin/env python
 # coding: utf-8
 
-# In[ ]:
+# # 1. Importieren der benötigten Bibliotheken für das ML-Training
+
+# In[1]:
 
 
 import os
@@ -14,79 +16,39 @@ from torchvision.transforms import ToTensor
 from torchvision.io import read_image
 from torch.utils.data import Dataset, DataLoader
 import torch.nn.functional as F
-import torch
-from torch.utils.data import DataLoader
 import numpy as np
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-import torch
-from torch.utils.data import DataLoader
-import os
-import torch
-import pandas as pd
-import matplotlib.pyplot as plt
-from torch import nn, cuda
-from torchvision import datasets, transforms, models
-from torchvision.transforms import ToTensor
-from torchvision.io import read_image
-from torch.utils.data import Dataset, DataLoader
-import torch.nn.functional as F
-import torch
-from torch.utils.data import DataLoader
-import numpy as np
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-import torch
-from torch.utils.data import DataLoader
-# from skimage import io
-from torch.utils.data import Dataset
 from torch.optim import Adam
+import torch.optim as optim
+from tqdm import tqdm
+
+# # 2. ML-Training 
+
+# ## 2.1 Festlegen der epochen und der Batchsize sowie die Transformierung der Daten in einen Tensor und dann noch normalisieren
 
 # In[ ]:
-
-
-# df_men_train =pd.read_csv( r"C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\model\excel_sheets\git_image_paths_val_men.csv")
-# df_men_train["Images"] = df_men_train["Images"].str.replace("C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/", " ")
-# df_men_train.to_csv(r"C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\model\excel_sheets\git_image_paths_val_men.csv")
-
-
-# In[ ]:
-
-
 
 
 epochs = 1
 batch_size = 64
 
+# Epochen speichern um diese für das Testen zu verwenden
 with open("test/epochs.txt", "w") as f:
     f.write(str(epochs))
 
-    
+# Transformation der Daten für das Training und Testen  
 transform = transforms.Compose([
     transforms.ToTensor(),
     transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
 ])
-# img_dir_train ='C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/train'
-# img_dir_val = 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/val'
-# train_dataset = datasets.ImageFolder(root=img_dir_train,transform=transform)
-# test_dataset = datasets.ImageFolder(root= img_dir_val,transform=transform)
 
+# Dateipfade für das Training und Testen festlegen
+train_dataset = datasets.ImageFolder(root='data/output/train',transform=transform)
+test_dataset = datasets.ImageFolder(root= 'data/output/val',transform=transform)
+train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
+test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
-
-
-# Apply the transformation to your dataset
-# train_dataset = datasets.ImageFolder(root='data/train',transform=transform)
-# test_dataset = datasets.ImageFolder(root= 'data/val',transform=transform)
-
-
-
-
-# df_men_train = pd.read_csv("model/excel_sheets/git_image_paths_men.csv")
-# df_women_train = pd.read_csv("model/excel_sheets/git_image_paths_women.csv")
-# df_women_test = pd.read_csv("model/excel_sheets/git_image_paths_val_women.csv")
-# df_men_test = pd.read_csv("model/excel_sheets/git_image_paths_val_men.csv")
-# merged_df_train = pd.concat([df_men_train, df_women_train], ignore_index=True)
-# merged_df_test = pd.concat([df_men_test, df_women_test], ignore_index=True)
-# merged_df_test.to_csv("model/git_merged_df_test.csv")
-# merged_df_train.to_csv("model/git_merged_df_train.csv")
+# ## 2.2 Erstellen eines eigenen Datasets (falls notwendig)
 
 # In[ ]:
 
@@ -129,26 +91,6 @@ class GenderRecognitionDataset(Dataset):
             image = self.transform(image)
         return (image,y_label)
 
-# train_data = CustomImageDataset(annotations_file='model/git_merged_df_train.csv',img_dir='data/train')
-# test_data =  CustomImageDataset(annotations_file='model/git_merged_df_test.csv',img_dir='data/val')
-
-# train_data = CustomImageDataset(annotations_file='C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/csv_sheets/merged_df_train.csv',img_dir='C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/train')
-# test_data =  CustomImageDataset(annotations_file='C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/csv_sheets/merged_df_test.csv',img_dir='C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/data/val')
-
-
-
-# train_dataset_gender = GenderRecognitionDataset(csv_file=r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\model\csv_sheets\merged_df_train.csv',img_dir='data/train',transform=transforms.ToTensor())
-# test_dataset_gender = GenderRecognitionDataset(csv_file=r'C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\model\csv_sheets\merged_df_test.csv',img_dir='data/val',transform=transforms.ToTensor())
-
-# train_dataset_gender = GenderRecognitionDataset(csv_file=r'model\csv_sheets\git_merged_df_train.csv',img_dir='data/train',transform=transforms.ToTensor())
-# test_dataset_gender = GenderRecognitionDataset(csv_file=r'model\csv_sheets\git_merged_df_test.csv',img_dir='data/val',transform=transforms.ToTensor())
-
-
-
-train_dataset = datasets.ImageFolder(root='data/train',transform=transform)
-test_dataset = datasets.ImageFolder(root= 'data/val',transform=transform)
-train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
 
 
@@ -157,6 +99,7 @@ test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
 
 
 
+# ## 2.3 Überprüfen ob die Bilder richtig angezeigt werden
 
 # In[ ]:
 
@@ -168,6 +111,10 @@ print(f"Labels batch shape: {train_labels.size()}")
 img = train_features[0].squeeze()
 img = train_features[0].permute(1, 2, 0)
 plt.imshow(img, cmap="gray")
+
+# ## 2.4 Erstellen eines CNN-Modells
+
+# ### Das CNN-Modell besteht aus 2 Convolutional Layers, 2 Pooling Layers, 2 Max Pooling Layers, 3 Dense Layers
 
 # In[ ]:
 
@@ -205,41 +152,66 @@ class SimpleCNN(nn.Module):
         x = self.fc3(x)  
         return x
 
+# # 3. ML-Modell trainieren
+
+# # Dokumentation für PyTorch Trainingsskript
+# 
+# Dieses Skript trainiert ein Convolutional Neural Network (CNN) mit PyTorch.
+# 
+# ## Variablen
+# 
+# - `model`: Eine Instanz des `SimpleCNN` Modells.
+# - `criterion`: Die Verlustfunktion, die während des Trainings verwendet wird. In diesem Fall wird die Cross-Entropy-Loss-Funktion verwendet.
+# - `optimizer`: Der Optimierer, der zur Aktualisierung der Modellparameter verwendet wird. Hier wird der Stochastic Gradient Descent (SGD) Optimierer verwendet.
+# - `patience`: Die Anzahl der Epochen, die auf eine Verbesserung der Genauigkeit gewartet wird, bevor das Training gestoppt wird.
+# - `best_accuracy`: Die beste Genauigkeit, die während des Trainings erreicht wurde. Initialisiert auf 0.
+# - `early_stopping_counter`: Zählt die Anzahl der Epochen ohne Verbesserung der Genauigkeit.
+# 
+# ## Trainingsschleife
+# 
+# Das Modell wird für eine bestimmte Anzahl von Epochen trainiert. In jeder Epoche wird das Modell mit den Trainingsdaten trainiert und dann mit den Testdaten validiert.
+# 
+# Während des Trainings werden die Modellparameter aktualisiert, um den Verlust zu minimieren. Der Verlust wird berechnet, indem die Ausgabe des Modells und die tatsächlichen Labels verglichen werden.
+# 
+# Nach jeder Epoche wird die Genauigkeit des Modells auf den Testdaten berechnet. Wenn die Genauigkeit über 90% liegt, wird der aktuelle Zustand des Modells gespeichert. Wenn die Genauigkeit nicht besser ist als die bisher beste Genauigkeit, wird der `early_stopping_counter` erhöht. Wenn der `early_stopping_counter` den Wert von `patience` erreicht, wird das Training gestoppt.
+# 
+# ## Ausgabe
+# 
+# Das Skript gibt den Verlust und die Genauigkeit nach jeder Epoche aus. Wenn das Training aufgrund von Early Stopping gestoppt wird, wird eine entsprechende Nachricht ausgegeben. Am Ende des Trainings wird eine Nachricht ausgegeben, dass das Training abgeschlossen ist.
+
 # In[ ]:
 
 
-import torch.optim as optim
-from tqdm import tqdm
 
 model = SimpleCNN()
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-patience = 10  # Number of epochs to wait for improvement before stopping
-best_accuracy = 0.0  # Best accuracy value. Initialized to 0 for now
-early_stopping_counter = 0  # Counter to keep track of the number of epochs without improvement
+patience = 10 
+best_accuracy = 0.0  
+early_stopping_counter = 0  
 
-for epoch in range(epochs):  # loop over the dataset multiple times
+for epoch in range(epochs): 
     running_loss = 0.0
     for i, data in enumerate(tqdm(train_dataloader), 0):
-        # get the inputs; data is a list of [inputs, labels]
+      
         inputs, labels = data
 
-        # zero the parameter gradients
+   
         optimizer.zero_grad()
 
-        # forward + backward + optimize
+   
         outputs = model(inputs)
         loss = criterion(outputs, labels)
         loss.backward()
         optimizer.step()  
 
-        # print statistics
+   
         running_loss += loss.item()
 
-    # Calculate accuracy after each epoch
+  
     correct = 0
     total = 0
-    if i % 10 == 9:  # print every 100 mini-batches
+    if i % 10 == 9: 
         print('[%d, %5d] loss: %.3f' %
               (epoch + 1, i + 1, running_loss / 100))
         running_loss = 0.0
@@ -254,9 +226,9 @@ for epoch in range(epochs):  # loop over the dataset multiple times
     accuracy = correct / total
 
 
-    if accuracy > 0.9:  # Only save if accuracy is above 90%
-        torch.save(model.state_dict(), f'model_epoch_{epoch+1}_accuracy_{accuracy:.2f}.pth')
-    # If the current accuracy is better than the best accuracy
+    if accuracy > 0.9:  
+        torch.save(model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch+1}_accuracy_{accuracy:.2f}.pth')
+   
     if accuracy > best_accuracy:
         best_accuracy = accuracy
         early_stopping_counter = 0
@@ -264,115 +236,14 @@ for epoch in range(epochs):  # loop over the dataset multiple times
     else:
         early_stopping_counter += 1
 
-    # If the counter has reached patience, stop the training
     if early_stopping_counter >= patience:
         print('Early stopping')
         break
 
 print('Finished Training')
 
-# In[ ]:
-
-
-# import torch.optim as optim
-# from tqdm import tqdm
-
-# # Instantiate the model, loss function and optimizer
-# model = SimpleCNN()
-# criterion = nn.CrossEntropyLoss()
-# optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)
-
-# # Assume `val_dataloader` is your DataLoader for the validation set
-# # for epoch in range(epochs):  # loop over the dataset multiple times
-# #     running_loss = 0.0
-# #     for i, data in enumerate(tqdm(train_dataloader), 0):
-# #         # get the inputs; data is a list of [inputs, labels]
-# #         inputs, labels = data
-
-# #         # zero the parameter gradients
-# #         optimizer.zero_grad()
-
-# #         # forward + backward + optimize
-# #         outputs = model(inputs)
-# #         loss = criterion(outputs, labels)
-# #         loss.backward()
-# #         optimizer.step()  
-         
-
-# #         # Trainingsverlauf ausgeben
-# #         running_loss += loss.item()
-
-# #         #Alle 10 Batches wird der Loss ausgegeben
-# #         if i % 10 == 9:    
-# #             # Berechnung der Accuracy
-# #             correct = 0
-# #             total = 0
-# #             with torch.no_grad():
-# #                 for val_data in test_dataloader:
-# #                     val_images, val_labels = val_data
-# #                     val_outputs = model(val_images)
-# #                     _, predicted = torch.max(val_outputs.data, 1)
-# #                     total += val_labels.size(0)
-# #                     correct += (predicted == val_labels).sum().item()
-# #             val_accuracy = correct / total
-
-# #             print(f'Epoch: {epoch + 1}, Batch: {i + 1}, Loss: {running_loss / 10}, Validation Accuracy: {val_accuracy * 100}%')
-# #             running_loss = 0.0
-
-# # print('Finished Training')
-
-
-# for epoch in range(epochs):  # loop over the dataset multiple times
-#     running_loss = 0.0
-#     for i, data in enumerate(tqdm(train_dataloader), 0):
-#         # get the inputs; data is a list of [inputs, labels]
-#         inputs, labels = data
-
-#         # zero the parameter gradients
-#         optimizer.zero_grad()
-
-#         # forward + backward + optimize
-#         outputs = model(inputs)
-#         loss = criterion(outputs, labels)
-#         loss.backward()
-#         optimizer.step()  
-
-#         # Trainingsverlauf ausgeben
-#         running_loss += loss.item()
-
-#         #Alle 10 Batches wird der Loss ausgegeben
-#         if i % 10 == 9:    
-#             # Berechnung der Accuracy
-#             correct = 0
-#             total = 0
-#             with torch.no_grad():
-#                 for val_data in test_dataloader:
-#                     val_images, val_labels = val_data
-#                     val_outputs = model(val_images)
-#                     _, predicted = torch.max(val_outputs.data, 1)
-#                     total += val_labels.size(0)
-#                     correct += (predicted == val_labels).sum().item()
-#             val_accuracy = correct / total
-
-#             print(f'Epoch: {epoch + 1}, Batch: {i + 1}, Loss: {running_loss / 10}, Validation Accuracy: {val_accuracy * 100}%')
-#             running_loss = 0.0
-
-#             # Wenn die Validation Accuracy 95% erreicht, wird das Training beendet
-#             if val_accuracy >= 0.95:
-#                 print('Early stopping, validation accuracy reached 95%')
-#                 break
-
-# print('Finished Training')
-
-# In[ ]:
-
-
-# model_path_local = 'C:/Users/busse/Bachelorarbeit/CICD-Pipeline-Gender-Recognition/model/PyTorch_Trained_Models/'
 model_path_git = f'model/PyTorch_Trained_Models/'
 torch.save(model.state_dict(), f'{model_path_git}model_git{batch_size}' + '-' + f'{epochs}' + '.pth')
-
-# torch.save(model.state_dict(), f'model/model{batch_size}' + '-' + f'{epochs}' + '.pth')
-
 
 # In[ ]:
 
