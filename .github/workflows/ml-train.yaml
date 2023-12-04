@@ -17,7 +17,7 @@ jobs:
 
       - name: 'Prepare data'
         run: |
-          jupyter nbconvert --to script data/dataprep_git.ipynb 
+          jupyter nbconvert --to script data/dataprep_scripts/dataprep_git.ipynb 
           python data/dataprep_scripts/dataprep_git.py 
 
       - name: Generate and publish plots Data Tests
