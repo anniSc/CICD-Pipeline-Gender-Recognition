@@ -75,6 +75,21 @@ jobs:
       
           cml-send-comment report_ml.md
 
+
+      - name: 'Test ML-Model'
+        run: |
+          jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
+          python test/model_test_scripts/model_test.py
+
+
+      - name: Publish files
+        run: |
+
+          for file in test/test-plots-rauschen/*; do
+            cml publish "$file" --md >> report_ml_test.md
+          done
+      
+          cml-send-comment report_ml_test.md
       - name: Commit and push model from train.py
         run: |
           git config --local user.email "Aseuc@github.com"
