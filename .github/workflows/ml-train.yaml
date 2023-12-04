@@ -18,7 +18,7 @@ jobs:
       - name: 'Prepare data'
         run: |
           jupyter nbconvert --to script data/dataprep_git.ipynb 
-          python data/dataprep_git.py 
+          python data/dataprep_scripts/dataprep_git.py 
 
       - name: Generate and publish plots Data Tests
         env:
@@ -26,10 +26,10 @@ jobs:
         run: |
           
           # Generiere einen Report der einzigartig ist um nicht immer den gleichen Report zu erhalten
-          report_file="report_$(date +%s).md"
+          report_file="report_data_plots.md"
 
           # Read the column names from the CSV file
-          columns=$(head -n 1 data/source.csv | tr ',' '\n')
+          columns=$(head -n 1 data/column_source_csv/source.csv | tr ',' '\n')
       
           # Iterate over each column
           for column in $columns; do
@@ -45,23 +45,23 @@ jobs:
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          jupyter nbconvert --to script model/pytorch_train.ipynb
-          python model/pytorch_train.py
+          jupyter nbconvert --to script model/ml_model_scripts/pytorch_train.ipynb
+          python model/ml_model_scripts/pytorch_train.py
 
           echo "## Model Metriken" > report_ml.md
-          cat metrics.txt >> report_ml.md
+          cat model/metrics/metrics.txt >> report_ml.md
           
           echo "\n## Model Performance" >> report_ml.md
           echo "Modell Performance bzw. das Matching zwischen Predictions und True-Labels in einer Heatmap dargestellt!" >> report_ml.md
-          cml-publish model/heatmap.jpg --md >> report_ml.md
+          cml-publish model/plots/heatmap.jpg --md >> report_ml.md
           
           echo "\n## Model Performance" >> report_ml.md
           echo "Modell Performance in einem Scatter-Plot dargestellt" >> report_ml.md
-          cml-publish model/plot_scatter.jpg --md >> report_ml.md
+          cml-publish model/plots/plot_scatter.jpg --md >> report_ml.md
         
           echo "\n## Model Performance" >> report_ml.md
           echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
-          cml-publish model/plot_plt.jpg --md >> report_ml.md
+          cml-publish model/plots/plot_plt.jpg --md >> report_ml.md
       
           cml-send-comment report_ml.md
 
