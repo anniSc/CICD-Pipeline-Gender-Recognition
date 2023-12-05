@@ -82,19 +82,19 @@ def predict(image, model_path):
 
 
 
-uploaded_file = st.file_uploader("Choose an image...", type=["jpg", "jpeg", "png"])
+uploaded_files = st.file_uploader("Bilder hochladen...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
-if uploaded_file is not None:
+for uploaded_file in uploaded_files:
     image = Image.open(uploaded_file)
-    st.image(image, caption='Uploaded Image.', use_column_width=True)
-    st.write("Image successfully uploaded.")
+    st.image(image, caption='Hochgeladenes Bild.', use_column_width=True)
+    st.write("Bild erfolgreich hochgeladen.")
 
     # Get a list of all files in the directory
     model_dir = 'model/PyTorch_Trained_Models'
     models = os.listdir(model_dir)
 
     # Use the list of models as options for the selectbox
-    model_name = st.selectbox("Select a model:", models)
+    model_name = st.selectbox("Wählen Sie ein Modell aus:", models)
     model_path = os.path.join(model_dir, model_name)
 
     if st.button('Prediction Starten!'):
