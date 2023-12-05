@@ -1,5 +1,8 @@
 name: ML-Train mit Performance-Report
-on: [push]
+on:
+  push:
+    branches:
+      - test_torch-new-workflow
 jobs:
   run:
     runs-on: [ubuntu-latest]
@@ -82,14 +85,24 @@ jobs:
           python test/model_test_scripts/model_test.py
 
 
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: Publish files
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
+          
+          report_file="report_test.md"
 
-          for file in test/test-plots-rauschen/*; do
-            cml publish "$file" --md >> report_ml_test.md
+          for file in test/test-plots-rauschen/*.png; do
+            echo "Publishing $file"
+            cml-publish "$file" --md >> $report_file
           done
+          
+          cml-send-comment report_test.md
+  
       
-          cml-send-comment report_ml_test.md
+          
       - name: Commit and push model from train.py
         run: |
           git config --local user.email "Aseuc@github.com"
@@ -98,8 +111,3 @@ jobs:
           git commit -m "Add generated file" -a || echo "No changes to commit"
           git push origin test_torch-new-workflow  
   
-
-
-
-      
-          
