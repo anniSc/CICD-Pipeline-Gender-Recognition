@@ -2,7 +2,7 @@ name: CI-CD-Workflow Gender Recognition
 on:
   push:
     branches:
-      - test_torch-new-workflow
+      - main
 jobs:
   build:
       runs-on: [ubuntu-latest]
