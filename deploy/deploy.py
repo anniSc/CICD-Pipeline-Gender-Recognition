@@ -82,6 +82,9 @@ def predict(image, model_path):
 
 
 
+
+st.title("Gender Recognition CI/CD Pipeline")
+
 uploaded_files = st.file_uploader("Bilder hochladen...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
 for uploaded_file in uploaded_files:
