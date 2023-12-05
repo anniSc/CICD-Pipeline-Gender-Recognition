@@ -112,13 +112,7 @@ jobs:
             
             cml-send-comment $report_file
             
-        - name: Commiten und Pushen der erzeugten Dateien
-          run: |
-            git config --local user.email "Aseuc@github.com"
-            git config --local user.name "Aseuc"
-            git add .
-            git commit -m "Add generated file" -a || echo "No changes to commit"
-            git push origin main
+        
   deploy:
     needs: build
     runs-on: ubuntu-latest
@@ -127,20 +121,10 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
-
-    - name: Install dependencies
-      run: pip install -r requirements.txt
-
-    - name: Install Google Cloud SDK
-      uses: google-github-actions/setup-gcloud@v0.2.1
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        export_default_credentials: true
-
-    - name: Deploy to Google Cloud
-      run: gcloud app deploy app.yaml
+    - name: ML-Model auf streamlit deployen
+      run: |
+        git config --local user.email "Aseuc@github.com"
+        git config --local user.name "Aseuc"
+        git add .
+        git commit -m "Add generated file" -a || echo "No changes to commit"
+        git push origin main
