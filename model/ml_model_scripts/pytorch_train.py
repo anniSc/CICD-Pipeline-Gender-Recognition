@@ -29,8 +29,22 @@ from tqdm import tqdm
 # In[ ]:
 
 
-epochs = 50
+epochs = 1
 batch_size = 64
+
+def count_files(men_dir, women_dir):
+    men_files = len(os.listdir(men_dir))
+    women_files = len(os.listdir(women_dir))
+
+    total_files = men_files + women_files
+
+    print(f"Anzahl der Dateien in 'men': {men_files}")
+    print(f"Anzahl der Dateien in 'women': {women_files}")
+    print(f"Gesamtanzahl der Dateien: {total_files}")
+
+# Verwendung der Funktion
+count_files('data/output/train/men', 'data/output/train/women')
+
 
 # Epochen speichern um diese für das Testen zu verwenden
 with open("test/epochs/epochs.txt", "w") as f:
@@ -243,7 +257,10 @@ for epoch in range(epochs):
 print('Finished Training')
 
 model_path_git = f'model/PyTorch_Trained_Models/'
+model_test_path = f'test/model_to_be_tested'
+
 torch.save(model.state_dict(), f'{model_path_git}model_git{batch_size}' + '-' + f'{epochs}' + '.pth')
+torch.save(model.state_dict(), f'{model_test_path}' + '.pth')
 
 # In[ ]:
 
