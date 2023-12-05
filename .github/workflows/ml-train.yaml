@@ -28,32 +28,7 @@ jobs:
             pip install -r requirements.txt
             pip install nbconvert
 
-        - name: 'Datenaufbereitung und Testen'
-          run: |
-            jupyter nbconvert --to script data/dataprep_scripts/dataprep_git.ipynb 
-            python data/dataprep_scripts/dataprep_git.py 
-
-        - name: Generate and publish plots Data Tests
-          env:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            
-            # Generiere einen Report der einzigartig ist um nicht immer den gleichen Report zu erhalten
-            report_file="report_data_plots.md"
-
-            # Read the column names from the CSV file
-            columns=$(head -n 1 data/column_source_csv/source.csv | tr ',' '\n')
         
-            # Iterate over each column
-            for column in $columns; do
-              # Update the report
-              echo "\n## Datenvisualisierung für $column" >> $report_file
-            
-              cml-publish data/plot_data/${column}.png --md >> $report_file
-            done
-        
-            cml-send-comment $report_file
-            
         - name: 'Modell trainieren'
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
