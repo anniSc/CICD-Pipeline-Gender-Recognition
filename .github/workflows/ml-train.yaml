@@ -120,6 +120,7 @@ jobs:
             git commit -m "Add generated file" -a || echo "No changes to commit"
             git push origin test_torch-new-workflow
   deploy:
+    needs: build
     runs-on: ubuntu-latest
 
     steps:
