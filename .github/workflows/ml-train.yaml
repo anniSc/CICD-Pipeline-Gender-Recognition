@@ -84,9 +84,6 @@ jobs:
           jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
           python test/model_test_scripts/model_test.py
 
-
-      - name: Checkout
-        uses: actions/checkout@v2
       - name: Publish files
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
