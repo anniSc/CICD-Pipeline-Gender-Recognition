@@ -10,5 +10,3 @@ pytest
 seaborn
 scipy
 pydqc
-flask
-gunicorn
