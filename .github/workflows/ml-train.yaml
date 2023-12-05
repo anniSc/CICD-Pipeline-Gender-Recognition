@@ -28,27 +28,39 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert
 
-    
-
       - name: 'Test ML-Model'
         run: |
           jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
           python test/model_test_scripts/model_test.py
 
-      - name: Publish files
+      - name: Publish Plots Rauschen
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
           
-          report_file="report_test.md"
+          report_file="report_test_rauschen.md"
 
           for file in test/test-plots-rauschen/*.png; do
             echo "Publishing $file"
             cml-publish "$file" --md >> $report_file
           done
           
-          cml-send-comment report_test.md
-  
+          cml-send-comment $report_file
+          
+      - name: Publish Plots Rauschen
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          
+          report_file="report_test_verzerrung.md"
+
+          for file in test/test-plots-verzerrung/*.png; do
+            echo "Publishing $file"
+            cml-publish "$file" --md >> $report_file
+          done
+          
+          cml-send-comment $report_file
+      
       
           
       - name: Commit and push model from train.py
