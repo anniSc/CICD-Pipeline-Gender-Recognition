@@ -28,7 +28,6 @@ jobs:
           pip install -r requirements.txt
           pip install nbconvert
 
-      
 
       - name: 'Test ML-Model'
         run: |
