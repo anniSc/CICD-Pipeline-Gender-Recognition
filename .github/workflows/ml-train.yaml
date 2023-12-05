@@ -5,145 +5,117 @@ on:
       - test_torch-new-workflow
 jobs:
   build:
-    runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml-py3:latest
-    steps:
-      - name: Cache pip dependencies
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-        env:
-          GITHUB_TOKEN: ${{ secrets.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 }}
+      runs-on: [ubuntu-latest]
+      container: docker://dvcorg/cml-py3:latest
+      steps:
+        - name: Cache pip dependencies
+          uses: actions/cache@v3
+          with:
+            path: ~/.cache/pip
+            key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+            restore-keys: |
+              ${{ runner.os }}-pip-
+          env:
+            GITHUB_TOKEN: "${{ secrets.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 }}"
 
-      - uses: actions/checkout@v2
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+        - uses: actions/checkout@v2
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
 
-      - name: Abhängigkeiten installieren
-        run: |
-          python -m pip install --upgrade pip
-          pip install -r requirements.txt
-          pip install nbconvert
+        - name: Abhängigkeiten installieren
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
+            pip install nbconvert
 
-      - name: 'Datenaufbereitung und Testen'
-        run: |
-          jupyter nbconvert --to script data/dataprep_scripts/dataprep_git.ipynb 
-          python data/dataprep_scripts/dataprep_git.py 
+        - name: 'Datenaufbereitung und Testen'
+          run: |
+            jupyter nbconvert --to script data/dataprep_scripts/dataprep_git.ipynb 
+            python data/dataprep_scripts/dataprep_git.py 
 
-      - name: Generate and publish plots Data Tests
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          
-          # Generiere einen Report der einzigartig ist um nicht immer den gleichen Report zu erhalten
-          report_file="report_data_plots.md"
+        - name: Generate and publish plots Data Tests
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            
+            # Generiere einen Report der einzigartig ist um nicht immer den gleichen Report zu erhalten
+            report_file="report_data_plots.md"
 
-          # Read the column names from the CSV file
-          columns=$(head -n 1 data/column_source_csv/source.csv | tr ',' '\n')
-      
-          # Iterate over each column
-          for column in $columns; do
-            # Update the report
-            echo "\n## Datenvisualisierung für $column" >> $report_file
-          
-            cml-publish data/plot_data/${column}.png --md >> $report_file
-          done
-      
-          cml-send-comment $report_file
-          
-      - name: 'Modell trainieren'
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          jupyter nbconvert --to script model/ml_model_scripts/pytorch_train.ipynb
-          python model/ml_model_scripts/pytorch_train.py
-
-          echo "## Model Metriken" > report_ml.md
-          cat model/metrics/metrics.txt >> report_ml.md
-          
-          echo "\n## Model Performance" >> report_ml.md
-          echo "Modell Performance bzw. das Matching zwischen Predictions und True-Labels in einer Heatmap dargestellt!" >> report_ml.md
-          cml-publish model/plots/heatmap.jpg --md >> report_ml.md
-          
-          echo "\n## Model Performance" >> report_ml.md
-          echo "Modell Performance in einem Scatter-Plot dargestellt" >> report_ml.md
-          cml-publish model/plots/plot_scatter.jpg --md >> report_ml.md
+            # Read the column names from the CSV file
+            columns=$(head -n 1 data/column_source_csv/source.csv | tr ',' '\n')
         
-          echo "\n## Model Performance" >> report_ml.md
-          echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
-          cml-publish model/plots/plot_plt.jpg --md >> report_ml.md
-      
-          cml-send-comment report_ml.md
+            # Iterate over each column
+            for column in $columns; do
+              # Update the report
+              echo "\n## Datenvisualisierung für $column" >> $report_file
+            
+              cml-publish data/plot_data/${column}.png --md >> $report_file
+            done
+        
+            cml-send-comment $report_file
+            
+        - name: 'Modell trainieren'
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            jupyter nbconvert --to script model/ml_model_scripts/pytorch_train.ipynb
+            python model/ml_model_scripts/pytorch_train.py
 
-
-      - name: 'Test ML-Model'
-        run: |
-          jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
-          python test/model_test_scripts/model_test.py
-
-      - name: Publish Plots Rauschen
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
+            echo "## Model Metriken" > report_ml.md
+            cat model/metrics/metrics.txt >> report_ml.md
+            
+            echo "\n## Model Performance" >> report_ml.md
+            echo "Modell Performance bzw. das Matching zwischen Predictions und True-Labels in einer Heatmap dargestellt!" >> report_ml.md
+            cml-publish model/plots/heatmap.jpg --md >> report_ml.md
+            
+            echo "\n## Model Performance" >> report_ml.md
+            echo "Modell Performance in einem Scatter-Plot dargestellt" >> report_ml.md
+            cml-publish model/plots/plot_scatter.jpg --md >> report_ml.md
           
-          report_file="report_test_rauschen.md"
-
-          for file in test/test-plots-rauschen/*.png; do
-            echo "Publishing $file"
-            cml-publish "$file" --md >> $report_file
-          done
-          
-          cml-send-comment $report_file
-          
-      - name: Publish Plots Verzerrung
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          
-          report_file="report_test_verzerrung.md"
-
-          for file in test/test-plots-verzerrung/*.png; do
-            echo "Publishing $file"
-            cml-publish "$file" --md >> $report_file
-          done
-          
-          cml-send-comment $report_file
-          
-      - name: Commiten und Pushen der erzeugten Dateien
-        run: |
-          git config --local user.email "Aseuc@github.com"
-          git config --local user.name "Aseuc"
-          git add .
-          git commit -m "Add generated file" -a || echo "No changes to commit"
-          git push origin test_torch-new-workflow  
+            echo "\n## Model Performance" >> report_ml.md
+            echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
+            cml-publish model/plots/plot_plt.jpg --md >> report_ml.md
+        
+            cml-send-comment report_ml.md
 
 
-  deploy:
-    runs-on: ubuntu-latest
+        - name: 'Test ML-Model'
+          run: |
+            jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
+            python test/model_test_scripts/model_test.py
 
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
+        - name: Publish Plots Rauschen
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            
+            report_file="report_test_rauschen.md"
 
-    - name: Set up Python
-      uses: actions/setup-python@v2
-      with:
-        python-version: '3.x'
+            for file in test/test-plots-rauschen/*.png; do
+              echo "Publishing $file"
+              cml-publish "$file" --md >> $report_file
+            done
+            
+            cml-send-comment $report_file
+            
+        - name: Publish Plots Verzerrung
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            
+            report_file="report_test_verzerrung.md"
 
-    - name: Install dependencies
-      run: pip install -r requirements.txt
-
-    - name: Install Google Cloud SDK
-      uses: google
-      with:
-        project_id: ${{ secrets.GCP_PROJECT_ID }}
-        service_account_key: ${{ secrets.GCP_SA_KEY }}
-        export_default_credentials: true
-
-    - name: Deploy to Google Cloud
-      run: gcloud app deploy app.yaml
-
-
+            for file in test/test-plots-verzerrung/*.png; do
+              echo "Publishing $file"
+              cml-publish "$file" --md >> $report_file
+            done
+            
+            cml-send-comment $report_file
+            
+        - name: Commiten und Pushen der erzeugten Dateien
+          run: |
+            git config --local user.email "Aseuc@github.com"
+            git config --local user.name "Aseuc"
+            git add .
+            git commit -m "Add generated file" -a || echo "No changes to commit"
+            git push origin test_torch-new-workflow
