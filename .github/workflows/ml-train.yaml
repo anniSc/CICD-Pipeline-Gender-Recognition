@@ -1,10 +1,10 @@
 name: CI-CD-Workflow Gender Recognition
 on:
   push:
-    branches:
-      - main
+    branches: [main]
+    
 jobs:
-  build:
+  build-and-test:
       runs-on: [ubuntu-latest]
       container: docker://dvcorg/cml-py3:latest
       steps:
@@ -47,7 +47,7 @@ jobs:
               echo "## Daten folgen wahrscheinlich einer Exponentialverteilung!" > $report_file_distribution
               cat $expoFile >> $report_file_distribution
             else
-              
+              echo " "
             fi
 
             binomiaFile="data/report_data/binomia_distribution.txt"
@@ -57,7 +57,7 @@ jobs:
               echo "## Daten folgen wahrscheinlich einer Binomialverteilung!" > $report_file_distribution
               cat $binomiaFile >> $report_file_distribution
             else
-
+              echo " "
             fi
 
 
@@ -68,7 +68,7 @@ jobs:
               echo "## Daten folgen wahrscheinlich einer Normalverteilung!" > $report_file_distribution
               cat $normFile >> $report_file_distribution
             else
-              
+              echo " "
             fi
 
             uniformFile="data/report_data/uniform_distribution.txt"
@@ -78,7 +78,7 @@ jobs:
               echo "## Daten folgen wahrscheinlich einer Uniformverteilung!" > $report_file_distribution
               cat $uniformFile >> $report_file_distribution
             else
-
+              echo " "
             fi
 
 
@@ -158,7 +158,7 @@ jobs:
             
         
   deploy:
-    needs: build
+    needs: build-and-test
     runs-on: ubuntu-latest
 
     steps:
