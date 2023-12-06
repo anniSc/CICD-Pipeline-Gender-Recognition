@@ -83,7 +83,7 @@ class SimpleCNN(nn.Module):
         # Erste Convolutional Layer. Nimmt 3 Eingangskanäle (RGB), gibt 6 Kanäle aus, mit einer Kernelgröße von 5
         self.conv1 = nn.Conv2d(3, 6, 5)  
         # Max-Pooling-Layer mit einem quadratischen Fenster der Kernelgröße=4, Schrittgröße=4
-        self.pool = nn.MaxPool2d(4, 4)  
+        self.pool = nn.MaxPool2d(2, 2)  
         # Zweite Convolutional Layer. Nimmt 6 Eingangskanäle (von der vorherigen Schicht), gibt 16 Kanäle aus, mit einer Kernelgröße von 5
         self.conv2 = nn.Conv2d(6, 16, 5)
         # Max-Pooling-Layer mit einem quadratischen Fenster der Kernelgröße=2, Schrittgröße=2
