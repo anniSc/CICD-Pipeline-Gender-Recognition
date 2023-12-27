@@ -10,3 +10,4 @@ pytest
 seaborn
 scipy
 pydqc
+fairlearn
