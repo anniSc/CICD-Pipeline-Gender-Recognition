@@ -102,25 +102,7 @@ jobs:
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            jupyter nbconvert --to script model/ml_model_scripts/pytorch_train.ipynb
-            python model/ml_model_scripts/pytorch_train.py
-
-            echo "## Model Metriken" > report_ml.md
-            cat model/metrics/metrics.txt >> report_ml.md
-            
-            echo "\n## Model Performance" >> report_ml.md
-            echo "Modell Performance bzw. das Matching zwischen Predictions und True-Labels in einer Heatmap dargestellt!" >> report_ml.md
-            cml-publish model/plots/heatmap.jpg --md >> report_ml.md
-            
-            echo "\n## Model Performance" >> report_ml.md
-            echo "Modell Performance in einem Scatter-Plot dargestellt" >> report_ml.md
-            cml-publish model/plots/plot_scatter.jpg --md >> report_ml.md
-          
-            echo "\n## Model Performance" >> report_ml.md
-            echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
-            cml-publish model/plots/plot_plt.jpg --md >> report_ml.md
-        
-            cml-send-comment report_ml.md
+     
 
 
         - name: 'Test ML-Model'
