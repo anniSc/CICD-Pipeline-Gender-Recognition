@@ -120,6 +120,20 @@ jobs:
             echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
             cml-publish model/plots/plot_plt.jpg --md >> report_ml.md
         
+            echo "\n## Model Performance" >> report_ml.md
+            echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
+            cml-publish model/plots/metricsFairLearn.jpg --md >> report_ml.md
+            
+            echo "\n## Model Performance" >> report_ml.md
+            echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
+            cml-publish model/plots/metrics.jpg --md >> report_ml.md
+
+            echo "\n## Model Performance" >> report_ml.md
+            echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
+            cml-publish model/plots/plot_bar.jpg --md >> report_ml.md
+
+            
+
             cml-send-comment report_ml.md
 
 
