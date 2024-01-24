@@ -8,7 +8,7 @@ torchvision
 scikit-learn
 pytest
 seaborn
-scipy
+scipy>=1.7.0
 pydqc
 fairlearn
 torchcam
