@@ -28,12 +28,12 @@ jobs:
             pip install -r requirements.txt
             pip install nbconvert
 
-        - name: 'Datenaufbereitung und Testen'
+        - name: 'Datenaufbereitung und -tests'
           run: |
             jupyter nbconvert --to script data/dataprep_scripts/dataprep_git.ipynb 
             python data/dataprep_scripts/dataprep_git.py 
 
-        - name: Generate and publish plots Data Tests
+        - name: Generierung und Veröffentlichung der visualisierten Daten und Tests
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
@@ -80,8 +80,6 @@ jobs:
             else
               echo " "
             fi
-
-
 
             report_file="report_data_plots.md"
 
