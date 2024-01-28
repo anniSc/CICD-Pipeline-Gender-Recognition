@@ -1,0 +1,72 @@
+# This is a basic configuration for getting started.
+# It configures a single datasource, and two expectations stores (one for the latest expectations, and one for all expectations)
+# It also configures a single validation operator that stores validation results in a local directory.
+
+# For more information on how to configure great_expectations, please visit
+# https://docs.greatexpectations.io/en/latest/how_to_guides/configuring_data_contexts/how_to_use_a_yaml_file_or_environment_variables_to_populate_credentials.html
+
+config_version: 2.0
+
+# The plugins_directory will be added to your python path for custom module loading
+# plugins_directory: plugins/
+
+# Configuring metadata stores
+stores:
+  # Stores the expectations
+  expectations_store:
+    class_name: ExpectationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: expectations/
+
+  # Stores the validation results
+  validations_store:
+    class_name: ValidationsStore
+    store_backend:
+      class_name: TupleFilesystemStoreBackend
+      base_directory: uncommitted/validations/
+
+  # Stores the evaluation parameters that were used in validation
+  evaluation_parameter_store:
+    class_name: EvaluationParameterStore
+expectations_store_name: expectations_store
+validations_store_name: validations_store
+evaluation_parameter_store_name: evaluation_parameter_store
+
+data_docs_sites:
+  # Data Docs make it simple to visualize data quality in your project. These
+  # include Expectations, Validations & Profiles. The are built for all
+  # Datasources from JSON artifacts in the local repo including validations &
+  # profiles from the uncommitted directory. Read more at https://docs.greatexpectations.io/en/latest/reference/core_concepts/data_docs.html
+  local_site:
+    class_name: SiteBuilder
+    site_index_builder:
+      class_name: DefaultSiteIndexBuilder
+    site_section_builders:
+      expectations:
+        class_name: DefaultSiteSectionBuilder
+        source_store_name: expectations_store
+        renderer:
+          module_name: great_expectations.render.renderer
+          class_name: ExpectationSuitePageRenderer
+      validations:
+        class_name: DefaultSiteSectionBuilder
+        source_store_name: validations_store
+        run_id_filter:
+          ne: profiling
+        renderer:
+          module_name: great_expectations.render.renderer
+          class_name: ValidationResultsPageRenderer
+      profiling:
+        class_name: DefaultSiteSectionBuilder
+        source_store_name: validations_store
+        run_id_filter:
+          eq: profiling
+        renderer:
+          module_name: great_expectations.render.renderer
+          class_name: ProfilingResultsPageRenderer
+
+anonymous_usage_statistics:
+  data_context_id: 732033ae-793a-4a0e-8caf-36b9fc98e370
+  enabled: true
+config_variables_file_path: uncommitted/config_variables.yml

@@ -1,5 +1,6 @@
 # Importiere die Great Expectations Bibliothek
 import great_expectations as ge
+
 # Erstelle eine Klasse, die von PandasDataset erbt
 class CustomPandasDataset(ge.dataset.PandasDataset):
 
@@ -11,17 +12,10 @@ class CustomPandasDataset(ge.dataset.PandasDataset):
     def expect_column_values_to_be_odd(self, column):
         # Diese Erwartung überprüft, ob die Werte in einer Spalte ungerade sind
         return self.expect_column_values_to_be_in_set(column, list(range(1, self[column].max() + 2, 2)))
-    # Erstelle ein Datenobjekt aus der CSV-Datei
-data = ge.read_csv(r"C:\Users\busse\Bachelorarbeit\CICD-Pipeline-Gender-Recognition\data\source_csv\list_attr_celeba.csv")
-data = ge.from_pandas(data, dataset_class=CustomPandasDataset)
-# Erstelle eine neue Erwartungssuite
-suite = data.create_expectation_suite("my_suite")
 
-# Füge Erwartungen hinzu, die die Datenqualität überprüfen
-suite.expect_column_to_exist("image_id") # Erwarte, dass die Spalte "name" existiert
+# Erstelle einen DataContext aus der Konfigurationsdatei
+context = ge.data_context.DataContext()
 
-# Validiere die Daten mit der Erwartungssuite
-results = data.validate(expectation_suite=suite)
+# Erstelle eine neue Erwartungssuite mit dem DataContext
+suite = context.create_expectation_suite("my_suite")
 
-# Zeige die Ergebnisse der Validierung an
-print(results)
