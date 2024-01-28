@@ -102,70 +102,54 @@ jobs:
           run: |
             jupyter nbconvert --to script model/ml_model_scripts/pytorch_train.ipynb
             python model/ml_model_scripts/pytorch_train.py
-
             echo "## Model Metriken" > report_ml.md
             cat model/metrics/metrics.txt >> report_ml.md
-            
             echo "\n## Model Performance" >> report_ml.md
             echo "Modell Performance bzw. das Matching zwischen Predictions und True-Labels in einer Heatmap dargestellt!" >> report_ml.md
             cml-publish model/plots/heatmap.jpg --md >> report_ml.md
-            
             echo "\n## Model Performance" >> report_ml.md
             echo "Modell Performance in einem Scatter-Plot dargestellt" >> report_ml.md
             cml-publish model/plots/plot_scatter.jpg --md >> report_ml.md
-          
             echo "\n## Model Performance" >> report_ml.md
             echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
             cml-publish model/plots/plot_plt.jpg --md >> report_ml.md
-        
             echo "\n## Model Performance" >> report_ml.md
             echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
             cml-publish model/plots/metricsFairLearn.jpg --md >> report_ml.md
-            
             echo "\n## Model Performance" >> report_ml.md
             echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
             cml-publish model/plots/metrics.jpg --md >> report_ml.md
-
             echo "\n## Model Performance" >> report_ml.md
             echo "Modell Performance in einem normalen Plot dargestellt" >> report_ml.md
             cml-publish model/plots/plot_bar.jpg --md >> report_ml.md
-
-            
-
             cml-send-comment report_ml.md
 
 
-        - name: 'Test ML-Model'
+        - name: 'Modell auf Robustheit testen'
           run: |
             jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
             python test/model_test_scripts/model_test.py
 
-        - name: Publish Plots Rauschen
+        - name: Veröffentlichung der Plots mit verrauschten Bildern
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            
             report_file="report_test_rauschen.md"
-
             for file in test/test-plots-rauschen/*.png; do
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
             done
-            
             cml-send-comment $report_file
             
-        - name: Publish Plots Verzerrung
+        - name: Veröffentlichung der Plots mit verzerrten Bildern
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            
             report_file="report_test_verzerrung.md"
-
             for file in test/test-plots-verzerrung/*.png; do
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
             done
-            
             cml-send-comment $report_file
             
         
@@ -177,7 +161,7 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v2
 
-    - name: ML-Model auf streamlit deployen
+    - name: ML-Modell auf streamlit deployen
       run: |
         git config --local user.email "Aseuc@github.com"
         git config --local user.name "Aseuc"
