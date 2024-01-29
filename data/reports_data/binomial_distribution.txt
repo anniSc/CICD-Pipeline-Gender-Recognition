@@ -1,0 +1,1 @@
+Die Daten in der Spalte Young folgen wahrscheinlich nicht einer Binomial-Verteilung.

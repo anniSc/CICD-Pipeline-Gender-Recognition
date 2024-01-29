@@ -1,0 +1,1 @@
+::warning::Die Daten in der Spalte Young wahrscheinlich nicht einer Uniformverteilung.
