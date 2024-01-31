@@ -120,19 +120,7 @@ jobs:
             cml-publish test/metricsFairlearn/metricsFairLearn.jpg --md >> report_ml.md
             echo "\n## Model Performance" >> report_ml.md
             cml-send-comment report_ml.md
-  
-        - name: "Veröffenlichung der Erklärbarkeit des Modells"
-          env:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            report_file="report_activation.md"
-            echo "## Erklärbarkeit des Modells" > report_activation.md       
-            for file in test/activation_map/*.png; do
-              echo "Publishing $file"
-              cml-publish "$file" --md >> $report_file
-            done
-            cml-send-comment $report_file
-      
+   
         - name: Veröffentlichung der Plots mit verrauschten Bildern
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -166,6 +154,17 @@ jobs:
             done
             cml-send-comment $report_file
             
+        - name: "Veröffenlichung der Erklärbarkeit des Modells"
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            report_file="report_activation.md"
+            echo "## Erklärbarkeit des Modells" > report_activation.md       
+            for file in test/activation_map/*.png; do
+              echo "Publishing $file"
+              cml-publish "$file" --md >> $report_file
+            done
+            cml-send-comment $report_file          
         
   deploy:
     needs: build-and-test
