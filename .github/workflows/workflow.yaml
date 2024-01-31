@@ -125,8 +125,8 @@ jobs:
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            report_file="report_ml.md"
-            echo "## Erklärbarkeit des Modells" > report_ml.md       
+            report_file="report_activation.md"
+            echo "## Erklärbarkeit des Modells" > report_activation.md       
             for file in test/activation_map/*.png; do
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
