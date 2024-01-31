@@ -111,6 +111,8 @@ jobs:
 
 
         - name: "Veröffenlichung der Fairlearn-Tests"
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             echo "## Model Metriken" > report_ml.md
             cat test/metrics/metrics.txt >> report_ml.md
@@ -120,6 +122,8 @@ jobs:
             cml-send-comment report_ml.md
   
         - name: "Veröffenlichung der Erklärbarkeit des Modells"
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             report_file="report_ml.md"
             echo "## Erklärbarkeit des Modells" > report_ml.md       
