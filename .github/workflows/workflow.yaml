@@ -118,7 +118,6 @@ jobs:
             cat test/metrics/metrics.txt >> report_ml.md
             echo "\n## Fairlearn Ergebnisse" >> report_ml.md
             cml-publish test/metricsFairlearn/metricsFairLearn.jpg --md >> report_ml.md
-            cml-publish test/metrics/plot_bar.jpg --md >> report_ml.md
             cml-publish   test/metrics/metrics.jpg --md >> report_ml.md
             cml-send-comment report_ml.md
    
@@ -127,7 +126,7 @@ jobs:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             report_file="report_test_rauschen.md"
-            echo "## Veröffenlichung der Modellmetriken mit verauschten Bilder" > $report_file      
+            echo "## Modellmetriken mit verauschten Bilder" > $report_file      
             for file in test/test-plots-rauschen/*.png; do
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
@@ -139,7 +138,7 @@ jobs:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             report_file="report_test_verzerrung.md"
-            echo "## Veröffenlichung der Modellmetriken mit verauschten Bilder" > $report_file      
+            echo "## Modellmetriken mit verauschten Bilder" > $report_file      
             for file in test/test-plots-verzerrung/*.png; do
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
@@ -151,7 +150,7 @@ jobs:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             report_file="report_rotation.md"
-            echo "## Veröffenlichung der Modellmetriken mit verdrehte Bilder" > $report_file      
+            echo "## Modellmetriken mit verdrehte Bilder" > $report_file      
             for file in test/test-plots-rotation/*.png; do
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
