@@ -119,7 +119,13 @@ jobs:
             echo "\n## Model Performance" >> report_ml.md
             cml-send-comment report_ml.md
   
-
+        - name: "Veröffenlichung der Fairlearn-Tests"
+          run: |
+            echo "## Erklärbarkeit des Modells" > report_ml.md
+            cml-publish test/activation_/metricsFairLearn.jpg --md >> report_ml.md
+            echo "\n## Model Performance" >> report_ml.md
+            cml-send-comment report_ml.md
+      
         - name: Veröffentlichung der Plots mit verrauschten Bildern
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
