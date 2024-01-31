@@ -116,27 +116,28 @@ jobs:
           run: |
             echo "## Model Metriken" > report_ml.md
             cat test/metrics/metrics.txt >> report_ml.md
-            echo "\n## Model Performance" >> report_ml.md
+            echo "\n## Fairlearn Ergebnisse" >> report_ml.md
             cml-publish test/metricsFairlearn/metricsFairLearn.jpg --md >> report_ml.md
-            echo "\n## Model Performance" >> report_ml.md
             cml-send-comment report_ml.md
    
-        - name: Veröffentlichung der Plots mit verrauschten Bildern
+        - name: Veröffentlichung der Modellmetriken mit verrauschten Bildern
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             report_file="report_test_rauschen.md"
+            echo "## Veröffenlichung der Modellmetriken mit verauschten Bilder" > $report_file      
             for file in test/test-plots-rauschen/*.png; do
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
             done
             cml-send-comment $report_file
             
-        - name: Veröffentlichung der Plots mit verzerrten Bildern
+        - name: Veröffentlichung der Modellmetriken mit verzerrten Bildern
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             report_file="report_test_verzerrung.md"
+            echo "## Veröffenlichung der Modellmetriken mit verauschten Bilder" > $report_file      
             for file in test/test-plots-verzerrung/*.png; do
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
@@ -148,6 +149,7 @@ jobs:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             report_file="report_rotation.md"
+            echo "## Veröffenlichung der Modellmetriken mit verdrehte Bilder" > $report_file      
             for file in test/test-plots-rotation/*.png; do
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
