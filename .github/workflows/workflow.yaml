@@ -131,7 +131,7 @@ jobs:
               echo "Publishing $file"
               cml-publish "$file" --md >> $report_file
             done
-            cml-send-comment report_ml.md
+            cml-send-comment $report_file
       
         - name: Veröffentlichung der Plots mit verrauschten Bildern
           env:
