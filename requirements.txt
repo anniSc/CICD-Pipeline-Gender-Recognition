@@ -12,3 +12,4 @@ scipy
 pydqc
 fairlearn
 torchcam
+opencv-python
