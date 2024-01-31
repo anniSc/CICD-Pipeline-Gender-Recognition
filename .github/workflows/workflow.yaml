@@ -118,6 +118,8 @@ jobs:
             cat test/metrics/metrics.txt >> report_ml.md
             echo "\n## Fairlearn Ergebnisse" >> report_ml.md
             cml-publish test/metricsFairlearn/metricsFairLearn.jpg --md >> report_ml.md
+            cml-publish test/metrics/plot_bar.jpg --md >> report_ml.md
+            cml-publish   test/metrics/metrics.jpg --md >> report_ml.md
             cml-send-comment report_ml.md
    
         - name: Veröffentlichung der Modellmetriken mit verrauschten Bildern
