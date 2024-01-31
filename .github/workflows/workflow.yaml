@@ -153,18 +153,18 @@ jobs:
               cml-publish "$file" --md >> $report_file
             done
             cml-send-comment $report_file
-            
+
         - name: "Veröffenlichung der Erklärbarkeit des Modells"
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            report_file="report_activation.md"
+            report_file_activation="report_activation.md"
             echo "## Erklärbarkeit des Modells" > report_activation.md       
             for file in test/activation_map/*.png; do
               echo "Publishing $file"
-              cml-publish "$file" --md >> $report_file
+              cml-publish "$file" --md >> $report_file_activation
             done
-            cml-send-comment $report_file          
+            cml-send-comment $report_file_activation    
         
   deploy:
     needs: build-and-test
