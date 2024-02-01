@@ -30,8 +30,8 @@ jobs:
 
         - name: 'Datenaufbereitung und -tests'
           run: |
-            jupyter nbconvert --to script data/dataprep_scripts/dataprep_git.ipynb 
-            python data/dataprep_scripts/dataprep_git.py 
+            jupyter nbconvert --to script data/dataprep_scripts/dataprep.ipynb 
+            python data/dataprep_scripts/dataprep.py 
 
         - name: Generierung und Veröffentlichung der visualisierten Daten und Tests
           env:
