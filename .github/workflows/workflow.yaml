@@ -26,14 +26,12 @@ jobs:
           run: |
             python -m pip install --upgrade pip
             pip install -r requirements.txt
-            pip install nbconvert
 
         - name: 'Datenaufbereitung und -tests'
           run: |
-            jupyter nbconvert --to script data/dataprep_scripts/dataprep.ipynb 
-            python data/dataprep_scripts/dataprep.py 
+            python data/dataprep_scripts/datapreparation.py 
 
-        - name: Generierung und Veröffentlichung der visualisierten Daten und Tests
+        - name: Generierung und Veröffentlichung der visualisierten Daten,Tests und Verteilungen
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
@@ -80,93 +78,11 @@ jobs:
               echo "\n## Datenvisualisierung für $column" >> $report_file
               cml-publish data/plot_data/${column}.png --md >> $report_file
             done
-            cml-send-comment $report_file
             
-        - name: 'Modell trainieren'
-          env:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            jupyter nbconvert --to script model/ml_model_scripts/pytorch_train.ipynb
-            python model/ml_model_scripts/pytorch_train.py
+            echo "\n## Balancierte Daten Geschlechter" >> $report_file
+            cml-publish data/plots_balanced/Gender_balanced.png
+            echo "\n## Balancierte Daten Jung und Alt" >> $report_file
+            cml-publish data/plots_balanced/Young_balanced.png
+
+            cml-send-comment $report_file
         
-
-        - name: 'Modell testen'
-          run: |
-            jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
-            python test/model_test_scripts/model_test.py
-
-
-        - name: "Veröffenlichung der Fairlearn-Tests"
-          env:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            echo "## Model Metriken" > report_ml.md
-            cat test/metrics/metrics.txt >> report_ml.md
-            echo "\n## Fairlearn Ergebnisse" >> report_ml.md
-            cml-publish test/metricsFairlearn/metricsFairLearn.jpg --md >> report_ml.md
-            cml-publish   test/metrics/metrics.jpg --md >> report_ml.md
-            cml-send-comment report_ml.md
-   
-        - name: Veröffentlichung der Modellmetriken mit verrauschten Bildern
-          env:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            report_file="report_test_rauschen.md"
-            echo "## Modellmetriken mit verauschten Bilder" > $report_file      
-            for file in test/test-plots-rauschen/*.png; do
-              echo "Publishing $file"
-              cml-publish "$file" --md >> $report_file
-            done
-            cml-send-comment $report_file
-            
-        - name: Veröffentlichung der Modellmetriken mit verzerrten Bildern
-          env:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            report_file="report_test_verzerrung.md"
-            echo "## Modellmetriken mit verauschten Bilder" > $report_file      
-            for file in test/test-plots-verzerrung/*.png; do
-              echo "Publishing $file"
-              cml-publish "$file" --md >> $report_file
-            done
-            cml-send-comment $report_file
-
-        - name: Veröffentlichung der Plots mit verdrehten Bildern
-          env:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            report_file="report_rotation.md"
-            echo "## Modellmetriken mit verdrehte Bilder" > $report_file      
-            for file in test/test-plots-rotation/*.png; do
-              echo "Publishing $file"
-              cml-publish "$file" --md >> $report_file
-            done
-            cml-send-comment $report_file
-
-        - name: "Veröffenlichung der Erklärbarkeit des Modells"
-          env:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
-          run: |
-            report_file_activation="report_activation.md"
-            echo "## Erklärbarkeit des Modells" > report_activation.md       
-            for file in test/activation_map/*.png; do
-              echo "Publishing $file"
-              cml-publish "$file" --md >> $report_file_activation
-            done
-            cml-send-comment $report_file_activation    
-        
-  deploy:
-    needs: build-and-test
-    runs-on: ubuntu-latest
-
-    steps:
-    - name: Checkout code
-      uses: actions/checkout@v2
-
-    - name: ML-Modell auf streamlit deployen
-      run: |
-        git config --local user.email "Aseuc@github.com"
-        git config --local user.name "Aseuc"
-        git add .
-        git commit -m "Add generated file" -a || echo "No changes to commit"
-        git push origin main
