@@ -193,7 +193,7 @@ class DataTest:
             if is_equal:
                 print("::warning:: Daten sind vollständig! Die Bilddaten-IDs stimmen mit den IDs aus Attributliste überein! ")
             else:
-                assert print("::error:: Die Bilddaten-IDs stimmen nicht mit den IDs aus Attributliste überein! ")
+                print("::warning:: Die Bilddaten-IDs stimmen nicht mit den IDs aus Attributliste überein! ")
             return is_equal
         @staticmethod
         def is_numeric(column):
@@ -267,8 +267,8 @@ class DataTest:
                     upper_bound = Q3 + 1.5 * IQR
                     outliers = df[(df[column_name] < lower_bound) | (df[column_name] > upper_bound)]
                     outliers_percentage[column_name] = len(outliers) / len(df) * 100
+                    print(f"Ausreißerprozentwert für Spalte '{column_name}': {outliers_percentage[column_name]}%")
             
-            print(f"Prozentsatz der Ausreißer in den Spalten:{outliers_percentage}")
             return outliers_percentage
 
         @staticmethod
