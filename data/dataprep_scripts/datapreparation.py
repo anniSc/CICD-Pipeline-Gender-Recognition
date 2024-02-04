@@ -67,9 +67,9 @@ class DataPreparation:
 
 
     @staticmethod
-    def extract_ids_source_data_and_save(directory, csv_path='data-ids.csv'):
+    def extract_ids_source_data_and_save(directory, csv_path='data-ids.csv', id_column='image_id'):
         filenames = os.listdir(directory)
-        df = pd.DataFrame(filenames, columns=['filename'])
+        df = pd.DataFrame(filenames, columns=[id_column])
         df.to_csv(csv_path, index=False)
 
 
