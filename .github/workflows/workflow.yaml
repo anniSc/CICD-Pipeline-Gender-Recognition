@@ -85,10 +85,18 @@ jobs:
             cml-publish data/plots_balanced/Young_balanced.png
 
             cml-send-comment $report_file
-            - name: 'Modell testen'
-            run: |
-              jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
-              python test/model_test_scripts/model_test.py
+            
+        - name: 'Modell trainieren'
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            jupyter nbconvert --to script model/ml_model_scripts/pytorch_train.ipynb
+            python model/ml_model_scripts/pytorch_train.py
+
+        - name: 'Modell testen'                   
+          run: |
+            jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
+            python test/model_test_scripts/model_test.py
         
         - name: "Veröffenlichung der Fairlearn-Tests"
           env:
