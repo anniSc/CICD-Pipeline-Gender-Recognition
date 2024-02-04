@@ -72,9 +72,6 @@ class DataPreparation:
         df = pd.DataFrame(filenames, columns=[id_column])
         df.to_csv(csv_path, index=False)
 
-
-
-
     @staticmethod
     def extract_all_ids(csv_path, column="Male", id_column="image_id"):
         df = pd.read_csv(csv_path)
@@ -188,14 +185,22 @@ class DataTest:
         def check_data_completeness(csv1, csv2):
             df1 = pd.read_csv(csv1)
             df2 = pd.read_csv(csv2)
-            column1 = df1.iloc[:, 0]
-            column2 = df2.iloc[:, 0]
-            is_equal = column1.equals(column2)
+            column1 = set(df1.iloc[:, 0])
+            column2 = set(df2.iloc[:, 0])
+            missing_in_1 = column1.difference(column2)
+            missing_in_2 = column2.difference(column1)
+            if missing_in_1:
+                print(f"::warning:: Die folgenden IDs fehlen in der zweiten Datei: {missing_in_1}")
+            if missing_in_2:
+                print(f"::warning:: Die folgenden IDs fehlen in der ersten Datei: {missing_in_2}")
+            is_equal = len(missing_in_1) == 0 and len(missing_in_2) == 0
             if is_equal:
                 print("::warning:: Daten sind vollständig! Die Bilddaten-IDs stimmen mit den IDs aus Attributliste überein! ")
             else:
-                assert print("::warning:: Die Bilddaten-IDs stimmen nicht mit den IDs aus Attributliste überein! ")
+                print("::warning:: Die Bilddaten-IDs stimmen nicht mit den IDs aus der Attributliste überein! ")
+                assert False
             return is_equal
+        
         @staticmethod
         def is_numeric(column):
             try:
