@@ -17,6 +17,7 @@ class DataPreparation:
     # Variablendeklaration von Bilddateipfaden
     image_folder = "data/img_align_celeba"
     csv_path = "data/source_csv/list_attr_celeba.csv"
+    source_csv_all_ids = "data/IDs/source_csv_all_ids.csv"
     source_train_path = "data/train-test-data/"
     image_source_path = "data/img_align_celeba"
     men_image_source_path_train = "data/train-test-data/train/men"
@@ -154,7 +155,7 @@ class DataTest:
             DataPreparation.extract_ids_source_data_and_save(directory=DataPreparation.image_folder, csv_path=DataPreparation.data_ids) 
             DataPreparation.extract_all_ids(csv_path=DataPreparation.csv_path, column=DataPreparation.feature_column, id_column=DataPreparation.id_column)       
 
-            DataTest.check_data_completeness(csv1=DataPreparation.data_ids, csv2=DataPreparation.csv_path)
+            DataTest.check_data_completeness(csv1=DataPreparation.data_ids, csv2=DataPreparation.source_csv_all_ids)
             
             DataTest.test_image_extensions(directory=DataPreparation.image_folder)
 
@@ -193,7 +194,7 @@ class DataTest:
             if is_equal:
                 print("::warning:: Daten sind vollständig! Die Bilddaten-IDs stimmen mit den IDs aus Attributliste überein! ")
             else:
-                print("::warning:: Die Bilddaten-IDs stimmen nicht mit den IDs aus Attributliste überein! ")
+                assert print("::warning:: Die Bilddaten-IDs stimmen nicht mit den IDs aus Attributliste überein! ")
             return is_equal
         @staticmethod
         def is_numeric(column):
