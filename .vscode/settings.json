@@ -1,5 +1,8 @@
 {
     "git.ignoreLimitWarning": true,
     "git.autofetch": true,
-    "git.autoStash": true
+    "git.autoStash": true,
+    "python.analysis.extraPaths": [
+        "./model/ml_model_scripts"
+    ]
 }
