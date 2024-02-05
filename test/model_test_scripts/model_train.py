@@ -119,7 +119,8 @@ class DataLoaderModelTrain:
     def __init__(self, batch_size, transform):
         self.batch_size = batch_size
         self.transform = transform
-    
+
+
     @staticmethod
     def load_data(test_dir, train_dir, transform, batch_size):
 
@@ -128,6 +129,7 @@ class DataLoaderModelTrain:
         train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
         test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
         return train_dataloader, test_dataloader
+    
     @staticmethod
     def transform_data():
         transform = transforms.Compose([
@@ -138,7 +140,7 @@ class DataLoaderModelTrain:
         return transform
 
 
-class Main():
+class Main(DataLoaderModelTrain):
     def __init__(self):
         self.batch_size = 64
         self.epochs = 1

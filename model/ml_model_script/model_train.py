@@ -122,7 +122,6 @@ class DataLoaderModelTrain:
     
     @staticmethod
     def load_data(test_dir, train_dir, transform, batch_size):
-
         train_dataset = datasets.ImageFolder(root=train_dir, transform=transform)
         test_dataset = datasets.ImageFolder(root=test_dir, transform=transform)
         train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
@@ -141,7 +140,7 @@ class Main():
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
         self.train_dir = 'data/train-test-data/train'
-        self.train_dataloader, self.test_dataloader = DataLoaderModelTrain.load_data(self, train_dir=self.train_dir,test_dir=self.test_dir,transform=self.transform,batch_size=self.batch_size)
+        self.train_dataloader, self.test_dataloader = DataLoaderModelTrain.load_data(train_dir=self.train_dir,test_dir=self.test_dir,transform=self.transform,batch_size=self.batch_size)
 
         self.model = SimpleCNN()
         self.trainer = Trainer(self.model, self.train_dataloader, self.test_dataloader, self.epochs, self.batch_size)
