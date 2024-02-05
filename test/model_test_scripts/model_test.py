@@ -1,49 +1,25 @@
-import os
-            
-import torchvision.transforms as transforms
-from PIL import Image
-
-import torch
-import pandas as pd
 import matplotlib.pyplot as plt
-from torch import nn, cuda
-from torchvision import datasets, transforms, models
-from torchvision.transforms import ToTensor
-from torchvision.io import read_image
-from torch.utils.data import Dataset, DataLoader
-import torch.nn.functional as F
 import numpy as np
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from torch.optim import Adam
-import torch.optim as optim
-from tqdm import tqdm
-import torch
 import os
-import random
-import torch
 import pandas as pd
-import matplotlib.pyplot as plt
-from torch import nn, cuda
-import torchvision 
-from torchvision import datasets, transforms, models
-from torchvision.transforms import ToTensor
-from torchvision.io import read_image
-from torch.utils.data import Dataset, DataLoader
-import torch.nn.functional as F
-import numpy as np
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from torch.optim import Adam
-import torch.optim as optim
-from tqdm import tqdm
-from fairlearn.metrics import MetricFrame
-from sklearn.tree import DecisionTreeClassifier
-from sklearn.datasets import fetch_openml
-from sklearn.model_selection import train_test_split
-from fairlearn.datasets import fetch_adult
-import torchvision.transforms as transforms
-from torchcam.methods import GradCAM, SmoothGradCAMpp, LayerCAM, XGradCAM, ScoreCAM, GradCAMpp
-from torch.autograd import Variable
 import sys
+import torch
+import torch.nn as nn
+import torch.nn.functional as F
+import torch.optim as optim
+import torchvision.transforms as transforms
+from fairlearn.datasets import fetch_adult
+from fairlearn.metrics import MetricFrame
+from sklearn.datasets import fetch_openml
+from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
+from sklearn.model_selection import train_test_split
+from sklearn.tree import DecisionTreeClassifier
+from torch.autograd import Variable
+from torchcam.methods import GradCAM, GradCAMpp, LayerCAM, ScoreCAM, SmoothGradCAMpp, XGradCAM
+from torchvision import datasets, models, transforms
+from torchvision.io import read_image
+from torchvision.transforms import ToTensor
+from tqdm import tqdm
 from model_train import DataLoaderModelTrain, SimpleCNN
 import torchvision.transforms.functional as TF
 
@@ -272,6 +248,7 @@ class ModelTester():
         f1 = f1_score(true_labels, predicted_labels, average='weighted')
 
         return accuracy, precision, recall, f1
+    
     def convert_image_to_tensor(image_path):
             image = Image.open(image_path)
             transform = transforms.Compose([
@@ -279,7 +256,6 @@ class ModelTester():
             ])
             return transform(image)
     
-    import torchvision.transforms.functional as TF
 
     def rotate_tensor_image(image_tensor, angle):
         rotated_image = TF.rotate(image_tensor, angle)
@@ -322,7 +298,7 @@ class ModelTester():
             rotation_angle += step
 
 
-class Main_Model_Test():
+class Main_Model_Test(ModelTester):
     def rotate_and_convert(angle, test_images = "data/train-test-data/test/", save_dir="rotated_images/"):
         from PIL import Image
         import os
@@ -340,8 +316,6 @@ class Main_Model_Test():
                 rotated_image.save(save_path)
                 
             angle += 10
-
-  
 
     def run_tests():
         IMAGE_SIZE = (178, 218)

@@ -90,11 +90,10 @@ jobs:
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            python model/ml_model_scripts/pytorch_train.py
+            python model/ml_model_scripts/model_train.py
 
         - name: 'Modell testen'                   
           run: |
-            jupyter nbconvert --to script test/model_test_scripts/model_test.ipynb
             python test/model_test_scripts/model_test.py
         
         - name: "Veröffenlichung der Fairlearn-Tests"
