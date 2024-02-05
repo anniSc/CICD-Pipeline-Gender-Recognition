@@ -90,7 +90,7 @@ jobs:
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            python model/ml_model_script/model_train.py
+            python model/model_script/model_train.py
 
         - name: 'Modell testen'                   
           run: |
