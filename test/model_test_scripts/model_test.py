@@ -22,6 +22,18 @@ from torchvision.transforms import ToTensor
 from tqdm import tqdm
 from model_train import DataLoaderModelTrain, SimpleCNN
 import torchvision.transforms.functional as TF
+import torchvision
+import random
+from fairlearn.metrics import (
+    MetricFrame,
+    count,
+    false_negative_rate,
+    false_positive_rate,
+    selection_rate,
+)
+
+from torchvision.transforms.functional import normalize, resize
+
 
 class ModelTester():
     
@@ -156,12 +168,12 @@ class ModelTester():
 
             # Show a sample noisy image
             plt.figure(figsize=(12, 6))
-            plt.title(f'Verauschtes Bild mit noise factor: {noise_factor}.', fontsize=10)
+            plt.title(f'Verauschtes Bild mit Verrauschungs-Faktor: {noise_factor}.', fontsize=10)
             plt.imshow(noisy_images[0].permute(1, 2, 0))
-            plt.text(1.2, 0.6, f'Genauigkeit: {accuracy}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
-            plt.text(1.2, 0.5, f'Precision: {precision}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
-            plt.text(1.2, 0.4, f'Recall: {recall}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
-            plt.text(1.2, 0.3, f'F1 Score: {f1}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
+            plt.text(1.1, 0.6, f'Genauigkeit: {accuracy}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
+            plt.text(1.1, 0.5, f'Precision: {precision}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
+            plt.text(1.1, 0.4, f'Recall: {recall}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
+            plt.text(1.1, 0.3, f'F1 Score: {f1}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
             plt.savefig(f"{savefig_path}/{i}.png")
             # plt.show()
 
@@ -297,8 +309,209 @@ class ModelTester():
             i += 1
             rotation_angle += step
 
+class TestFairness():
+    train_men = "data/train-test-data/train/men"
+    train_women = "data/train-test-data/train/women"
+    sensitive_features = ["men","women"]
+    train = "data/train-test-data/train"
+    test = "data/train-test-data/test"
+    merged_csv = "test/csv/gender_labelled.csv" 
 
-class Main_Model_Test(ModelTester):
+    transform = transforms.Compose([
+            transforms.Resize((178, 218)),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        ])
+    transform = transforms.Compose([transforms.ToTensor()])
+    
+  
+    def get_sensitive_features(merged_csv, label_men=1, label_women=-1):
+        df = pd.read_csv(merged_csv)
+        sensitive_features = df['Male'].tolist()
+        sensitive_features = pd.Series(sensitive_features).replace({label_women: 'Frau', label_men: 'Mann'}).tolist()
+        return sensitive_features
+    
+
+    def get_fairness_metrics(merged_csv,train_dataloader, model, transform, sensitive_features):
+        y_test = []
+        y_pred = []
+        
+        for inputs, labels in train_dataloader:
+            outputs = model(inputs)
+            _, preds = torch.max(outputs, 1)
+            y_test.extend(labels.numpy())
+            y_pred.extend(preds.numpy())
+        
+        metrics = MetricFrame(metrics=accuracy_score, y_true=y_test, y_pred=y_pred, sensitive_features=sensitive_features)
+        return metrics, y_test, y_pred
+
+
+    def create_gender_labelled_csv(men_folder, women_folder, output_csv, label_men = 1, label_women=-1):
+        men_files = os.listdir(men_folder)
+        women_files = os.listdir(women_folder)
+    
+        men_df = pd.DataFrame({
+            'filename': men_files,
+            'Male': [label_men]*len(men_files)  # 1 für Männer
+        })
+        women_df = pd.DataFrame({
+            'filename': women_files,
+            'Male': [label_women]*len(women_files)  # -1 für Frauen
+        })
+
+        combined_df = pd.concat([men_df, women_df])
+        
+        combined_df.to_csv(output_csv, index=False)
+        return os.path.abspath(output_csv)
+
+    def plot_bar_fairnesscheck(groups, accuracies,metrics):
+        groups = metrics.by_group.index.tolist()
+        accuracies = metrics.by_group.values.tolist()
+        plt.bar(groups, accuracies)
+        plt.title('Genauigkeit von Gruppen')
+        plt.xlabel('Gruppe')
+        plt.ylabel('Genauigkeit')
+        # plt.show()
+        plt.savefig("test/metrics/plot_bar.jpg", dpi=100)
+
+    def analyze_metrics(sensitive_features, y_test, y_pred):
+        from fairlearn.metrics import (
+            MetricFrame,
+            count,
+            false_negative_rate,
+            false_positive_rate,
+            selection_rate,
+        )
+    
+        metrics = {
+            "accuracy": accuracy_score,
+            "precision": precision_score,
+            "false positive rate": false_positive_rate,
+            "false negative rate": false_negative_rate,
+            "selection rate": selection_rate,
+            "count": count,
+        }
+        print(y_test)
+        metric_frame = MetricFrame(
+            metrics=metrics, y_true=y_test, y_pred=y_pred, sensitive_features=sensitive_features
+        )
+
+        ax = metric_frame.by_group.plot.bar(
+            subplots=True,
+            layout=[3, 3],
+            legend=False,
+            figsize=[12, 8],
+            title="Metriken!",
+        )
+
+        for row in ax:
+            for subplot in row:
+                subplot.yaxis.set_major_locator(plt.MaxNLocator(integer=True))
+        
+        plt.savefig("test/metrics/metrics.jpg", dpi=100)
+        # plt.show()
+        return metric_frame
+        # Die Metriken, die auf dem Bild erstellt werden, sind:
+        # - accuracy (Genauigkeit): Gibt den Anteil der korrekt vorhergesagten Werte an.
+        # - precision (Präzision): Gibt den Anteil der korrekt vorhergesagten positiven Werte an.
+        # - false positive rate (Falsch-Positiv-Rate): Gibt den Anteil der falsch vorhergesagten positiven Werte an.
+        # - false negative rate (Falsch-Negativ-Rate): Gibt den Anteil der falsch vorhergesagten negativen Werte an.
+        # - selection rate (Auswahlrate): Gibt den Anteil der ausgewählten Werte an.
+        # - count (Anzahl): Gibt die Anzahl der Werte an.
+        
+
+
+    def run_fairness_tests(train_dataloader,model,transform):
+        merged_csv = TestFairness.create_gender_labelled_csv(TestFairness.train_men,TestFairness.train_women,TestFairness.merged_csv)
+
+        metrics, y_test, y_pred =  TestFairness.get_fairness_metrics(merged_csv, train_dataloader, model, transform, TestFairness.get_sensitive_features(merged_csv))
+        groups = metrics.by_group.index.tolist()
+        accuracies = metrics.by_group.values.tolist()
+        TestFairness.plot_bar_fairnesscheck(groups, accuracies,metrics)
+        metric_frame = TestFairness.analyze_metrics(sensitive_features=TestFairness.get_sensitive_features(merged_csv=merged_csv), y_test=y_test, y_pred=y_pred)
+
+
+        import matplotlib.pyplot as plt
+
+        fig1 = metric_frame.by_group.plot(
+            kind="bar",
+            ylim=[0, 2],
+            subplots=True,
+            layout=[3, 3],
+            legend=False,
+            figsize=[12, 8],
+            title="Alle Metriken mit zugewiesenem y-Achsenbereich anzeigen",
+        )
+
+        fig2 = metric_frame.by_group[["count"]].plot(
+            kind="pie",
+            subplots=True,
+            layout=[1, 1],
+            legend=True,
+            figsize=[12, 8],
+            labels=["Frau","Mann"],
+            autopct="%.2f",
+            title="Metriken als Kuchendiagramm",
+        )
+
+
+        fig1[0][0].figure.savefig("test/metricsFairlearn/Fig1metricsFairLearn.jpg", dpi=100)
+        fig2[0][0].figure.savefig("test/metricsFairlearn/Fig2metricsFairLearn.jpg", dpi=100)
+
+
+
+import os
+import random
+import torch
+import torchvision
+import matplotlib.pyplot as plt
+from torchvision.transforms.functional import normalize, resize
+
+class ModelVisualizer:
+    def __init__(self, model_path, target_layer):
+        self.model = self.load_model(model_path)
+        self.cam_extractor = GradCAMpp(self.model, target_layer)
+
+    def load_model(self, model_path):
+        model = SimpleCNN()
+        model.load_state_dict(torch.load(model_path))
+        model.eval()
+        return model
+
+    def get_image_paths(self, dir_path):
+        return [os.path.join(dir_path, img) for img in os.listdir(dir_path)]
+
+    def select_images(self, men_dir, women_dir):
+        men_images = self.get_image_paths(men_dir)
+        women_images = self.get_image_paths(women_dir)
+        return random.sample(men_images, 1) + random.sample(women_dir, 1)
+
+    def process_image(self, img_path):
+        img = torchvision.io.read_image(img_path)
+        return normalize(resize(img, (178, 218)) / 255., [0.485, 0.456, 0.406], [0.220, 0.224, 0.225])
+
+    def visualize_model(self, men_dir = "data/train-test-data/train/men", women_dir = "data/train-test-data/train/women"):
+        men_images = [os.path.join(men_dir, img) for img in os.listdir(men_dir)]
+        women_images = [os.path.join(women_dir, img) for img in os.listdir(women_dir)]
+        selected_images = random.sample(men_images, 1) + random.sample(women_images, 1)
+        for i, img_path in enumerate(selected_images):
+            img = torchvision.io.read_image(img_path)
+            input_tensor = torchvision.transforms.functional.normalize(
+                torchvision.transforms.functional.resize(img, (178, 218)) / 255.,
+                [0.485, 0.456, 0.406],
+                [0.220, 0.224, 0.225]
+            )
+            out = self.model(input_tensor.unsqueeze(0))
+            activation_map = self.cam_extractor(1, out)
+            activation_map = activation_map[0].squeeze(0).numpy()
+
+            plt.imshow(activation_map, cmap='jet')
+            plt.savefig(f'test/activation_map/activation_map_{i}.png')
+            plt.show()
+
+
+
+class Main_Model_Test(ModelTester, TestFairness,ModelVisualizer):
     def rotate_and_convert(angle, test_images = "data/train-test-data/test/", save_dir="rotated_images/"):
         from PIL import Image
         import os
@@ -342,12 +555,19 @@ class Main_Model_Test(ModelTester):
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
-        _,test_dataloader = DataLoaderModelTrain.load_data(train_dir=TRAIN_DIR, test_dir=TEST_DIR, transform=transform, batch_size=batch_size)
-        ModelTester.evaluate_model(model, test_dataloader)
-        ModelTester.test_model_robustness(model, test_dataloader, device)
-        ModelTester.add_noise_and_test(model, test_dataloader, device)
+        train_dataloader,test_dataloader = DataLoaderModelTrain.load_data(train_dir=TRAIN_DIR, test_dir=TEST_DIR, transform=transform, batch_size=batch_size)
+        # ModelTester.evaluate_model(model, test_dataloader)
+        # ModelTester.test_model_robustness(model, test_dataloader, device)
+        # ModelTester.add_noise_and_test(model, test_dataloader, device)
         ModelTester.test_noise_robustness(model, test_dataloader, device, end_noise=2.0, step = 0.01)
-        ModelTester.test_distortion_robustness(model, test_dataloader, device, end_distortion=2.0, step = 0.001)
-        ModelTester.test_rotation_robustness(model, test_dataloader, device, end_angle=270.0, step = 10.0)
+        # ModelTester.test_distortion_robustness(model, test_dataloader, device, end_distortion=2.0, step = 0.001)
+        # ModelTester.test_rotation_robustness(model, test_dataloader, device, end_angle=270.0, step = 90.0)
+        # TestFairness.run_fairness_tests(train_dataloader, model, transform)
+        # visualizer = ModelVisualizer(model_path, "conv2")
+        # visualizer.visualize_model()
+
+        
+
+
 
 Main_Model_Test.run_tests()
