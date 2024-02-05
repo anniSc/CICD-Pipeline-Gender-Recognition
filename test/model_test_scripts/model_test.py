@@ -31,7 +31,13 @@ from fairlearn.metrics import (
     false_positive_rate,
     selection_rate,
 )
-
+import glob
+import os
+import random
+import torch
+import torchvision
+import matplotlib.pyplot as plt
+from torchvision.transforms.functional import normalize, resize
 from torchvision.transforms.functional import normalize, resize
 
 
@@ -82,7 +88,7 @@ class ModelTester():
         noisy_images = torch.clamp(noisy_images, 0., 1.)
         return noisy_images
 
-    def add_noise_and_test(model, test_dataloader, device, noise_factor=0.5):
+    def add_noise_and_test_robustness(model, test_dataloader, device, noise_factor=0.5):
         noisy_images = []
         labels_list = []
         
@@ -96,6 +102,8 @@ class ModelTester():
         labels_list = torch.cat(labels_list)
 
         noisy_dataloader = torch.utils.data.DataLoader(list(zip(noisy_images, labels_list)), batch_size=test_dataloader.batch_size)
+
+        
 
         ModelTester.test_model_robustness(model, noisy_dataloader, device)
 
@@ -179,10 +187,11 @@ class ModelTester():
 
             if accuracy < 0.7:
                 print(f'::warning::Genauigkeit unter 70% mit noise factor: {noise_factor}. Test wird gestoppt.')
+                plt.close()
                 break
             i += 1
             noise_factor += step
-
+        plt.close()
 
     def add_distortion(image, distortion_factor=0.5):
         startpoints = torch.tensor([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
@@ -219,14 +228,16 @@ class ModelTester():
             plt.text(1.2, 0.4, f'Recall: {recall}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
             plt.text(1.2, 0.3, f'F1-Score: {f1}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
             plt.savefig(f"{savefig_path}/{i}.png")
-            print(f"test/test-plots-verzerrung/{i}.png")
-            plt.show()
-
+            # print(f"test/test-plots-verzerrung/{i}.png")
+            # plt.show()
+            plt.clf()
             if accuracy < 0.7:
                 print(f'::warning:: Genauigkeit unter 70% mit Verzerrungs-Faktor: {distortion_factor}. Test wird gestoppt.')
+                plt.clf()
                 break
             i += 1
             distortion_factor += step
+            plt.clf()
 
     def rotate_and_convert(image, angle, test_images = "data/train-test-data/test"):
         from PIL import Image
@@ -305,10 +316,14 @@ class ModelTester():
             plt.text(1.2, 0.3, f'F1-Score: {f1}', horizontalalignment='left', verticalalignment='center', transform=plt.gca().transAxes)
             plt.savefig(fr"{savefig_path}/{i}.png")
             print(f"test/test-plots-rotation/{i}.png")
-            # plt.show()
+            plt.clf()
+            if accuracy < 0.7:
+                print(f'::warning:: Genauigkeit unter 70% mit Rotations-Faktor: {rotation_angle}. Test wird gestoppt.')
+                plt.clf()
+                break
             i += 1
             rotation_angle += step
-
+            plt.clf()
 class TestFairness():
     train_men = "data/train-test-data/train/men"
     train_women = "data/train-test-data/train/women"
@@ -343,6 +358,7 @@ class TestFairness():
             y_pred.extend(preds.numpy())
         
         metrics = MetricFrame(metrics=accuracy_score, y_true=y_test, y_pred=y_pred, sensitive_features=sensitive_features)
+        print(metrics)
         return metrics, y_test, y_pred
 
 
@@ -371,8 +387,8 @@ class TestFairness():
         plt.title('Genauigkeit von Gruppen')
         plt.xlabel('Gruppe')
         plt.ylabel('Genauigkeit')
-        # plt.show()
         plt.savefig("test/metrics/plot_bar.jpg", dpi=100)
+        plt.clf()
 
     def analyze_metrics(sensitive_features, y_test, y_pred):
         from fairlearn.metrics import (
@@ -391,7 +407,7 @@ class TestFairness():
             "selection rate": selection_rate,
             "count": count,
         }
-        print(y_test)
+ 
         metric_frame = MetricFrame(
             metrics=metrics, y_true=y_test, y_pred=y_pred, sensitive_features=sensitive_features
         )
@@ -409,7 +425,8 @@ class TestFairness():
                 subplot.yaxis.set_major_locator(plt.MaxNLocator(integer=True))
         
         plt.savefig("test/metrics/metrics.jpg", dpi=100)
-        # plt.show()
+        plt.clf()
+
         return metric_frame
         # Die Metriken, die auf dem Bild erstellt werden, sind:
         # - accuracy (Genauigkeit): Gibt den Anteil der korrekt vorhergesagten Werte an.
@@ -418,20 +435,31 @@ class TestFairness():
         # - false negative rate (Falsch-Negativ-Rate): Gibt den Anteil der falsch vorhergesagten negativen Werte an.
         # - selection rate (Auswahlrate): Gibt den Anteil der ausgewählten Werte an.
         # - count (Anzahl): Gibt die Anzahl der Werte an.
-        
+    def clear_file(file_path):
+        with open(file_path, 'w') as outfile:
+            outfile.write("")  
 
 
     def run_fairness_tests(train_dataloader,model,transform):
-        merged_csv = TestFairness.create_gender_labelled_csv(TestFairness.train_men,TestFairness.train_women,TestFairness.merged_csv)
+        # def clear_and_write_file(file_path, content):
+        #     with open(file_path, 'w') as outfile:
+        #         outfile.write(content)  
 
+        merged_csv = TestFairness.create_gender_labelled_csv(TestFairness.train_men,TestFairness.train_women,TestFairness.merged_csv)
         metrics, y_test, y_pred =  TestFairness.get_fairness_metrics(merged_csv, train_dataloader, model, transform, TestFairness.get_sensitive_features(merged_csv))
+        accuracy_per_group = metrics.by_group
+
+        TestFairness.clear_file('test/metrics/fairness_metrics.txt')
+        for group, accuracy in accuracy_per_group.items():
+            print(f"Genauigkeit für die Gruppe: {group}: {accuracy}")
+            with open('test/metrics/fairness_metrics.txt', 'a') as outfile:
+                outfile.write(f'Genauigkeit für die Gruppe: {group}: {accuracy} \n')
+           
         groups = metrics.by_group.index.tolist()
         accuracies = metrics.by_group.values.tolist()
         TestFairness.plot_bar_fairnesscheck(groups, accuracies,metrics)
         metric_frame = TestFairness.analyze_metrics(sensitive_features=TestFairness.get_sensitive_features(merged_csv=merged_csv), y_test=y_test, y_pred=y_pred)
-
-
-        import matplotlib.pyplot as plt
+            
 
         fig1 = metric_frame.by_group.plot(
             kind="bar",
@@ -457,20 +485,14 @@ class TestFairness():
 
         fig1[0][0].figure.savefig("test/metricsFairlearn/Fig1metricsFairLearn.jpg", dpi=100)
         fig2[0][0].figure.savefig("test/metricsFairlearn/Fig2metricsFairLearn.jpg", dpi=100)
+        fig1[0][0].figure.clf()
+        fig2[0][0].figure.clf()
 
-
-
-import os
-import random
-import torch
-import torchvision
-import matplotlib.pyplot as plt
-from torchvision.transforms.functional import normalize, resize
-
-class ModelVisualizer:
+class ModelExplainability:
     def __init__(self, model_path, target_layer):
         self.model = self.load_model(model_path)
-        self.cam_extractor = GradCAMpp(self.model, target_layer)
+        self.cam_extractor_grad = GradCAMpp(self.model, target_layer)
+
 
     def load_model(self, model_path):
         model = SimpleCNN()
@@ -489,8 +511,11 @@ class ModelVisualizer:
     def process_image(self, img_path):
         img = torchvision.io.read_image(img_path)
         return normalize(resize(img, (178, 218)) / 255., [0.485, 0.456, 0.406], [0.220, 0.224, 0.225])
+    
+   
 
-    def visualize_model(self, men_dir = "data/train-test-data/train/men", women_dir = "data/train-test-data/train/women"):
+    def visualize_model_grad(self, men_dir = "data/train-test-data/train/men", women_dir = "data/train-test-data/train/women"):
+  
         men_images = [os.path.join(men_dir, img) for img in os.listdir(men_dir)]
         women_images = [os.path.join(women_dir, img) for img in os.listdir(women_dir)]
         selected_images = random.sample(men_images, 1) + random.sample(women_images, 1)
@@ -502,33 +527,18 @@ class ModelVisualizer:
                 [0.220, 0.224, 0.225]
             )
             out = self.model(input_tensor.unsqueeze(0))
-            activation_map = self.cam_extractor(1, out)
+            activation_map = self.cam_extractor_grad(1, out)
             activation_map = activation_map[0].squeeze(0).numpy()
-
+            plt.close()
             plt.imshow(activation_map, cmap='jet')
             plt.savefig(f'test/activation_map/activation_map_{i}.png')
-            # plt.show()
+            plt.clf()
 
 
 
-class Main_Model_Test(ModelTester, TestFairness,ModelVisualizer):
-    # def rotate_and_convert(angle, test_images = "data/train-test-data/test/", save_dir="rotated_images/"):
-    #     from PIL import Image
-    #     import os
-    #     i = 0
-    #     if not os.path.exists(save_dir):
-    #         os.makedirs(save_dir)
-    #     for filename in os.listdir(test_images):
-    #         if angle == 360: 
-    #             break
-         
-    #         image_path = os.path.join(test_images, filename)
-    #         image = Image.open(image_path)
-    #         rotated_image = image.rotate(angle)
-    #         save_path = os.path.join(save_dir, f"rotated_{angle}_{filename}")
-    #         rotated_image.save(save_path)
-            
-    #         angle += 10
+
+
+class Main_Model_Test(ModelTester, TestFairness,ModelExplainability):
 
     def run_tests():
         IMAGE_SIZE = (178, 218)
@@ -558,16 +568,11 @@ class Main_Model_Test(ModelTester, TestFairness,ModelVisualizer):
         train_dataloader,test_dataloader = DataLoaderModelTrain.load_data(train_dir=TRAIN_DIR, test_dir=TEST_DIR, transform=transform, batch_size=batch_size)
         ModelTester.evaluate_model(model, test_dataloader)
         ModelTester.test_model_robustness(model, test_dataloader, device)
-        ModelTester.add_noise_and_test(model, test_dataloader, device)
-        ModelTester.test_noise_robustness(model, test_dataloader, device, end_noise=2.0, step = 0.01)
+        ModelTester.test_noise_robustness(model, test_dataloader, device, step = 0.01)
         ModelTester.test_distortion_robustness(model, test_dataloader, device, end_distortion=2.0, step = 0.001)
-        ModelTester.test_rotation_robustness(model, test_dataloader, device, end_angle=270.0, step = 90.0)
+        ModelTester.test_rotation_robustness(model, test_dataloader, device, end_angle=270.0, step = 10.0)
         TestFairness.run_fairness_tests(train_dataloader, model, transform)
-        visualizer = ModelVisualizer(model_path, "conv2")
-        visualizer.visualize_model()
-
-        
-
-
-
+        ModelExplainability(model_path, "conv2").visualize_model_grad()
+  
+    
 Main_Model_Test.run_tests()

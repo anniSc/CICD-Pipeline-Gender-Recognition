@@ -101,7 +101,11 @@ class Trainer:
 
             if accuracy > 0.9:
                 torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch+1}_accuracy_{accuracy:.2f}.pth')
-
+            
+            if accuracy > 0.95:
+                torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch+1}_accuracy_{accuracy:.2f}.pth')
+                break
+            
             if accuracy > self.best_accuracy:
                 self.best_accuracy = accuracy
                 self.early_stopping_counter = 0
@@ -132,7 +136,7 @@ class DataLoaderModelTrain:
 class Main(DataLoaderModelTrain):
     def __init__(self):
         self.batch_size = 64
-        self.epochs = 1
+        self.epochs = 10
         self.test_dir = 'data/train-test-data/test'
         self.transform = transforms.Compose([
             transforms.Resize((178, 218)),

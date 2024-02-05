@@ -17,7 +17,6 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from torch.optim import Adam
 import torch.optim as optim
 
-
 class SimpleCNN(nn.Module):
     def __init__(self):
         super(SimpleCNN, self).__init__()
@@ -52,36 +51,39 @@ class SimpleCNN(nn.Module):
         return x
 
 
+class GenderRecognitionPipeline:
+    def __init__(self):
+        self.model_dir = 'model/PyTorch_Trained_Models'
+        self.models = os.listdir(self.model_dir)
 
-def predict(image, model_path):
-    # Define the transformation
-    transform = transforms.Compose([
-        transforms.Resize((178, 218)),
-        transforms.ToTensor(),
-        transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-    ])
+    def predict(self, image, model_path):
+        # Define the transformation
+        transform = transforms.Compose([
+            transforms.Resize((178, 218)),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
+        ])
 
+        image = image.convert("RGB")
+        # Apply the transformation and add an extra dimension
+        image = transform(image)
+        image = image.unsqueeze(0)
 
-    image = image.convert("RGB")
-    # Apply the transformation and add an extra dimension
-    image = transform(image)
-    image = image.unsqueeze(0)
+        # Load the model
+        model = SimpleCNN()
+        model.load_state_dict(torch.load(model_path))
+        model.eval()
 
-    # Load the model
-    model = SimpleCNN()
-    model.load_state_dict(torch.load(model_path))
-    model.eval()
-
-    # Make the prediction
-    with torch.no_grad():
+        # Make the prediction
+        with torch.no_grad():
             outputs = model(image)
             probabilities = torch.nn.functional.softmax(outputs[0], dim=0)
             _, predicted = torch.max(outputs.data, 1)
 
-    return predicted.item(), probabilities.numpy()
+        return predicted.item(), probabilities.numpy()
 
 
-
+pipeline = GenderRecognitionPipeline()
 
 st.title("Gender Recognition CI/CD Pipeline")
 
@@ -92,16 +94,12 @@ for uploaded_file in uploaded_files:
     st.image(image, caption='Hochgeladenes Bild.', use_column_width=True)
     st.write("Bild erfolgreich hochgeladen.")
 
-    # Get a list of all files in the directory
-    model_dir = 'model/PyTorch_Trained_Models'
-    models = os.listdir(model_dir)
-
     # Use the list of models as options for the selectbox
-    model_name = st.selectbox("Wählen Sie ein Modell aus:", models)
-    model_path = os.path.join(model_dir, model_name)
+    model_name = st.selectbox("Wählen Sie ein Modell aus:", pipeline.models)
+    model_path = os.path.join(pipeline.model_dir, model_name)
 
     if st.button('Prediction Starten!'):
-        prediction, probabilities = predict(image, model_path)
+        prediction, probabilities = pipeline.predict(image, model_path)
         st.write(f"Prediction: {prediction}")
         st.write(f"Wahrscheinlichkeit das auf dem Bilde ein Mann ist: {probabilities[0]*100}%")
         st.write(f"Wahrscheinlichkeit das auf dem Bilde eine Frau ist: {probabilities[1]*100}%")
