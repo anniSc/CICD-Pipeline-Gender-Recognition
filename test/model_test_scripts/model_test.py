@@ -150,7 +150,7 @@ class ModelTester():
 
             noisy_dataloader = torch.utils.data.DataLoader(list(zip(noisy_images, labels_list)), batch_size=test_dataloader.batch_size)
 
-            print(f'::warning::Test mit noise factor: {noise_factor}')
+            print(f'::warning::Test mit Verrauschungs-Faktor: {noise_factor}')
             accuracy, precision,recall, f1 = ModelTester.test_model_robustness(model, noisy_dataloader, device)
             
 
@@ -211,7 +211,7 @@ class ModelTester():
             plt.show()
 
             if accuracy < 0.7:
-                print(f'::warning::Genauigkeit unter 70% mit Verzerrungs-Faktor: {distortion_factor}. Test wird gestoppt.')
+                print(f'::warning:: Genauigkeit unter 70% mit Verzerrungs-Faktor: {distortion_factor}. Test wird gestoppt.')
                 break
             i += 1
             distortion_factor += step
@@ -280,7 +280,7 @@ class ModelTester():
 
             rotated_dataloader = torch.utils.data.DataLoader(list(zip(rotated_images, labels_list)), batch_size=test_dataloader.batch_size)
 
-            print(f'Test mit rotation angle: {rotation_angle}')
+            print(f'Test mit: {rotation_angle}° (Grad)')
             accuracy, precision, recall, f1 = ModelTester.test_model_robustness_rotation(model, rotated_dataloader, device)
             
             # Show a sample rotated image
@@ -308,13 +308,13 @@ class Main_Model_Test(ModelTester):
         for filename in os.listdir(test_images):
             if angle == 360: 
                 break
-            else:
-                image_path = os.path.join(test_images, filename)
-                image = Image.open(image_path)
-                rotated_image = image.rotate(angle)
-                save_path = os.path.join(save_dir, f"rotated_{angle}_{filename}")
-                rotated_image.save(save_path)
-                
+         
+            image_path = os.path.join(test_images, filename)
+            image = Image.open(image_path)
+            rotated_image = image.rotate(angle)
+            save_path = os.path.join(save_dir, f"rotated_{angle}_{filename}")
+            rotated_image.save(save_path)
+            
             angle += 10
 
     def run_tests():
@@ -325,44 +325,29 @@ class Main_Model_Test(ModelTester):
         MODEL_PATH = 'test/model_to_be_tested'
         device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
         model_tester = ModelTester()    
-        # Define the path to the model
         model_path =  model_tester.get_model_path(MODEL_PATH) # Replace with your actual model path
-
-        # Check if the model file exists
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"No model found at {model_path}")
-
-        # Initialize the model
-        model = SimpleCNN()  # Replace SimpleCNN with your actual model class
-
-        # Load the state dict
+        model = SimpleCNN() 
         state_dict = torch.load(model_path)
-
-        # Apply the state dict to the model
         model.load_state_dict(state_dict)
-
-        # Move the model to the correct device
         model = model.to(device)
-
         if os.path.exists(BATCH_SIZE_FILE):
             with open(BATCH_SIZE_FILE, 'r') as f:
                 batch_size = int(f.read())
         else:
             batch_size = 64
-
-
         transform =  transform = transforms.Compose([
             transforms.Resize((178, 218)),
             transforms.ToTensor(),
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
         _,test_dataloader = DataLoaderModelTrain.load_data(train_dir=TRAIN_DIR, test_dir=TEST_DIR, transform=transform, batch_size=batch_size)
+        ModelTester.evaluate_model(model, test_dataloader)
+        ModelTester.test_model_robustness(model, test_dataloader, device)
+        ModelTester.add_noise_and_test(model, test_dataloader, device)
+        ModelTester.test_noise_robustness(model, test_dataloader, device, end_noise=2.0, step = 0.01)
+        ModelTester.test_distortion_robustness(model, test_dataloader, device, end_distortion=2.0, step = 0.001)
+        ModelTester.test_rotation_robustness(model, test_dataloader, device, end_angle=270.0, step = 10.0)
 
-
-        # ModelTester.evaluate_model(model, test_dataloader)
-        # ModelTester.test_model_robustness(model, test_dataloader, device)
-        # ModelTester.add_noise_and_test(model, test_dataloader, device)
-        # ModelTester.test_noise_robustness(model, test_dataloader, device, end_noise=2.0, step = 0.01)
-        # ModelTester.test_distortion_robustness(model, test_dataloader, device, end_distortion=2.0, step = 0.001)
-        ModelTester.test_rotation_robustness(model, test_dataloader, device, end_angle=270.0, step = 40.0)  
 Main_Model_Test.run_tests()
