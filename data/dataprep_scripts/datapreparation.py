@@ -441,6 +441,7 @@ class DataVisualization:
             plt.ylabel('Count')
             plt.savefig(f"{save_path}/{save_name}.png")
             # plt.show()
+            plt.clf()
 
         def histogram_all_columns(csv_path,save_path):
             df = pd.read_csv(csv_path)
@@ -450,14 +451,14 @@ class DataVisualization:
                     counts.plot(kind='bar', title=f"Verteilung der Werte in der Spalte '{column_name}'")
                     plt.savefig(f"{save_path}/{column_name}.png")
                     # plt.show()
-
+                    plt.clf()
 
 
 class Main(DataPreparation, DataTest, DataBalancing, DataVisualization): 
     """
     Die Hauptklasse, die die verschiedenen Funktionen zur Datenverarbeitung, Datenprüfung, Datenbalancierung und Datenvisualisierung enthält.
     """
-    total_images = 10
+    total_images = 10000
     balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
     balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
     young_column = "Young" 

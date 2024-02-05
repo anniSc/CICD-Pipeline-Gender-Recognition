@@ -51,7 +51,7 @@ class SimpleCNN(nn.Module):
         return x
 
 
-class GenderRecognitionPipeline:
+class GenderRecognitionPredictor:
     def __init__(self):
         self.model_dir = 'model/PyTorch_Trained_Models'
         self.models = os.listdir(self.model_dir)
@@ -83,23 +83,26 @@ class GenderRecognitionPipeline:
         return predicted.item(), probabilities.numpy()
 
 
-pipeline = GenderRecognitionPipeline()
 
-st.title("Gender Recognition CI/CD Pipeline")
 
-uploaded_files = st.file_uploader("Bilder hochladen...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+class MainDeploy(GenderRecognitionPredictor):
+    def deploy(self):  
+        st.title("Gender Recognition CI/CD Pipeline")
 
-for uploaded_file in uploaded_files:
-    image = Image.open(uploaded_file)
-    st.image(image, caption='Hochgeladenes Bild.', use_column_width=True)
-    st.write("Bild erfolgreich hochgeladen.")
+        uploaded_files = st.file_uploader("Bilder hochladen...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
 
-    # Use the list of models as options for the selectbox
-    model_name = st.selectbox("Wählen Sie ein Modell aus:", pipeline.models)
-    model_path = os.path.join(pipeline.model_dir, model_name)
+        for uploaded_file in uploaded_files:
+            image = Image.open(uploaded_file)
+            st.image(image, caption='Hochgeladenes Bild.', use_column_width=True)
+            st.write("Bild erfolgreich hochgeladen.")
 
-    if st.button('Prediction Starten!'):
-        prediction, probabilities = pipeline.predict(image, model_path)
-        st.write(f"Prediction: {prediction}")
-        st.write(f"Wahrscheinlichkeit das auf dem Bilde ein Mann ist: {probabilities[0]*100}%")
-        st.write(f"Wahrscheinlichkeit das auf dem Bilde eine Frau ist: {probabilities[1]*100}%")
+            # Use the list of models as options for the selectbox
+            model_name = st.selectbox("Wählen Sie ein Modell aus:", GenderRecognitionPredictor.models)
+            model_path = os.path.join(GenderRecognitionPredictor.model_dir, model_name)
+
+            if st.button('Prediction Starten!'):
+                prediction, probabilities = GenderRecognitionPredictor.predict(image, model_path)
+                st.write(f"Prediction: {prediction}")
+                st.write(f"Wahrscheinlichkeit das auf dem Bilde ein Mann ist: {probabilities[0]*100}%")
+                st.write(f"Wahrscheinlichkeit das auf dem Bilde eine Frau ist: {probabilities[1]*100}%")
+
