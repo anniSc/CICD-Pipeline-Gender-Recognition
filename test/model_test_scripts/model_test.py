@@ -507,7 +507,7 @@ class ModelVisualizer:
 
             plt.imshow(activation_map, cmap='jet')
             plt.savefig(f'test/activation_map/activation_map_{i}.png')
-            plt.show()
+            # plt.show()
 
 
 
@@ -556,15 +556,15 @@ class Main_Model_Test(ModelTester, TestFairness,ModelVisualizer):
             transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
         ])
         train_dataloader,test_dataloader = DataLoaderModelTrain.load_data(train_dir=TRAIN_DIR, test_dir=TEST_DIR, transform=transform, batch_size=batch_size)
-        # ModelTester.evaluate_model(model, test_dataloader)
-        # ModelTester.test_model_robustness(model, test_dataloader, device)
-        # ModelTester.add_noise_and_test(model, test_dataloader, device)
+        ModelTester.evaluate_model(model, test_dataloader)
+        ModelTester.test_model_robustness(model, test_dataloader, device)
+        ModelTester.add_noise_and_test(model, test_dataloader, device)
         ModelTester.test_noise_robustness(model, test_dataloader, device, end_noise=2.0, step = 0.01)
-        # ModelTester.test_distortion_robustness(model, test_dataloader, device, end_distortion=2.0, step = 0.001)
-        # ModelTester.test_rotation_robustness(model, test_dataloader, device, end_angle=270.0, step = 90.0)
-        # TestFairness.run_fairness_tests(train_dataloader, model, transform)
-        # visualizer = ModelVisualizer(model_path, "conv2")
-        # visualizer.visualize_model()
+        ModelTester.test_distortion_robustness(model, test_dataloader, device, end_distortion=2.0, step = 0.001)
+        ModelTester.test_rotation_robustness(model, test_dataloader, device, end_angle=270.0, step = 90.0)
+        TestFairness.run_fairness_tests(train_dataloader, model, transform)
+        visualizer = ModelVisualizer(model_path, "conv2")
+        visualizer.visualize_model()
 
         
 
