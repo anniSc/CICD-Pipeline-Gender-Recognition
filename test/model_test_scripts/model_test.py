@@ -512,23 +512,23 @@ class ModelVisualizer:
 
 
 class Main_Model_Test(ModelTester, TestFairness,ModelVisualizer):
-    def rotate_and_convert(angle, test_images = "data/train-test-data/test/", save_dir="rotated_images/"):
-        from PIL import Image
-        import os
-        i = 0
-        if not os.path.exists(save_dir):
-            os.makedirs(save_dir)
-        for filename in os.listdir(test_images):
-            if angle == 360: 
-                break
+    # def rotate_and_convert(angle, test_images = "data/train-test-data/test/", save_dir="rotated_images/"):
+    #     from PIL import Image
+    #     import os
+    #     i = 0
+    #     if not os.path.exists(save_dir):
+    #         os.makedirs(save_dir)
+    #     for filename in os.listdir(test_images):
+    #         if angle == 360: 
+    #             break
          
-            image_path = os.path.join(test_images, filename)
-            image = Image.open(image_path)
-            rotated_image = image.rotate(angle)
-            save_path = os.path.join(save_dir, f"rotated_{angle}_{filename}")
-            rotated_image.save(save_path)
+    #         image_path = os.path.join(test_images, filename)
+    #         image = Image.open(image_path)
+    #         rotated_image = image.rotate(angle)
+    #         save_path = os.path.join(save_dir, f"rotated_{angle}_{filename}")
+    #         rotated_image.save(save_path)
             
-            angle += 10
+    #         angle += 10
 
     def run_tests():
         IMAGE_SIZE = (178, 218)
