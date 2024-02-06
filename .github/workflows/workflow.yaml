@@ -157,8 +157,7 @@ jobs:
 
         - name: Checkout code
           uses: actions/checkout@v2
-
-        - name: Push trained model to main branch
+        - name: Generierte Dateien in das Repository pushen
           run: |
             git config --local user.email "Aseuc@github.com"
             git config --local user.name "Aseuc"
