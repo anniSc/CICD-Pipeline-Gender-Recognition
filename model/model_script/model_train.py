@@ -67,6 +67,8 @@ class Trainer:
         self.early_stopping_counter = 0
 
     def train(self):
+        now = datetime.now()
+        formatted_now = now.strftime("%d-%m-%Y" + "_%H-%M-%S")
         """
         Trainiert das Modell mit den angegebenen Trainings- und Test-/Validierungsdatensätzen.
 
@@ -98,12 +100,12 @@ class Trainer:
                     total += val_labels.size(0)
                     correct += (predicted == val_labels).sum().item()
             accuracy = correct / total
-
+            
             if accuracy > 0.9:
-                torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch+1}_accuracy_{accuracy:.2f}.pth')
+                torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth')
             
             if accuracy > 0.95:
-                torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch+1}_accuracy_{accuracy:.2f}.pth')
+                torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth')
                 break
             
             if accuracy > self.best_accuracy:
@@ -117,8 +119,10 @@ class Trainer:
                 print('Early stopping')
                 break
 
-        print('Finished Training')
 
+        torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth')
+        print(f'Training beende. Genauigkeit: {accuracy:.2f}' + f'Epoch: {epoch}'  )
+        print("Gespeicherter Pfad: ", f'model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth')
 class DataLoaderModelTrain:
     def __init__(self, batch_size, transform):
         self.batch_size = batch_size
@@ -164,6 +168,7 @@ class Main(DataLoaderModelTrain):
         formatted_now = now.strftime("%d-%m-%Y")
         
         torch.save(self.model.state_dict(), f'{self.model_save_path}model_{self.batch_size}' + '-' + f'{self.epochs}' + '.pth')
+        
         if self.model_test_path is not None:
             self.clean_up_pth(model_test_path)            
             torch.save(self.model.state_dict(), f"{model_test_path}{formatted_now}" + ".pth")
