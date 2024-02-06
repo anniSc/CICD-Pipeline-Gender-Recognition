@@ -154,7 +154,22 @@ jobs:
               cml-publish "$file" --md >> $report_file_activation
             done
             cml-send-comment $report_file_activation    
-        
+
+        - name: Checkout code
+          uses: actions/checkout@v2
+
+        - name: Push trained model to main branch
+          run: |
+            git config --local user.email "Aseuc@github.com"
+            git config --local user.name "Aseuc"
+            git add model/PyTorch_Trained_Models
+            git commit -m "Add trained model" -a || echo "No changes to commit"
+            git push origin main
+
+
+
+
+
   deploy:
     needs: build-and-test
     runs-on: ubuntu-latest
