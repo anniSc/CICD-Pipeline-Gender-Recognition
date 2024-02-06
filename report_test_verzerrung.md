@@ -1,5 +1,2 @@
-![](https://asset.cml.dev/2875d4fafc2e02a52f189c420b138562bec1b0c1?cml=png)
-![](https://asset.cml.dev/3e3e3a5a8d2503624e95703e447da98eec6fb921?cml=png)
-![](https://asset.cml.dev/acc667ad51e1b80d19dfc93b7f99babad12773dd?cml=png)
-![](https://asset.cml.dev/b3d68a8d9bbf3a143ed187f694271fdae197cd69?cml=png)
-![](https://asset.cml.dev/876fbc4c0b7a08ef20ded75e45cf79d44c505ad4?cml=png)
+## Modellmetriken mit verauschten Bilder
+![](https://asset.cml.dev/7dc8ef28c5d31ad81fc872c7aef0ec663ced37d5?cml=png)

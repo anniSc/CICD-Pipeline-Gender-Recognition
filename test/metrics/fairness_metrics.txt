@@ -1,2 +1,2 @@
-Genauigkeit für die Gruppe: Frau: 0.7371428571428571 
-Genauigkeit für die Gruppe: Mann: 0.7514285714285714 
+Genauigkeit fÃ¼r die Gruppe: Frau: 0.6666666666666666 
+Genauigkeit fÃ¼r die Gruppe: Mann: 0.3333333333333333 

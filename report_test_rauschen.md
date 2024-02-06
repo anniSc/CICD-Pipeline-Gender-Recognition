@@ -1,11 +1,2 @@
-![](https://asset.cml.dev/404f3784e02da55c15801cc455c3c4af891e7fa6?cml=png)
-![](https://asset.cml.dev/cd66d90da114dfc3ee70745b924c55db294967d1?cml=png)
-![](https://asset.cml.dev/c634ef442707ff6575229dbf52ae6b177bc64572?cml=png)
-![](https://asset.cml.dev/d7c9e028dcf1fd94e1cc48e1030f85156d2d452d?cml=png)
-![](https://asset.cml.dev/0af33d3a8f920ba15157d272696a6cbe57ef436b?cml=png)
-![](https://asset.cml.dev/437de99741fbda8c1ca904bcaddf92e673180336?cml=png)
-![](https://asset.cml.dev/4b7d5ba883e45fb42f31c453ef0d261994015c07?cml=png)
-![](https://asset.cml.dev/0dc88b345c5a2a8d50a7c8c27723cd0bf91d562f?cml=png)
-![](https://asset.cml.dev/d55a75adf7d81e7556fb2356e9c36fcd7a7a23aa?cml=png)
-![](https://asset.cml.dev/0b6db809b1793949648c0972b52e77b652714ad3?cml=png)
-![](https://asset.cml.dev/5d3ffe601df05ee236aa860335622863b67aa228?cml=png)
+## Modellmetriken mit verauschten Bilder
+![](https://asset.cml.dev/284f69e9fdf251afd8dc570a8dab37237f5370b8?cml=png)
