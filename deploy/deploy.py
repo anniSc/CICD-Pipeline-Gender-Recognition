@@ -73,7 +73,7 @@ class MainDeploy(GenderRecognitionPredictor):
             model_name = st.selectbox("Wählen Sie ein Modell aus:", MainDeploy.models)
             model_path = os.path.join(MainDeploy.model_dir, model_name)
 
-            if st.button('Prediction Starten!'):
+            if st.button('Vorhersage Starten!'):
                 prediction, probabilities = GenderRecognitionPredictor.predict(image, model_path)
                 st.write(f"Prediction: {prediction}")
                 st.write(f"Wahrscheinlichkeit das auf dem Bilde ein Mann ist: {probabilities[0]*100}%")

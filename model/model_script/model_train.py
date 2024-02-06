@@ -140,7 +140,7 @@ class DataLoaderModelTrain:
 class Main(DataLoaderModelTrain):
     def __init__(self):
         self.batch_size = 64
-        self.epochs = 10
+        self.epochs = 50
         self.test_dir = 'data/train-test-data/test'
         self.transform = transforms.Compose([
             transforms.Resize((178, 218)),
