@@ -146,7 +146,7 @@ class DataTest:
         save_exponential_distribution_path_txt = ""
 
         def run_datatest(save_binomial_distribution_path_txt, save_uniform_distribution_path_txt, save_exponential_distribution_path_txt, save_norm_distribution_path_txt):
-            
+            DataPreparation.create_directories()
             DataPreparation.extract_ids_source_data_and_save(directory=DataPreparation.image_folder, csv_path=DataPreparation.data_ids) 
             DataPreparation.extract_all_ids(csv_path=DataPreparation.csv_path, column=DataPreparation.feature_column, id_column=DataPreparation.id_column)       
 
