@@ -54,8 +54,6 @@ class DataPreparation:
         DataPreparation.split_data_random(image_folder=DataPreparation.image_folder, male_csv=DataPreparation.male_csv, female_csv=DataPreparation.female_csv, total_images=total_images, id_column=DataPreparation.id_column)
         
 
-
-
     @staticmethod
     def create_directories():
         os.makedirs(DataPreparation.men_image_source_path_train, exist_ok=True)

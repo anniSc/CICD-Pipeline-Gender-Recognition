@@ -156,13 +156,13 @@ jobs:
             cml-send-comment $report_file_activation    
 
 
-        - name: Generierte Dateien in das Repository pushen
-          run: |
-            git config --local user.email "Aseuc@github.com"
-            git config --local user.name "Aseuc"
-            git add model/PyTorch_Trained_Models
-            git commit -m "Add trained model" -a || echo "No changes to commit"
-            git push origin main
+        # - name: Generierte Dateien in das Repository pushen
+        #   run: |
+        #     git config --local user.email "Aseuc@github.com"
+        #     git config --local user.name "Aseuc"
+        #     git add model/PyTorch_Trained_Models
+        #     git commit -m "Add trained model" -a || echo "No changes to commit"
+        #     git push origin main
 
 
 
