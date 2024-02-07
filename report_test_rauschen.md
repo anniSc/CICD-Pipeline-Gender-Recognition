@@ -1,2 +1,2 @@
 ## Modellmetriken mit verauschten Bilder
-![](https://asset.cml.dev/8eb2b2d91ac6f71a34c323b097c0ed5a1a2de947?cml=png)
+![](https://asset.cml.dev/55c72566af08366e5c161b9caecff1f11fa6d89d?cml=png)
