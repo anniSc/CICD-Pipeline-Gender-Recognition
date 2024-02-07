@@ -156,6 +156,9 @@ jobs:
             cml-send-comment $report_file_activation    
 
 
+        - name: Checkout code
+          uses: actions/checkout@v2
+
         - name: Generierte Dateien in das Repository pushen
           run: |
             git config --local user.email "Aseuc@github.com"
