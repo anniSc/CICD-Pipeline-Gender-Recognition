@@ -160,9 +160,10 @@ jobs:
             git config --local user.email "Aseuc@github.com"
             git config --local user.name "Aseuc"
             git add model/PyTorch_Trained_Models
-            git commit -m "Add trained model" -a || echo "No changes to commit"
+            git commit -m "Add trained model" || echo "No changes to commit"
             git push origin main
-
+        
+        
     
   deploy:
     needs: build-and-test
