@@ -465,9 +465,10 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
     save_uniform_distribution_path_txt = "data/reports_data/uniform_distribution.txt"  
     save_exponential_distribution_path_txt = "data/reports_data/exponential_distribution.txt"
 
-    DataTest.run_datatest(save_binomial_distribution_path_txt, save_uniform_distribution_path_txt, save_exponential_distribution_path_txt, save_norm_distribution_path_txt)
-    DataVisualization.run_datavis(balanced_gender_path=balanced_gender_path, balanced_young_path=balanced_young_path, column_name=young_column, feature_column=DataPreparation.feature_column)
-    DataPreparation.run_dataprep(total_images=total_images)
+def run_all(self):
+    DataTest.run_datatest(self.save_binomial_distribution_path_txt, self.save_uniform_distribution_path_txt, self.save_exponential_distribution_path_txt, self.save_norm_distribution_path_txt)
+    DataVisualization.run_datavis(balanced_gender_path=self.balanced_gender_path, balanced_young_path=self.balanced_young_path, column_name=self.young_column, feature_column=DataPreparation.feature_column)
+    DataPreparation.run_dataprep(total_images=self.total_images)
 
-
-Main()
+main = Main()
+main.run_all()
