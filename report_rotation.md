@@ -1,2 +1,2 @@
 ## Modellmetriken mit verdrehte Bilder
-![](https://asset.cml.dev/ed5b4edd61316d003db8dd9a70481f0b7869c9f1?cml=png)
+![](https://asset.cml.dev/678269c60fd788e6b7971146447b821eaf3692b7?cml=png)
