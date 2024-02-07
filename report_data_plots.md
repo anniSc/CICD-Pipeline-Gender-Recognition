@@ -242,3 +242,127 @@
 ## Balancierte Daten Geschlechter
 
 ## Balancierte Daten Jung und Alt
+
+## Datenvisualisierung für 5_o_Clock_Shadow
+![](https://asset.cml.dev/359327fff4ed599db4a4693c4dffaea2bd6fac58?cml=png)
+
+## Datenvisualisierung für Arched_Eyebrows
+![](https://asset.cml.dev/44860c8280fa444fc1a60daa2ad28ad24482c3e0?cml=png)
+
+## Datenvisualisierung für Attractive
+![](https://asset.cml.dev/1c4b17faa8503c300db467d70ebe87e99565bca8?cml=png)
+
+## Datenvisualisierung für Bags_Under_Eyes
+![](https://asset.cml.dev/54a1b3da2e2c297e35790ef164bb76cb90b5d321?cml=png)
+
+## Datenvisualisierung für Bald
+![](https://asset.cml.dev/103ba8a7ff0d61a9f66ac2f7bd59ec986dafaf3a?cml=png)
+
+## Datenvisualisierung für Bangs
+![](https://asset.cml.dev/fa7f8acec75cbbe4d277e8cab2a962077ff8196d?cml=png)
+
+## Datenvisualisierung für Big_Lips
+![](https://asset.cml.dev/abb8c0d6c00c452b8848564c6328254570929c6e?cml=png)
+
+## Datenvisualisierung für Big_Nose
+![](https://asset.cml.dev/db48bcc750a4f08402b50528d23c73e426887535?cml=png)
+
+## Datenvisualisierung für Black_Hair
+![](https://asset.cml.dev/eae278a710277e8820823136bcd6a1774c1a5f70?cml=png)
+
+## Datenvisualisierung für Blond_Hair
+![](https://asset.cml.dev/4257a5822c72727a3946cac28a5bc95ebf1bffa5?cml=png)
+
+## Datenvisualisierung für Blurry
+![](https://asset.cml.dev/0c72e6b7c463ca8ad9ac32e5a4ece252cf0c4cfe?cml=png)
+
+## Datenvisualisierung für Brown_Hair
+![](https://asset.cml.dev/4d3d108552782008b9330c7d814fc17170e9d395?cml=png)
+
+## Datenvisualisierung für Bushy_Eyebrows
+![](https://asset.cml.dev/8dd431bef6b8f4b9ad80232c7995d73f9e580086?cml=png)
+
+## Datenvisualisierung für Chubby
+![](https://asset.cml.dev/2a20fc92156aa70bb9f39619afbf2be30a2ffc03?cml=png)
+
+## Datenvisualisierung für Double_Chin
+![](https://asset.cml.dev/1ac12938d1a16ccb15fd9125bbd81a856f62d4a7?cml=png)
+
+## Datenvisualisierung für Eyeglasses
+![](https://asset.cml.dev/4b767342b002187fe701693d637784621761a73c?cml=png)
+
+## Datenvisualisierung für Goatee
+![](https://asset.cml.dev/b7acd8bb031303eeece9f76cfb019d4f2e79a554?cml=png)
+
+## Datenvisualisierung für Gray_Hair
+![](https://asset.cml.dev/dd7a19c1f7d097703fe9e7e9264a217e25a03d75?cml=png)
+
+## Datenvisualisierung für Heavy_Makeup
+![](https://asset.cml.dev/f17ad296b35834b96aecde07978201a7745e1c66?cml=png)
+
+## Datenvisualisierung für High_Cheekbones
+![](https://asset.cml.dev/3e16304b2fd86b8f023f4b1309e1e6479c773673?cml=png)
+
+## Datenvisualisierung für Male
+![](https://asset.cml.dev/614337661f359431cc32135cfa63cc34d7eecb0c?cml=png)
+
+## Datenvisualisierung für Mouth_Slightly_Open
+![](https://asset.cml.dev/499dbe77510ea238a65427f1980a57ec97e3b700?cml=png)
+
+## Datenvisualisierung für Mustache
+![](https://asset.cml.dev/3afad2d55fbb26450ab10d92c7ff2895e8798fad?cml=png)
+
+## Datenvisualisierung für Narrow_Eyes
+![](https://asset.cml.dev/2c8f0e3ae529dafd4277c3ac876406ad3604947d?cml=png)
+
+## Datenvisualisierung für No_Beard
+![](https://asset.cml.dev/6a9cdd6c0e1be5ce3d2fc4ab5aa3beeef376c563?cml=png)
+
+## Datenvisualisierung für Oval_Face
+![](https://asset.cml.dev/7809ea4c2f08ab3c9dc6c661be95cb22e5292f96?cml=png)
+
+## Datenvisualisierung für Pale_Skin
+![](https://asset.cml.dev/55168b068fccb1aafab58fb63dce3c5fa1f175fa?cml=png)
+
+## Datenvisualisierung für Pointy_Nose
+![](https://asset.cml.dev/9072370e2f42d59a41c1ca5a769535e9ad8e099b?cml=png)
+
+## Datenvisualisierung für Receding_Hairline
+![](https://asset.cml.dev/81ce3f1cb1ba0b52562aaafd2308a443a471a16c?cml=png)
+
+## Datenvisualisierung für Rosy_Cheeks
+![](https://asset.cml.dev/8e8283809f2080233585de97c3115975c526b7e0?cml=png)
+
+## Datenvisualisierung für Sideburns
+![](https://asset.cml.dev/c3bc8fd467352c68af737da3161d283388e6d444?cml=png)
+
+## Datenvisualisierung für Smiling
+![](https://asset.cml.dev/6d4345bcb042af8a03c80012ae62a8a48ee22b7c?cml=png)
+
+## Datenvisualisierung für Straight_Hair
+![](https://asset.cml.dev/1859835a4fc0a37f8f085e37d4a4dc5d7719eeef?cml=png)
+
+## Datenvisualisierung für Wavy_Hair
+![](https://asset.cml.dev/83b27649ebea16a44649075af45008afb41e3e6b?cml=png)
+
+## Datenvisualisierung für Wearing_Earrings
+![](https://asset.cml.dev/b6adaa16e49db7ef6b77752c37f7681c680c9a22?cml=png)
+
+## Datenvisualisierung für Wearing_Hat
+![](https://asset.cml.dev/903ebdd73271c34a263d8580ec3c4afdba6423cf?cml=png)
+
+## Datenvisualisierung für Wearing_Lipstick
+![](https://asset.cml.dev/91c1ec0ea6fb97e3041846b919911764bf8a8e8f?cml=png)
+
+## Datenvisualisierung für Wearing_Necklace
+![](https://asset.cml.dev/d0703af823b5c608724c36f3e976cb2328d11819?cml=png)
+
+## Datenvisualisierung für Wearing_Necktie
+![](https://asset.cml.dev/4376a79881e028d3bbadd6109681de5bdb08181d?cml=png)
+
+## Datenvisualisierung für Young
+![](https://asset.cml.dev/13c4ab1712de3a94913c5810ac5ad1a632a5dbf5?cml=png)
+
+## Balancierte Daten Geschlechter
+
+## Balancierte Daten Jung und Alt
