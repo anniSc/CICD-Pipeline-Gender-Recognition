@@ -185,7 +185,8 @@ jobs:
       
       - name: ML-Modell auf streamlit deployen
         run: |
-          git pull origin main      
+          git pull origin main
+          git push origin main
           git config --local user.email "Aseuc@github.com"
           git config --local user.name "Aseuc"
           git add .
