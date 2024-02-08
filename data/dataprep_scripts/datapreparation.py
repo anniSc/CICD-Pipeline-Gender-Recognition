@@ -456,7 +456,7 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
     """
     Die Hauptklasse, die die verschiedenen Funktionen zur Datenverarbeitung, Datenprüfung, Datenbalancierung und Datenvisualisierung enthält.
     """
-    total_images = 10
+    total_images = 1000
     balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
     balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
     young_column = "Young" 
