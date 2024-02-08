@@ -7,8 +7,8 @@ import os
 class TestDataTest(unittest.TestCase):
 
     def test_check_data_completeness(self):
-        csv1 = "path/to/csv1.csv"
-        csv2 = "path/to/csv2.csv"
+        csv1 = "data/IDs/data-ids.csv"
+        csv2 = "data/labels/source_csv_all_ids.csv"
         expected_output = True
 
         with patch("pandas.read_csv") as mock_read_csv:
@@ -60,7 +60,7 @@ class TestDataTest(unittest.TestCase):
         column_name_of_image_paths = "image_id"
         expected_output = None
 
-        with patch("pd.read_csv") as mock_read_csv:
+        with patch("pandas.read_csv") as mock_read_csv:
             mock_read_csv.return_value = pd.DataFrame({"image_id": [1, 2, 3]})
             result = DataTest.test_quality_of_csv(csv_path, column_name_of_image_paths)
 
@@ -70,7 +70,7 @@ class TestDataTest(unittest.TestCase):
         csv_path = "path/to/csv_file.csv"
         expected_output = None
 
-        with patch("pd.read_csv") as mock_read_csv:
+        with patch("pandas.read_csv") as mock_read_csv:
             mock_read_csv.return_value = pd.DataFrame({"column1": [1, 2, 3], "column2": [4, 5, 6]})
             result = DataTest.test_outliers_zscore(csv_path)
 
@@ -80,7 +80,7 @@ class TestDataTest(unittest.TestCase):
         csv_path = "path/to/csv_file.csv"
         expected_output = None
 
-        with patch("pd.read_csv") as mock_read_csv:
+        with patch("pandas.read_csv") as mock_read_csv:
             mock_read_csv.return_value = pd.DataFrame({"column1": [1, 1, 1, -1, -1], "column2": [1, 1, 1, 1, 1]})
             result = DataTest.test_balance_all_columns(csv_path)
 
@@ -99,7 +99,7 @@ class TestDataTest(unittest.TestCase):
         id_column = "id"
         expected_output = None
 
-        with patch("pd.read_csv") as mock_read_csv:
+        with patch("pandas.read_csv") as mock_read_csv:
             mock_read_csv.return_value = pd.DataFrame({"id": [1, 2, 3]})
             with patch("sklearn.ensemble.IsolationForest") as mock_IsolationForest:
                 mock_IsolationForest.return_value.fit.return_value.predict.return_value = [-1, 1, -1]
@@ -112,7 +112,7 @@ class TestDataTest(unittest.TestCase):
         save_distribution_path_txt = "path/to/norm_distribution.txt"
         expected_output = None
 
-        with patch("pd.read_csv") as mock_read_csv:
+        with patch("pandas.read_csv") as mock_read_csv:
             mock_read_csv.return_value = pd.DataFrame({"column1": [1, 2, 3], "column2": [4, 5, 6]})
             with patch("builtins.open") as mock_open:
                 result = DataTest.test_normal_distribution(data, save_distribution_path_txt)
@@ -124,7 +124,7 @@ class TestDataTest(unittest.TestCase):
         save_distribution_path_txt = "path/to/uniform_distribution.txt"
         expected_output = None
 
-        with patch("pd.read_csv") as mock_read_csv:
+        with patch("pandas.read_csv") as mock_read_csv:
             mock_read_csv.return_value = pd.DataFrame({"column1": [1, 2, 3], "column2": [4, 5, 6]})
             with patch("builtins.open") as mock_open:
                 result = DataTest.test_uniform_distribution(data, save_distribution_path_txt)
