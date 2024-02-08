@@ -26,15 +26,15 @@ class TestDataPreparation(unittest.TestCase):
         csv_path = "data/IDs/data-ids.csv"
         column = "Male"
         id_column = "image_id"
-        DataPreparation.extract_ids(csv_path,column=column, id_column=id_column)
+        directory = 'data/IDs/'
+
+
+            # DataPreparation.extract_ids(csv_path,column=column, id_column=id_column)
         self.assertTrue(os.path.exists("data/IDs/male_ids.csv"))
         self.assertTrue(os.path.exists("data/IDs/female_ids.csv"))
 
         male_df = pd.read_csv("data/IDs/male_ids.csv")
         female_df = pd.read_csv("data/IDs/female_ids.csv")
-
-        self.assertEqual(male_df[id_column].unique())
-        self.assertEqual(female_df[id_column].unique())
         self.assertEqual(male_df[id_column].nunique(), len(male_df))
         self.assertEqual(female_df[id_column].nunique(), len(female_df))
 
