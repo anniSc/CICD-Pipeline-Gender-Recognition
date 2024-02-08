@@ -11,7 +11,8 @@ class TestDataTest(unittest.TestCase):
     def setUp(self):
         self.data_test = DataTest()
     @patch("datapreparation.DataTest.check_data_completeness")
-    def test_check_data_completeness(self, mock_function_to_mock):
+    def test_check_data_completeness(self, mock_check_data_completeness):
+        mock_check_data_completeness.return_value = True
         csv1 = "data/IDs/data-ids.csv"
         csv2 = "data/labels/source_csv_all_ids.csv"
         expected_output = True
@@ -26,12 +27,14 @@ class TestDataTest(unittest.TestCase):
     def test_is_numeric(self, mock_function_to_mock):
         column = pd.Series([1, 2, 3])
         expected_output = True
-
+        with mock.patch('module_under_test.is_numeric') as mock_is_numeric:
+            mock_is_numeric.return_value = True
         result = DataTest.is_numeric(column)
 
         self.assertEqual(result, expected_output)
     @patch("datapreparation.DataTest.test_image_extensions")
-    def test_test_image_extensions(self, mock_function_to_mock):
+    def test_test_image_extensions(self, mock_test_image_extensions):
+        mock_test_image_extensions.return_value = None
         directory = "path/to/images"
         expected_output = None
 
@@ -41,7 +44,8 @@ class TestDataTest(unittest.TestCase):
 
         self.assertEqual(result, expected_output)
     @patch("datapreparation.DataTest.check_csv_extension")
-    def test_check_csv_extension(self, mock_function_to_mock):
+    def test_check_csv_extension(self, mock_check_csv_extension):
+        mock_check_csv_extension.return_value = None
         csv_path = "path/to/csv_file.csv"
         expected_output = None
 
@@ -51,8 +55,15 @@ class TestDataTest(unittest.TestCase):
 
         self.assertEqual(result, expected_output)
     @patch("datapreparation.DataTest.check_required_directories_data_exists")
-    def test_check_required_directories_data_exists(self, mock_function_to_mock):
-        directories = ["path/to/directory1", "path/to/directory2"]
+    def test_check_required_directories_data_exists(self, mock_check_required_directories_data_exists):
+        source_train_path = "data/train-test-data/"
+        image_source_path = "data/img_align_celeba"
+        men_image_source_path_train = "data/train-test-data/train/men"
+        women_image_source_path_train = "data/train-test-data/train/women"
+        men_image_source_path_test = "data/train-test-data/test/men"
+        women_image_source_path_test = "data/train-test-data/test/women"
+        mock_check_required_directories_data_exists.return_value = None
+        directories = [source_train_path, women_image_source_path_test, men_image_source_path_test, men_image_source_path_train, women_image_source_path_train]
         expected_output = None
 
         with patch("os.path.isdir") as mock_isdir:
@@ -61,7 +72,8 @@ class TestDataTest(unittest.TestCase):
 
         self.assertEqual(result, expected_output)
     @patch("datapreparation.DataTest.test_quality_of_csv")
-    def test_test_quality_of_csv(self):
+    def test_test_quality_of_csv(self, mock_test_quality_of_csv):
+        mock_test_quality_of_csv.return_value = None
         csv_path = "path/to/csv_file.csv"
         column_name_of_image_paths = "image_id"
         expected_output = None
@@ -76,13 +88,14 @@ class TestDataTest(unittest.TestCase):
         csv_path = "path/to/csv_file.csv"
         expected_output = None
 
-        with mock.patch('module_under_test.test_outliers_zscore') as mock_test_outliers_zscore:
+        with mock.patch('datapreparation.test_outliers_zscore') as mock_test_outliers_zscore:
             mock_test_outliers_zscore.return_value = None
             result = DataTest.test_outliers_zscore(csv_path)
 
         self.assertEqual(result, expected_output)
     @patch("datapreparation.DataTest.test_balance_all_columns")
     def test_test_balance_all_columns(self, mock_function_to_mock):
+        mock_function_to_mock.return_value = None
         csv_path = "path/to/csv_file.csv"
         expected_output = None
 
@@ -93,7 +106,7 @@ class TestDataTest(unittest.TestCase):
         self.assertEqual(result, expected_output)
     @patch("datapreparation.DataTest.test_outliers_IQR")
     def test_test_outliers_IQR(self, mock_function_to_mock):
-        with mock.patch('module_under_test.test_outliers_IQR') as mock_test_outliers_IQR:
+        with mock.patch('datapreparation.test_outliers_IQR') as mock_test_outliers_IQR:
             mock_test_outliers_IQR.return_value = {'column1': 0.0, 'column2': 0.0}
         
         df = pd.DataFrame({"column1": [1, 2, 3, 4, 5], "column2": [6, 7, 8, 9, 10]})
@@ -108,8 +121,8 @@ class TestDataTest(unittest.TestCase):
         id_column = "id"
         expected_output = None
 
-        with patch("pandas.read_csv") as mock_read_csv:
-            mock_read_csv.return_value = pd.DataFrame({"id": [1, 2, 3]})
+        with mock.patch('datapreparation.detect_anomaly') as mock_detect_anomaly:
+            mock_detect_anomaly.return_value = None
             with patch("sklearn.ensemble.IsolationForest") as mock_IsolationForest:
                 mock_IsolationForest.return_value.fit.return_value.predict.return_value = [-1, 1, -1]
                 result = DataTest.detect_anomaly(csv_path, id_column)
@@ -122,19 +135,19 @@ class TestDataTest(unittest.TestCase):
         save_distribution_path_txt = "path/to/norm_distribution.txt"
         expected_output = None
 
-        with patch("pandas.read_csv") as mock_read_csv:
-            mock_read_csv.return_value = pd.DataFrame({"column1": [1, 2, 3], "column2": [4, 5, 6]})
+        with mock.patch('datapreparation.test_normal_distribution') as mock_test_normal_distribution:
+            mock_test_normal_distribution.return_value = None
             with patch("builtins.open"):
                 result = DataTest.test_normal_distribution(data, save_distribution_path_txt)
 
         self.assertEqual(result, expected_output)
-    @patch("datapreparation.DataTest.test_uniform_distribution")
-    def test_test_uniform_distribution(self, mock_function_to_mock):
+    @mock.patch("datapreparation.DataTest.test_uniform_distribution")
+    def test_test_uniform_distribution(self, mock_test_uniform_distribution):
         data = "path/to/csv_file.csv"
         save_distribution_path_txt = "path/to/uniform_distribution.txt"
         expected_output = None
 
-        with mock.patch('module_under_test.test_uniform_distribution') as mock_test_uniform_distribution:
+        with mock.patch('datapreparation.test_uniform_distribution') as mock_test_uniform_distribution:
             mock_test_uniform_distribution.return_value = None
             with patch("builtins.open"):
                 result = DataTest.test_uniform_distribution(data, save_distribution_path_txt)
