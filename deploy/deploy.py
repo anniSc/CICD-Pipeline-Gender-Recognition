@@ -17,21 +17,25 @@ from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_sc
 from torch.optim import Adam
 import torch.optim as optim
 import sys
-sys.path.insert(0,'model/model_script/')
+
+sys.path.insert(0, "model/model_script/")
 from model_train import SimpleCNN as SCNN
+
 
 class GenderRecognitionPredictor:
     def __init__(self):
-        self.model_dir = 'model/PyTorch_Trained_Models'
+        self.model_dir = "model/PyTorch_Trained_Models"
         self.models = os.listdir(self.model_dir)
 
     def predict(image, model_path):
         # Define the transformation
-        transform = transforms.Compose([
-            transforms.Resize((178, 218)),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
+        transform = transforms.Compose(
+            [
+                transforms.Resize((178, 218)),
+                transforms.ToTensor(),
+                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+            ]
+        )
 
         image = image.convert("RGB")
         # Apply the transformation and add an extra dimension
@@ -52,32 +56,39 @@ class GenderRecognitionPredictor:
         return predicted.item(), probabilities.numpy()
 
 
-
-
 class MainDeploy(GenderRecognitionPredictor):
-    model_dir = 'model/PyTorch_Trained_Models/'
+    model_dir = "model/PyTorch_Trained_Models/"
     models = os.listdir(model_dir)
 
-
-    def deploy():  
+    def deploy():
         st.title("Gender Recognition CI/CD Pipeline")
 
-        uploaded_files = st.file_uploader("Bilder hochladen...", type=["jpg", "jpeg", "png"], accept_multiple_files=True)
+        uploaded_files = st.file_uploader(
+            "Bilder hochladen...",
+            type=["jpg", "jpeg", "png"],
+            accept_multiple_files=True,
+        )
 
         for uploaded_file in uploaded_files:
             image = Image.open(uploaded_file)
-            st.image(image, caption='Hochgeladenes Bild.', use_column_width=True)
+            st.image(image, caption="Hochgeladenes Bild.", use_column_width=True)
             st.write("Bild erfolgreich hochgeladen.")
 
             # Use the list of models as options for the selectbox
             model_name = st.selectbox("Wählen Sie ein Modell aus:", MainDeploy.models)
             model_path = os.path.join(MainDeploy.model_dir, model_name)
 
-            if st.button('Vorhersage Starten!'):
-                prediction, probabilities = GenderRecognitionPredictor.predict(image, model_path)
+            if st.button("Vorhersage Starten!"):
+                prediction, probabilities = GenderRecognitionPredictor.predict(
+                    image, model_path
+                )
                 st.write(f"Prediction: {prediction}")
-                st.write(f"Wahrscheinlichkeit das auf dem Bilde ein Mann ist: {probabilities[0]*100}%")
-                st.write(f"Wahrscheinlichkeit das auf dem Bilde eine Frau ist: {probabilities[1]*100}%")
+                st.write(
+                    f"Wahrscheinlichkeit das auf dem Bilde ein Mann ist: {probabilities[0]*100}%"
+                )
+                st.write(
+                    f"Wahrscheinlichkeit das auf dem Bilde eine Frau ist: {probabilities[1]*100}%"
+                )
 
 
 MainDeploy.deploy()

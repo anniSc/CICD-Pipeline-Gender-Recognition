@@ -10,14 +10,15 @@ import os
 import glob
 from datetime import datetime
 
+
 class SimpleCNN(nn.Module):
     def __init__(self):
         super(SimpleCNN, self).__init__()
         self.conv1 = nn.Conv2d(3, 6, 5)
         self.pool = nn.MaxPool2d(2, 2)
         self.conv2 = nn.Conv2d(6, 16, 5)
-        self.pool = nn.MaxPool2d(2,2)
-        self.fc1 = nn.Linear(33456 , 120)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(33456, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, 2)
 
@@ -29,6 +30,7 @@ class SimpleCNN(nn.Module):
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
         return x
+
 
 class Trainer:
     """
@@ -89,7 +91,7 @@ class Trainer:
             correct = 0
             total = 0
             if i % 10 == 9:
-                print('[%d, %5d] loss: %.3f' % (epoch + 1, i + 1, running_loss / 100))
+                print("[%d, %5d] loss: %.3f" % (epoch + 1, i + 1, running_loss / 100))
                 running_loss = 0.0
 
             with torch.no_grad():
@@ -100,14 +102,20 @@ class Trainer:
                     total += val_labels.size(0)
                     correct += (predicted == val_labels).sum().item()
             accuracy = correct / total
-            
+
             if accuracy > 0.9:
-                torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth')
-            
+                torch.save(
+                    self.model.state_dict(),
+                    f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+                )
+
             if accuracy > 0.95:
-                torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth')
+                torch.save(
+                    self.model.state_dict(),
+                    f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+                )
                 break
-            
+
             if accuracy > self.best_accuracy:
                 self.best_accuracy = accuracy
                 self.early_stopping_counter = 0
@@ -116,24 +124,35 @@ class Trainer:
                 self.early_stopping_counter += 1
 
             if self.early_stopping_counter >= self.patience:
-                print('Early stopping')
+                print("Early stopping")
                 break
 
+        torch.save(
+            self.model.state_dict(),
+            f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+        )
+        print(f"Training beende. Genauigkeit: {accuracy:.2f}" + f"Epoch: {epoch}")
+        print(
+            "Gespeicherter Pfad: ",
+            f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+        )
 
-        torch.save(self.model.state_dict(), f'model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth')
-        print(f'Training beende. Genauigkeit: {accuracy:.2f}' + f'Epoch: {epoch}'  )
-        print("Gespeicherter Pfad: ", f'model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth')
+
 class DataLoaderModelTrain:
     def __init__(self, batch_size, transform):
         self.batch_size = batch_size
         self.transform = transform
-    
+
     @staticmethod
     def load_data(test_dir, train_dir, transform, batch_size):
         train_dataset = datasets.ImageFolder(root=train_dir, transform=transform)
         test_dataset = datasets.ImageFolder(root=test_dir, transform=transform)
-        train_dataloader = torch.utils.data.DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
-        test_dataloader = torch.utils.data.DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
+        train_dataloader = torch.utils.data.DataLoader(
+            train_dataset, batch_size=batch_size, shuffle=True
+        )
+        test_dataloader = torch.utils.data.DataLoader(
+            test_dataset, batch_size=batch_size, shuffle=True
+        )
         return train_dataloader, test_dataloader
 
 
@@ -141,24 +160,36 @@ class Main(DataLoaderModelTrain):
     def __init__(self):
         self.batch_size = 64
         self.epochs = 50
-        self.test_dir = 'data/train-test-data/test'
-        self.transform = transforms.Compose([
-            transforms.Resize((178, 218)),
-            transforms.ToTensor(),
-            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5))
-        ])
-        self.train_dir = 'data/train-test-data/train'
-        self.train_dataloader, self.test_dataloader = DataLoaderModelTrain.load_data(train_dir=self.train_dir,test_dir=self.test_dir,transform=self.transform,batch_size=self.batch_size)
+        self.test_dir = "data/train-test-data/test"
+        self.transform = transforms.Compose(
+            [
+                transforms.Resize((178, 218)),
+                transforms.ToTensor(),
+                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+            ]
+        )
+        self.train_dir = "data/train-test-data/train"
+        self.train_dataloader, self.test_dataloader = DataLoaderModelTrain.load_data(
+            train_dir=self.train_dir,
+            test_dir=self.test_dir,
+            transform=self.transform,
+            batch_size=self.batch_size,
+        )
 
         self.model = SimpleCNN()
-        self.trainer = Trainer(self.model, self.train_dataloader, self.test_dataloader, self.epochs, self.batch_size)
-        self.model_save_path = f'model/PyTorch_Trained_Models/'
-        self.model_test_path = f'test/model_to_be_tested/model_to_be_tested.pth'
-
+        self.trainer = Trainer(
+            self.model,
+            self.train_dataloader,
+            self.test_dataloader,
+            self.epochs,
+            self.batch_size,
+        )
+        self.model_save_path = f"model/PyTorch_Trained_Models/"
+        self.model_test_path = f"test/model_to_be_tested/model_to_be_tested.pth"
 
     @staticmethod
     def clean_up_pth(directory):
-        files = glob.glob(os.path.join(directory, '*.pth'))
+        files = glob.glob(os.path.join(directory, "*.pth"))
         for file in files:
             os.remove(file)
 
@@ -166,15 +197,24 @@ class Main(DataLoaderModelTrain):
         self.trainer.train()
         now = datetime.now()
         formatted_now = now.strftime("%d-%m-%Y")
-        
-        torch.save(self.model.state_dict(), f'{self.model_save_path}model_{self.batch_size}' + '-' + f'{self.epochs}' + '.pth')
-        
-        if self.model_test_path is not None:
-            self.clean_up_pth(model_test_path)            
-            torch.save(self.model.state_dict(), f"{model_test_path}{formatted_now}" + ".pth")
-        else:
-            torch.save(self.model.state_dict(), f"{model_test_path}{formatted_now}" + ".pth")
 
+        torch.save(
+            self.model.state_dict(),
+            f"{self.model_save_path}model_{self.batch_size}"
+            + "-"
+            + f"{self.epochs}"
+            + ".pth",
+        )
+
+        if self.model_test_path is not None:
+            self.clean_up_pth(model_test_path)
+            torch.save(
+                self.model.state_dict(), f"{model_test_path}{formatted_now}" + ".pth"
+            )
+        else:
+            torch.save(
+                self.model.state_dict(), f"{model_test_path}{formatted_now}" + ".pth"
+            )
 
 
 if __name__ == "__main__":
