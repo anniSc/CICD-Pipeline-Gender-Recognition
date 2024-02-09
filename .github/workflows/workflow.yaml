@@ -30,7 +30,7 @@ jobs:
               data/plot_data/*
               data/reports_data/*
               report_data_plots.md
-            
+              report_distribution.md
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
 
