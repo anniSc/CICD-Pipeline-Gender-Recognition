@@ -32,15 +32,12 @@
               echo " "
             fi
             report_file="report_data_plots.md"
-            # Read the column names from the CSV file
-            columns=$(head -n 1 data/column_source_csv/source.csv | tr ',' '\n')
-            # Iterate over each column
-            for column in $columns; do
+            # Iterate over each file in the plot_data directory
+            for file in data/plot_data/*.png; do
               # Update the report
-              echo "\n## Datenvisualisierung für $column" >> $report_file
-              cml-publish data/plot_data/${column}.png --md >> $report_file
+              echo "\n## Datenvisualisierung für $(basename "$file" .png)" >> $report_file
+              cml-publish "$file" --md >> $report_file
             done
-            
             echo "\n## Balancierte Daten Geschlechter" >> $report_file
             cml-publish data/plots_balanced/Gender_balanced.png
             echo "\n## Balancierte Daten Jung und Alt" >> $report_file
