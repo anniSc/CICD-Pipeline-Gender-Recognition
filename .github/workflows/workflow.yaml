@@ -1,4 +1,4 @@
-name: CI-CD-Workflow Gender Recognition
+name: Workflow
 on:
   push:
     branches: [main]
@@ -8,15 +8,15 @@ jobs:
       runs-on: [ubuntu-latest]
       container: docker://dvcorg/cml-py3:latest
       steps:
-        - name: Caching von pip Abhängigkeiten
-          uses: actions/cache@v3
-          with:
-            path: ~/.cache/pip
-            key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
-            restore-keys: |
-              ${{ runner.os }}-pip-
-          env:
-            GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+        # - name: Caching von pip Abhängigkeiten
+        #   uses: actions/cache@v3
+        #   with:
+        #     path: ~/.cache/pip
+        #     key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
+        #     restore-keys: |
+        #       ${{ runner.os }}-pip-
+        #   env:
+        #     GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
 
         - uses: actions/checkout@v3
           with:
@@ -26,6 +26,10 @@ jobs:
               requirements.txt
               data/reports_data/*
               data/plot_data/*
+              data/plots_balanced/*
+              data/plot_data/*
+              data/reports_data/*
+              report_data_plots.md
             
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -45,10 +49,7 @@ jobs:
           run: |
             chmod +x .github/workflows/data.sh
             ./.github/workflows/data.sh
-            data/plots_balanced/*
-            data/plot_data/*
-            data/reports_data/*
-            report_data_plots.md
+        
        
   #       - name: 'Modell trainieren'
   #         env:

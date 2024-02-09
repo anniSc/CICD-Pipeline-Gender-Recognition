@@ -3,11 +3,11 @@ import sys
 
 import streamlit as st
 import torch
+from model_train import SimpleCNN as SCNN
 from PIL import Image
 from torchvision import transforms
 
 sys.path.insert(0, "model/model_script/")
-from model_train import SimpleCNN as SCNN
 
 
 class GenderRecognitionPredictor:
@@ -59,11 +59,16 @@ class MainDeploy(GenderRecognitionPredictor):
 
         for uploaded_file in uploaded_files:
             image = Image.open(uploaded_file)
-            st.image(image, caption="Hochgeladenes Bild.", use_column_width=True)
+            st.image(
+                image,
+                caption="Hochgeladenes Bild.",
+                use_column_width=True)
             st.write("Bild erfolgreich hochgeladen.")
 
             # Use the list of models as options for the selectbox
-            model_name = st.selectbox("Wählen Sie ein Modell aus:", MainDeploy.models)
+            model_name = st.selectbox(
+                "Wählen Sie ein Modell aus:",
+                MainDeploy.models)
             model_path = os.path.join(MainDeploy.model_dir, model_name)
 
             if st.button("Vorhersage Starten!"):
