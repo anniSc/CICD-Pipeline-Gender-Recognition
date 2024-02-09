@@ -24,6 +24,8 @@ jobs:
               test/
               .github/workflows/
               requirements.txt
+              data/reports_data/*
+              data/plot_data/*
             
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
