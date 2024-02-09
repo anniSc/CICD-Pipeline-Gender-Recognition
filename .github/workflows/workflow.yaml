@@ -46,7 +46,7 @@ jobs:
             chmod +x .github/workflows/data.sh
             ./.github/workflows/data.sh
             report_data_plots.md
-            report_distribution.md
+       
   #       - name: 'Modell trainieren'
   #         env:
   #           repo_token: ${{ secrets.GITHUB_TOKEN }}

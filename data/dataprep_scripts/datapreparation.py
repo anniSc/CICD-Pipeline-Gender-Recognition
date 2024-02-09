@@ -1,16 +1,10 @@
 import os
-import subprocess
-import pandas as pd
-import shutil
-import tqdm
-import glob
-import pytest
-import numpy as np
-import matplotlib.pyplot as plt
-import matplotlib.image as mpimg
-from scipy.stats import shapiro, binom_test, kstest, uniform
-import seaborn as sns
 import random
+import shutil
+import matplotlib.pyplot as plt
+import numpy as np
+import pandas as pd
+from scipy.stats import kstest, shapiro, uniform
 
 
 class DataPreparation:
@@ -387,7 +381,6 @@ class DataTest:
     @staticmethod
     def detect_anomaly(csv_path, id_column):
         from sklearn.ensemble import IsolationForest
-        import numpy as np
 
         X = pd.read_csv(csv_path)
         X = X.drop(id_column, axis=1)
@@ -497,8 +490,8 @@ class DataTest:
 
     @staticmethod
     def test_image_brightness(source_directory, num_images=3, num_pixels=1000):
-        from scipy.stats import kruskal
         from PIL import Image
+        from scipy.stats import kruskal
 
         image_files = [f for f in os.listdir(source_directory) if f.endswith(".jpg")]
 
@@ -604,7 +597,7 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
     Die Hauptklasse, die die verschiedenen Funktionen zur Datenverarbeitung, Datenprüfung, Datenbalancierung und Datenvisualisierung enthält.
     """
 
-    total_images = 20000
+    total_images = 20
     balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
     balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
     young_column = "Young"

@@ -2,43 +2,21 @@ import matplotlib.pyplot as plt
 import numpy as np
 import os
 import pandas as pd
-import sys
 import torch
-import torch.nn as nn
-import torch.nn.functional as F
-import torch.optim as optim
 import torchvision.transforms as transforms
-from fairlearn.datasets import fetch_adult
 from fairlearn.metrics import MetricFrame
-from sklearn.datasets import fetch_openml
 from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier
-from torch.autograd import Variable
 from torchcam.methods import (
-    GradCAM,
     GradCAMpp,
-    LayerCAM,
-    ScoreCAM,
-    SmoothGradCAMpp,
-    XGradCAM,
 )
-from torchvision import datasets, models, transforms
-from torchvision.io import read_image
-from torchvision.transforms import ToTensor
-from tqdm import tqdm
+from torchvision import transforms
 from model_train import DataLoaderModelTrain, SimpleCNN
 import torchvision.transforms.functional as TF
 import torchvision
 import random
 from fairlearn.metrics import (
     MetricFrame,
-    count,
-    false_negative_rate,
-    false_positive_rate,
-    selection_rate,
 )
-import glob
 import os
 import random
 import torch

@@ -1,22 +1,10 @@
-import torch
-from torchvision import transforms
-import streamlit as st
-from PIL import Image
 import os
-import torch
-import pandas as pd
-import matplotlib.pyplot as plt
-from torch import nn, cuda
-from torchvision import datasets, transforms, models
-from torchvision.transforms import ToTensor
-from torchvision.io import read_image
-from torch.utils.data import Dataset, DataLoader
-import torch.nn.functional as F
-import numpy as np
-from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-from torch.optim import Adam
-import torch.optim as optim
 import sys
+
+import streamlit as st
+import torch
+from PIL import Image
+from torchvision import transforms
 
 sys.path.insert(0, "model/model_script/")
 from model_train import SimpleCNN as SCNN
