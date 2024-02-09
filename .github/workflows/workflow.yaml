@@ -45,6 +45,9 @@ jobs:
           run: |
             chmod +x .github/workflows/data.sh
             ./.github/workflows/data.sh
+            data/plots_balanced/*
+            data/plot_data/*
+            data/reports_data/*
             report_data_plots.md
        
   #       - name: 'Modell trainieren'
