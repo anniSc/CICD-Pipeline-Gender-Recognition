@@ -165,6 +165,7 @@ class Trainer:
         plt.ylabel("Usage (%)")
         plt.title("CPU and Memory Usage Over Time")
         plt.legend()
+        plt.savefig("model/cpu_memory_usage.png")
         plt.show()
 
 
