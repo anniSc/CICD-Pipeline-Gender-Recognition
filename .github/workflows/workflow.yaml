@@ -1,7 +1,7 @@
 name: Workflow
 on:
   push:
-    branches: [asd]
+    branches: [main]
     
 jobs:
   build-and-test:
