@@ -43,6 +43,7 @@ jobs:
               report_test_rauschen.md
               report_test_verzerrung.md
               report_rotation.md
+              
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
 
