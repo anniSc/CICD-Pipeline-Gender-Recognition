@@ -39,7 +39,7 @@
 # cml-send-comment $report_file_activation
 
 
-function create_report(){
+function create_single_report(){
     local report_file=$1
     local report_title=$2
     local image_dir=$3
@@ -51,6 +51,7 @@ function create_report(){
     done
     cml-send-comment $report_file
 }
+
 create_single_report(){
     local report_file=$1
     local report_title=$2
