@@ -51,6 +51,15 @@ function create_report() {
     done
     cml-send-comment $report_file
 }
+create_single_report() {
+    local report_file=$1
+    local report_title=$2
+    local image_file=$3
+
+    echo "## $report_title" > $report_file
+    cml-publish "$image_file" --md >> $report_file
+    cml-send-comment $report_file
+}
 
 function create_ml_report() {
     echo "## Model Metriken" > report_ml.md
@@ -67,4 +76,4 @@ create_report "report_test_rauschen.md" "Modellmetriken mit verauschten Bilder" 
 create_report "report_test_verzerrung.md" "Modellmetriken mit verauschten Bilder" "test/test-plots-verzerrung"
 create_report "report_rotation.md" "Modellmetriken mit verdrehte Bilder" "test/test-plots-rotation"
 create_report "report_activation.md" "Erklärbarkeit des Modells" "test/activation_map"
-create_report "report_ml.md" "CPU/Speicherauslastung" "model/cpu_memory_usage.png"
+create_single_report "report_ml.md" "CPU/Speicherauslastung" "model/cpu_memory_usage.png"
