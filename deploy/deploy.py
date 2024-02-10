@@ -7,8 +7,9 @@ from model_train import SimpleCNN as SCNN
 from PIL import Image
 from torchvision import transforms
 
-sys.path.insert(0, "model/model_script/")
-
+from model_train import SimpleCNN as SCNN
+ 
+sys.path.append("model/model_script/model_train.py")
 
 class GenderRecognitionPredictor:
     def __init__(self):

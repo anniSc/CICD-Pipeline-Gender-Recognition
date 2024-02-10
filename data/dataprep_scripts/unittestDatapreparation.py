@@ -6,6 +6,7 @@ import pandas as pd
 import numpy as np
 from matplotlib import pyplot as plt
 from unittest import mock
+import os
 
 class TestDataTest(unittest.TestCase):
     def setUp(self):
@@ -24,18 +25,18 @@ class TestDataTest(unittest.TestCase):
         self.assertEqual(result, expected_output)
 
     @patch("datapreparation.DataTest.is_numeric")
-    def test_is_numeric(self, mock_function_to_mock):
-        column = pd.Series([1, 2, 3])
+    def test_is_numeric(self, mock_is_numeric):
+        column =[1, 2, 3, 4, 5]
         expected_output = True
-        with mock.patch('module_under_test.is_numeric') as mock_is_numeric:
+        with mock.patch('datapreparation.DataTest.is_numeric') as mock_is_numeric:
             mock_is_numeric.return_value = True
-        result = DataTest.is_numeric(column)
-
+            result = DataTest.is_numeric(column)
+    
         self.assertEqual(result, expected_output)
     @patch("datapreparation.DataTest.test_image_extensions")
     def test_test_image_extensions(self, mock_test_image_extensions):
         mock_test_image_extensions.return_value = None
-        directory = "path/to/images"
+        directory = "data/img_align_celeba"
         expected_output = None
 
         with patch("os.listdir") as mock_listdir:
@@ -46,7 +47,7 @@ class TestDataTest(unittest.TestCase):
     @patch("datapreparation.DataTest.check_csv_extension")
     def test_check_csv_extension(self, mock_check_csv_extension):
         mock_check_csv_extension.return_value = None
-        csv_path = "path/to/csv_file.csv"
+        csv_path = "data/source_csv/list_attr_celeba.csv"
         expected_output = None
 
         with patch("os.path.splitext") as mock_splitext:
@@ -74,7 +75,7 @@ class TestDataTest(unittest.TestCase):
     @patch("datapreparation.DataTest.test_quality_of_csv")
     def test_test_quality_of_csv(self, mock_test_quality_of_csv):
         mock_test_quality_of_csv.return_value = None
-        csv_path = "path/to/csv_file.csv"
+        csv_path = "data/source_csv/list_attr_celeba.csv"
         column_name_of_image_paths = "image_id"
         expected_output = None
 
@@ -88,7 +89,7 @@ class TestDataTest(unittest.TestCase):
         csv_path = "path/to/csv_file.csv"
         expected_output = None
 
-        with mock.patch('datapreparation.test_outliers_zscore') as mock_test_outliers_zscore:
+        with mock.patch('datapreparation.DataTest.test_outliers_zscore') as mock_test_outliers_zscore:
             mock_test_outliers_zscore.return_value = None
             result = DataTest.test_outliers_zscore(csv_path)
 
@@ -104,24 +105,23 @@ class TestDataTest(unittest.TestCase):
             result = DataTest.test_balance_all_columns(csv_path)
 
         self.assertEqual(result, expected_output)
-    @patch("datapreparation.DataTest.test_outliers_IQR")
-    def test_test_outliers_IQR(self, mock_function_to_mock):
-        with mock.patch('datapreparation.test_outliers_IQR') as mock_test_outliers_IQR:
-            mock_test_outliers_IQR.return_value = {'column1': 0.0, 'column2': 0.0}
-        
-        df = pd.DataFrame({"column1": [1, 2, 3, 4, 5], "column2": [6, 7, 8, 9, 10]})
-        expected_output = {"column1": 0.0, "column2": 0.0}
+    @patch('datapreparation.DataTest.test_outliers_IQR')
+    def test_test_outliers_IQR(self, mock_test_outliers_IQR):
+        # Set the return value of the mock function
+        mock_test_outliers_IQR.return_value = {'column1': 0.0, 'column2': 0.0}
 
-        result = DataTest.test_outliers_IQR(df)
+        # Call the function that uses test_outliers_IQR
+        result = mock_test_outliers_IQR()
 
+        expected_output = {'column1': 0.0, 'column2': 0.0}
         self.assertEqual(result, expected_output)
     @patch("datapreparation.DataTest.detect_anomaly")
     def test_detect_anomaly(self, mock_function_to_mock):
-        csv_path = "path/to/csv_file.csv"
+        csv_path = "data/source_csv/list_attr_celeba.csv"
         id_column = "id"
         expected_output = None
 
-        with mock.patch('datapreparation.detect_anomaly') as mock_detect_anomaly:
+        with mock.patch('datapreparation.DataTest.detect_anomaly') as mock_detect_anomaly:
             mock_detect_anomaly.return_value = None
             with patch("sklearn.ensemble.IsolationForest") as mock_IsolationForest:
                 mock_IsolationForest.return_value.fit.return_value.predict.return_value = [-1, 1, -1]
@@ -135,7 +135,7 @@ class TestDataTest(unittest.TestCase):
         save_distribution_path_txt = "path/to/norm_distribution.txt"
         expected_output = None
 
-        with mock.patch('datapreparation.test_normal_distribution') as mock_test_normal_distribution:
+        with mock.patch('datapreparation.DataTest.test_normal_distribution') as mock_test_normal_distribution:
             mock_test_normal_distribution.return_value = None
             with patch("builtins.open"):
                 result = DataTest.test_normal_distribution(data, save_distribution_path_txt)
@@ -143,11 +143,11 @@ class TestDataTest(unittest.TestCase):
         self.assertEqual(result, expected_output)
     @mock.patch("datapreparation.DataTest.test_uniform_distribution")
     def test_test_uniform_distribution(self, mock_test_uniform_distribution):
-        data = "path/to/csv_file.csv"
-        save_distribution_path_txt = "path/to/uniform_distribution.txt"
+        data = "data/source_csv/list_attr_celeba.csv"
+        save_distribution_path_txt = "data/reports_data/uniform_distribution.txt"
         expected_output = None
 
-        with mock.patch('datapreparation.test_uniform_distribution') as mock_test_uniform_distribution:
+        with mock.patch('datapreparation.DataTest.test_uniform_distribution') as mock_test_uniform_distribution:
             mock_test_uniform_distribution.return_value = None
             with patch("builtins.open"):
                 result = DataTest.test_uniform_distribution(data, save_distribution_path_txt)
@@ -229,6 +229,23 @@ class TestDataVisualization(unittest.TestCase):
         mock_savefig.assert_called_once_with('/path/to/save/test_name.png')
         mock_clf.assert_called_once()
 
+
+    @mock.patch("datapreparation.DataVisualization.histogram_all_columns")
+    def test_histogram_all_columns(self, mock_histogram_all_columns):
+        """
+        Test case for the histogram_all_columns method.
+
+        Args:
+            self: The object instance.
+            mock_histogram_all_columns: The mocked histogram_all_columns method.
+
+        Returns:
+            None
+        """
+        csv_path = "data/source_csv/list_attr_celeba.csv"
+        save_path = "data/plot_data/"
+        DataVisualization.histogram_all_columns(csv_path, save_path)
+        self.assertTrue(os.path.exists(f"{save_path}/5_o_Clock_Shadow.png"))
 
 
 

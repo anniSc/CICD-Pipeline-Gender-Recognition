@@ -3,6 +3,7 @@
     "git.autofetch": true,
     "git.autoStash": true,
     "python.analysis.extraPaths": [
-        "./model/ml_model_scripts"
+        "./model/ml_model_scripts",
+        "./model/model_script"
     ]
 }

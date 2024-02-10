@@ -1,13 +1,14 @@
+import glob
+import os
+from datetime import datetime
+
 import torch
-from torch import nn
-from torchvision import datasets, transforms
 import torch.nn.functional as F
 import torch.optim as optim
-from tqdm import tqdm
 import torchvision.transforms as transforms
-import os
-import glob
-from datetime import datetime
+from torch import nn
+from torchvision import datasets, transforms
+from tqdm import tqdm
 
 
 class SimpleCNN(nn.Module):
@@ -55,7 +56,8 @@ class Trainer:
         early_stopping_counter (int): Der Zähler zur Verfolgung der Anzahl der Epochen ohne Verbesserung der Validierungsgenauigkeit.
     """
 
-    def __init__(self, model, train_dataloader, test_dataloader, epochs, batch_size):
+    def __init__(self, model, train_dataloader,
+                 test_dataloader, epochs, batch_size):
         self.model = model
         self.train_dataloader = train_dataloader
         self.test_dataloader = test_dataloader
@@ -90,7 +92,9 @@ class Trainer:
             correct = 0
             total = 0
             if i % 10 == 9:
-                print("[%d, %5d] loss: %.3f" % (epoch + 1, i + 1, running_loss / 100))
+                print(
+                    "[%d, %5d] loss: %.3f" %
+                    (epoch + 1, i + 1, running_loss / 100))
                 running_loss = 0.0
 
             with torch.no_grad():
@@ -130,7 +134,9 @@ class Trainer:
             self.model.state_dict(),
             f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
         )
-        print(f"Training beende. Genauigkeit: {accuracy:.2f}" + f"Epoch: {epoch}")
+        print(
+            f"Training beende. Genauigkeit: {accuracy:.2f}" +
+            f"Epoch: {epoch}")
         print(
             "Gespeicherter Pfad: ",
             f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
@@ -144,7 +150,8 @@ class DataLoaderModelTrain:
 
     @staticmethod
     def load_data(test_dir, train_dir, transform, batch_size):
-        train_dataset = datasets.ImageFolder(root=train_dir, transform=transform)
+        train_dataset = datasets.ImageFolder(
+            root=train_dir, transform=transform)
         test_dataset = datasets.ImageFolder(root=test_dir, transform=transform)
         train_dataloader = torch.utils.data.DataLoader(
             train_dataset, batch_size=batch_size, shuffle=True
@@ -208,11 +215,13 @@ class Main(DataLoaderModelTrain):
         if self.model_test_path is not None:
             self.clean_up_pth(model_test_path)
             torch.save(
-                self.model.state_dict(), f"{model_test_path}{formatted_now}" + ".pth"
+                self.model.state_dict(
+                ), f"{model_test_path}{formatted_now}" + ".pth"
             )
         else:
             torch.save(
-                self.model.state_dict(), f"{model_test_path}{formatted_now}" + ".pth"
+                self.model.state_dict(
+                ), f"{model_test_path}{formatted_now}" + ".pth"
             )
 
 

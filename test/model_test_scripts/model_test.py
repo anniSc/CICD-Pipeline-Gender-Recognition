@@ -1,28 +1,19 @@
+import os
+import random
+
 import matplotlib.pyplot as plt
 import numpy as np
-import os
 import pandas as pd
 import torch
+import torchvision
 import torchvision.transforms as transforms
-from fairlearn.metrics import MetricFrame
-from sklearn.metrics import accuracy_score, f1_score, precision_score, recall_score
-from torchcam.methods import (
-    GradCAMpp,
-)
-from torchvision import transforms
-from model_train import DataLoaderModelTrain, SimpleCNN
 import torchvision.transforms.functional as TF
-import torchvision
-import random
-from fairlearn.metrics import (
-    MetricFrame,
-)
-import os
-import random
-import torch
-import torchvision
-import matplotlib.pyplot as plt
-from torchvision.transforms.functional import normalize, resize
+from fairlearn.metrics import MetricFrame
+from model_train import DataLoaderModelTrain, SimpleCNN
+from sklearn.metrics import (accuracy_score, f1_score, precision_score,
+                             recall_score)
+from torchcam.methods import GradCAMpp
+from torchvision import transforms
 from torchvision.transforms.functional import normalize, resize
 
 
@@ -46,8 +37,14 @@ class ModelTester:
 
         # Calculate metrics
         accuracy = accuracy_score(true_labels, predicted_labels)
-        precision = precision_score(true_labels, predicted_labels, average="weighted")
-        recall = recall_score(true_labels, predicted_labels, average="weighted")
+        precision = precision_score(
+            true_labels,
+            predicted_labels,
+            average="weighted")
+        recall = recall_score(
+            true_labels,
+            predicted_labels,
+            average="weighted")
         f1 = f1_score(true_labels, predicted_labels, average="weighted")
 
         print(f"Genauigkeit: {accuracy}")
@@ -72,7 +69,8 @@ class ModelTester:
         noisy_images = torch.clamp(noisy_images, 0.0, 1.0)
         return noisy_images
 
-    def add_noise_and_test_robustness(model, test_dataloader, device, noise_factor=0.5):
+    def add_noise_and_test_robustness(
+            model, test_dataloader, device, noise_factor=0.5):
         noisy_images = []
         labels_list = []
 
@@ -108,7 +106,8 @@ class ModelTester:
 
         # Berechne die Metriken
         accuracy = accuracy_score(true_labels, predictions)
-        precision = precision_score(true_labels, predictions, average="weighted")
+        precision = precision_score(
+            true_labels, predictions, average="weighted")
         recall = recall_score(true_labels, predictions, average="weighted")
         f1 = f1_score(true_labels, predictions, average="weighted")
 
@@ -130,9 +129,11 @@ class ModelTester:
             inputs = inputs.to(device)
             # Das Modell macht eine Vorhersage auf den Eingaben.
             output = model(inputs)
-            # Die Ausgabe des Modells wird in Wahrscheinlichkeiten umgewandelt, indem die Softmax-Funktion angewendet wird.
+            # Die Ausgabe des Modells wird in Wahrscheinlichkeiten umgewandelt,
+            # indem die Softmax-Funktion angewendet wird.
             probabilities = torch.nn.functional.softmax(output, dim=1)
-            # Die Klasse mit der höchsten Wahrscheinlichkeit wird als Vorhersage ausgewählt.
+            # Die Klasse mit der höchsten Wahrscheinlichkeit wird als
+            # Vorhersage ausgewählt.
             predictions = torch.argmax(probabilities, dim=1)
             # Die Vorhersagen werden in eine Liste umgewandelt und ausgegeben.
             predictions_list = predictions.cpu().numpy().tolist()
@@ -224,7 +225,8 @@ class ModelTester:
         plt.close()
 
     def add_distortion(image, distortion_factor=0.5):
-        startpoints = torch.tensor([[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
+        startpoints = torch.tensor(
+            [[0.0, 0.0], [1.0, 0.0], [0.0, 1.0], [1.0, 1.0]])
         endpoints = startpoints + torch.tensor(
             [
                 [0.0, distortion_factor],
@@ -252,7 +254,8 @@ class ModelTester:
             labels_list = []
 
             for inputs, labels in test_dataloader:
-                inputs_distorted = ModelTester.add_distortion(inputs, distortion_factor)
+                inputs_distorted = ModelTester.add_distortion(
+                    inputs, distortion_factor)
                 distorted_images.append(inputs_distorted)
                 labels_list.append(labels)
 
@@ -322,7 +325,8 @@ class ModelTester:
             distortion_factor += step
             plt.clf()
 
-    def rotate_and_convert(image, angle, test_images="data/train-test-data/test"):
+    def rotate_and_convert(
+            image, angle, test_images="data/train-test-data/test"):
         from PIL import Image
 
         for filename in os.listdir(test_images):
@@ -352,7 +356,10 @@ class ModelTester:
         precision = precision_score(
             true_labels, predicted_labels, average="weighted", zero_division=1
         )
-        recall = recall_score(true_labels, predicted_labels, average="weighted")
+        recall = recall_score(
+            true_labels,
+            predicted_labels,
+            average="weighted")
         f1 = f1_score(true_labels, predicted_labels, average="weighted")
 
         return accuracy, precision, recall, f1
@@ -542,13 +549,8 @@ class TestFairness:
         plt.clf()
 
     def analyze_metrics(sensitive_features, y_test, y_pred):
-        from fairlearn.metrics import (
-            MetricFrame,
-            count,
-            false_negative_rate,
-            false_positive_rate,
-            selection_rate,
-        )
+        from fairlearn.metrics import (MetricFrame, count, false_negative_rate,
+                                       false_positive_rate, selection_rate)
 
         metrics = {
             "accuracy": accuracy_score,
@@ -615,7 +617,8 @@ class TestFairness:
         for group, accuracy in accuracy_per_group.items():
             print(f"Genauigkeit für die Gruppe: {group}: {accuracy}")
             with open("test/metrics/fairness_metrics.txt", "a") as outfile:
-                outfile.write(f"Genauigkeit für die Gruppe: {group}: {accuracy} \n")
+                outfile.write(
+                    f"Genauigkeit für die Gruppe: {group}: {accuracy} \n")
 
         groups = metrics.by_group.index.tolist()
         accuracies = metrics.by_group.values.tolist()
@@ -691,13 +694,17 @@ class ModelExplainability:
         men_dir="data/train-test-data/train/men",
         women_dir="data/train-test-data/train/women",
     ):
-        men_images = [os.path.join(men_dir, img) for img in os.listdir(men_dir)]
-        women_images = [os.path.join(women_dir, img) for img in os.listdir(women_dir)]
-        selected_images = random.sample(men_images, 1) + random.sample(women_images, 1)
+        men_images = [os.path.join(men_dir, img)
+                      for img in os.listdir(men_dir)]
+        women_images = [os.path.join(women_dir, img)
+                        for img in os.listdir(women_dir)]
+        selected_images = random.sample(
+            men_images, 1) + random.sample(women_images, 1)
         for i, img_path in enumerate(selected_images):
             img = torchvision.io.read_image(img_path)
             input_tensor = torchvision.transforms.functional.normalize(
-                torchvision.transforms.functional.resize(img, (178, 218)) / 255.0,
+                torchvision.transforms.functional.resize(
+                    img, (178, 218)) / 255.0,
                 [0.485, 0.456, 0.406],
                 [0.220, 0.224, 0.225],
             )
