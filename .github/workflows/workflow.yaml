@@ -76,8 +76,8 @@ jobs:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             python model/model_script/model_train.py
-            chmod +x .github/workflows/ressource_model_train.sh
-            ./.github/workflows/ressource_model_train.sh
+            chmod +x .github/workflows/resource_model_train.sh
+            ./.github/workflows/resource_model_train.sh
         # - name: 'Modell testen'                   
         #   run: |
         #     python test/model_test_scripts/model_test.py
