@@ -58,72 +58,6 @@ class SimpleCNN(nn.Module):
         x = self.fc3(x)
         return x
 
-  
-class ImprovedCNN(nn.Module):
-    """
-        ImprovedCNN ist ein Modell für die Geschlechtererkennung, das auf einem Convolutional Neural Network basiert.
-
-        Attribute:
-            conv1 (nn.Conv2d): Erste Faltungs-Schicht.
-            conv2 (nn.Conv2d): Zweite Faltungs-Schicht.
-            dropout (nn.Dropout): Dropout-Schicht zur Regularisierung.
-            pool (nn.MaxPool2d): Max-Pooling-Schicht.
-            fc1 (nn.Linear): Erste vollständig verbundene Schicht.
-            fc2 (nn.Linear): Zweite vollständig verbundene Schicht.
-            fc3 (nn.Linear): Dritte vollständig verbundene Schicht.
-            batch_norm (nn.BatchNorm2d): Batch-Normalisierungsschicht.
-
-        Methoden:
-            forward(x): Vorwärtsdurchlauf des Modells.
-    """
-  
-
-
-    def __init__(self):
-        nn.Conv2d(3, 32, kernel_size=3, padding=1),
-        nn.ReLU(),
-        nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
-        nn.ReLU(),
-        nn.MaxPool2d(2, 2),  # output: 64 x 16 x 16
-        nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
-        nn.ReLU(),
-        nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
-        nn.ReLU(),
-        nn.MaxPool2d(2, 2),  # output: 128 x 8 x 8
-        nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
-        nn.ReLU(),
-        nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
-        nn.ReLU(),
-        nn.MaxPool2d(2, 2),  # output: 256 x 4 x 4
-        nn.Flatten(),
-        nn.Linear(256*4*4, 1024),
-        nn.ReLU(),
-        nn.Linear(1024, 512),
-        nn.ReLU(),
-        nn.Linear(512, 10)
-
-    # def find_flatten_size(self):
-    #     x = torch.zeros(1, 3,200,200) 
-    #     x = self.pool(F.relu(self.conv1(x)))
-    #     x = self.pool(F.relu(self.conv2(x)))
-    #     _, c, h, w = x.size()
-    #     print(c * h * w)
-    #     return c * h * w
-        
-    
-    
-    
-    def forward(self, x):
-        x = self.pool(F.relu(self.conv1(x)))
-        x = self.pool(F.relu(self.batch_norm(self.conv2(x))))
-        x = x.view(x.size(0), -1)
-        x = F.relu(self.fc1(self.dropout(x)))
-        x = F.relu(self.fc2(self.dropout(x)))  
-        
-      
-        x = self.fc3(x)
-        return x
-
 
 
 class Trainer:
@@ -451,7 +385,6 @@ class ImageClassificationBase(nn.Module):
 
 
 
-
 class class_finder(ImageClassificationBase):
     def __init__(self):
         super().__init__()
@@ -479,22 +412,19 @@ class class_finder(ImageClassificationBase):
             nn.Linear(512, 10)
         )
 
-    def forward(self, xb):
-        return self.network(xb)
-
-
-
-
-
+    def forward(self, x):
+        return self.network(x)
 
 
 
 
 if __name__ == "__main__":
     # model = SimpleCNN()
-    model = ImprovedCNN()
+    model = class_finder()
     # model = class_finder()
     batch_size = 64
+    import torch.optim as optim
+
     epochs = 50
     test_dir = "data/train-test-data/test"
     model_save_path = f"model/PyTorch_Trained_Models/"
