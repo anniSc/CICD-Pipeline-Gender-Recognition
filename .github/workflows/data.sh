@@ -17,6 +17,19 @@ update_report() {
   fi
 }
 
+create_single_report() {
+    local report_file=$1
+    local report_title=$2
+    local image_file=$3
+
+    echo "## $report_title" > $report_file
+    cml-publish "$image_file" --md >> $report_file
+    cml-send-comment $report_file
+}
+
+
+
+
 # Check each distribution file and update report
 for i in ${!distribution_files[@]}; do
   update_report ${distribution_files[$i]} ${distribution_names[$i]}
@@ -37,3 +50,5 @@ cml-publish data/plots_balanced/Young_balanced.png --md >> $report_file
 
 # Send the report
 cml-send-comment $report_file
+
+create_single_report "report_ml.md" "CPU/Speicherauslastung" "data/cpu_memory_usage_on_dataprep.png"

@@ -1,11 +1,13 @@
 import os
 import random
 import shutil
+import threading
 import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 from scipy.stats import kstest, shapiro, uniform
-
+import time
+import psutil
 
 class DataPreparation:
     total_images = 0
@@ -596,19 +598,37 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
     """
     Die Hauptklasse, die die verschiedenen Funktionen zur Datenverarbeitung, Datenprüfung, Datenbalancierung und Datenvisualisierung enthält.
     """
+    def __init__(self):
+            self.total_images = 10
+            self.balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
+            self.balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
+            self.young_column = "Young"
+            self.save_norm_distribution_path_txt = "data/reports_data/norm_distribution.txt"
+            self.save_binomial_distribution_path_txt = "data/reports_data/binomial_distribution.txt"
+            self.save_uniform_distribution_path_txt = "data/reports_data/uniform_distribution.txt"
+            self.save_exponential_distribution_path_txt = (
+                "data/reports_data/exponential_distribution.txt"
+            )
+            self.memory_usage = []
+            self.cpu_usage = []
+            self.timestamps = []
+            self.stop_thread = False
+            self.thread = threading.Thread(target=self.collect_usage)
+            self.time = 0
+    def collect_usage(self):
+        while not self.stop_thread:
+            self.memory_usage.append(psutil.virtual_memory().percent)
 
-    total_images = 10
-    balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
-    balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
-    young_column = "Young"
-    save_norm_distribution_path_txt = "data/reports_data/norm_distribution.txt"
-    save_binomial_distribution_path_txt = "data/reports_data/binomial_distribution.txt"
-    save_uniform_distribution_path_txt = "data/reports_data/uniform_distribution.txt"
-    save_exponential_distribution_path_txt = (
-        "data/reports_data/exponential_distribution.txt"
-    )
+            # Get CPU usage
+            self.cpu_usage.append(psutil.cpu_percent(interval=1))
+            self.timestamps.append(time.time())
+            # Wait for a while before collecting again
+            time.sleep(1)
+        print(self.cpu_usage, self.memory_usage, self.timestamps)
 
     def run_all(self):
+        self.thread.start()
+        start_time = time.time()
         DataTest.run_datatest(
             self.save_binomial_distribution_path_txt,
             self.save_uniform_distribution_path_txt,
@@ -621,9 +641,30 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
             column_name=self.young_column,
             feature_column=DataPreparation.feature_column,
         )
+
         DataPreparation.run_dataprep(total_images=self.total_images)
         
+        self.stop_thread = True
+        self.thread.join()
+        self.plot_usage()
+
+
+    def get_usage_collection(self):
+        return self.cpu_usage, self.memory_usage, self.timestamps
+    
+    def plot_usage(self):
+        cpu_usage, memory_usage, timestamps = self.get_usage_collection()
+        plt.title("CPU und Speichernutzung während der Datenvorbereitung")
+        plt.xlabel("Zeit (s)")
+        plt.ylabel("Nutzung (%)")
+        plt.legend(["CPU-Nutzung", "Speichernutzung"])
+        # plt.figure(facecolor="lightgrey")
+        plt.plot(timestamps, cpu_usage, label="CPU Usage", color="red", linewidth=3)
+        plt.plot(timestamps, memory_usage, label="Memory Usage", color="blue",linewidth=3)
+        plt.savefig("data/cpu_memory_usage_on_dataprep.png")
+        plt.show()
 
 if __name__ == "__main__":
     main = Main()
     main.run_all()
+    
