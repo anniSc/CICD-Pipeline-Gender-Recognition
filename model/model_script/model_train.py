@@ -9,7 +9,9 @@ import torchvision.transforms as transforms
 from torch import nn
 from torchvision import datasets, transforms
 from tqdm import tqdm
-
+import psutil 
+import matplotlib.pyplot as plt
+import time
 
 class SimpleCNN(nn.Module):
     def __init__(self):
@@ -72,6 +74,10 @@ class Trainer:
     def train(self):
         now = datetime.now()
         formatted_now = now.strftime("%d-%m-%Y" + "_%H-%M-%S")
+        cpu_percentages = []
+        memory_percentages = []
+        time_stamps = []
+    
         """
         Trainiert das Modell mit den angegebenen Trainings- und Test-/Validierungsdatensätzen.
 
@@ -79,6 +85,9 @@ class Trainer:
         Speichert das Modell mit der höchsten erreichten Validierungsgenauigkeit.
         Führt ein vorzeitiges Beenden durch, wenn die Validierungsgenauigkeit für eine bestimmte Anzahl von Epochen nicht verbessert wird.
         """
+
+
+        start_time = time.time()
         for epoch in range(self.epochs):
             running_loss = 0.0
             for i, data in enumerate(tqdm(self.train_dataloader), 0):
@@ -105,6 +114,12 @@ class Trainer:
                     total += val_labels.size(0)
                     correct += (predicted == val_labels).sum().item()
             accuracy = correct / total
+
+
+            cpu_percentages.append(psutil.cpu_percent())
+            memory_percentages.append(psutil.virtual_memory().percent)
+            time_stamps.append(time.time()+start_time)
+
 
             if accuracy > 0.9:
                 torch.save(
@@ -141,6 +156,16 @@ class Trainer:
             "Gespeicherter Pfad: ",
             f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
         )
+    def plot_cpu_memory_usage(self, cpu_percentages, memory_percentages, time_stamps):
+        plt.plot(time_stamps, cpu_percentages, label="CPU Usage")
+        plt.plot(time_stamps, memory_percentages, label="Memory Usage")
+        plt.xlabel("Time (s)")
+        plt.ylabel("Usage (%)")
+        plt.title("CPU and Memory Usage Over Time")
+        plt.legend()
+        plt.show()
+
+
 
 
 class DataLoaderModelTrain:
@@ -165,7 +190,7 @@ class DataLoaderModelTrain:
 class Main(DataLoaderModelTrain):
     def __init__(self):
         self.batch_size = 64
-        self.epochs = 50
+        self.epochs = 5
         self.test_dir = "data/train-test-data/test"
         self.transform = transforms.Compose(
             [
@@ -225,6 +250,11 @@ class Main(DataLoaderModelTrain):
             )
 
 
+
+
+
 if __name__ == "__main__":
     m = Main()
+ 
+
     m.train_and_save()
