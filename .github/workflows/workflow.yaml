@@ -21,27 +21,38 @@ jobs:
         - uses: actions/checkout@v3
           with:
             sparse-checkout: |
-              test/
-              .github/workflows/
+             
+              .github/workflows/*
               requirements.txt
               data/reports_data/*
               data/plot_data/*
               data/plots_balanced/*
               data/plot_data/*
               data/reports_data/*
+              data/IDs/*
+              data/train-test-data/*
+              data/source_csv/*
+              test/*
+              data/balanced_source_csv/*
+              report_activation.md
+              report_data_plots.md
               report_data_plots.md
               report_distribution.md
+              report_ml.md
+              report_test_rauschen.md
+              report_test_verzerrung.md
+              report_rotation.md
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
 
-        # - name: Abhängigkeiten installieren
-        #   run: |
-        #     python -m pip install --upgrade pip
-        #     pip install -r requirements.txt
+        - name: Abhängigkeiten installieren
+          run: |
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
 
-        # - name: 'Datenaufbereitung und -tests'
-        #   run: |
-        #     python data/dataprep_scripts/datapreparation.py 
+        - name: 'Datenaufbereitung und -tests'
+          run: |
+            python data/dataprep_scripts/datapreparation.py 
 
         - name: Generierung und Veröffentlichung der visualisierten Daten,Tests und Verteilungen
           env:
@@ -51,109 +62,109 @@ jobs:
             ./.github/workflows/data.sh
         
        
-  #       - name: 'Modell trainieren'
-  #         env:
-  #           repo_token: ${{ secrets.GITHUB_TOKEN }}
-  #         run: |
-  #           python model/model_script/model_train.py
+        - name: 'Modell trainieren'
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            python model/model_script/model_train.py
 
-  #       - name: 'Modell testen'                   
-  #         run: |
-  #           python test/model_test_scripts/model_test.py
+        - name: 'Modell testen'                   
+          run: |
+            python test/model_test_scripts/model_test.py
         
-  #       - name: "Veröffenlichung der Fairlearn-Tests"
-  #         env:
-  #           repo_token: ${{ secrets.GITHUB_TOKEN }}
-  #         run: |
-  #           echo "## Model Metriken" > report_ml.md
-  #           cat test/metrics/metrics.txt >> report_ml.md
-  #           echo "\n## Fairlearn Ergebnisse" >> report_ml.md
-  #           cml-publish   test/metrics/metrics.jpg --md >> report_ml.md
-  #           cml-publish test/metricsFairlearn/Fig1metricsFairLearn.jpg --md >> report_ml.md
-  #           cml-publish test/metricsFairlearn/Fig2metricsFairLearn.jpg --md >> report_ml.md
-  #           cml-send-comment report_ml.md
+        - name: "Veröffenlichung der Fairlearn-Tests"
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            echo "## Model Metriken" > report_ml.md
+            cat test/metrics/metrics.txt >> report_ml.md
+            echo "\n## Fairlearn Ergebnisse" >> report_ml.md
+            cml-publish   test/metrics/metrics.jpg --md >> report_ml.md
+            cml-publish test/metricsFairlearn/Fig1metricsFairLearn.jpg --md >> report_ml.md
+            cml-publish test/metricsFairlearn/Fig2metricsFairLearn.jpg --md >> report_ml.md
+            cml-send-comment report_ml.md
     
-  #       - name: Veröffentlichung der Modellmetriken mit verrauschten Bildern
-  #         env:
-  #           repo_token: ${{ secrets.GITHUB_TOKEN }}
-  #         run: |
-  #           report_file="report_test_rauschen.md"
-  #           echo "## Modellmetriken mit verauschten Bilder" > $report_file      
-  #           for file in test/test-plots-rauschen/*.png; do
-  #             echo "Publishing $file"
-  #             cml-publish "$file" --md >> $report_file
-  #           done
-  #           cml-send-comment $report_file
+        - name: Veröffentlichung der Modellmetriken mit verrauschten Bildern
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            report_file="report_test_rauschen.md"
+            echo "## Modellmetriken mit verauschten Bilder" > $report_file      
+            for file in test/test-plots-rauschen/*.png; do
+              echo "Publishing $file"
+              cml-publish "$file" --md >> $report_file
+            done
+            cml-send-comment $report_file
             
-  #       - name: Veröffentlichung der Modellmetriken mit verzerrten Bildern
-  #         env:
-  #           repo_token: ${{ secrets.GITHUB_TOKEN }}
-  #         run: |
-  #           report_file="report_test_verzerrung.md"
-  #           echo "## Modellmetriken mit verauschten Bilder" > $report_file      
-  #           for file in test/test-plots-verzerrung/*.png; do
-  #             echo "Publishing $file"
-  #             cml-publish "$file" --md >> $report_file
-  #           done
-  #           cml-send-comment $report_file
-  #       - name: Veröffentlichung der Plots mit verdrehten Bildern
-  #         env:
-  #           repo_token: ${{ secrets.GITHUB_TOKEN }}
-  #         run: |
-  #           report_file="report_rotation.md"
-  #           echo "## Modellmetriken mit verdrehte Bilder" > $report_file      
-  #           for file in test/test-plots-rotation/*.png; do
-  #             echo "Publishing $file"
-  #             cml-publish "$file" --md >> $report_file
-  #           done
-  #           cml-send-comment $report_file
-  #       - name: "Veröffenlichung der Erklärbarkeit des Modells"
-  #         env:
-  #           repo_token: ${{ secrets.GITHUB_TOKEN }}
-  #         run: |
-  #           report_file_activation="report_activation.md"
-  #           echo "## Erklärbarkeit des Modells" > report_activation.md       
-  #           for file in test/activation_map/*.png; do
-  #             echo "Publishing $file"
-  #             cml-publish "$file" --md >> $report_file_activation
-  #           done
-  #           cml-send-comment $report_file_activation    
+        - name: Veröffentlichung der Modellmetriken mit verzerrten Bildern
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            report_file="report_test_verzerrung.md"
+            echo "## Modellmetriken mit verauschten Bilder" > $report_file      
+            for file in test/test-plots-verzerrung/*.png; do
+              echo "Publishing $file"
+              cml-publish "$file" --md >> $report_file
+            done
+            cml-send-comment $report_file
+        - name: Veröffentlichung der Plots mit verdrehten Bildern
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            report_file="report_rotation.md"
+            echo "## Modellmetriken mit verdrehte Bilder" > $report_file      
+            for file in test/test-plots-rotation/*.png; do
+              echo "Publishing $file"
+              cml-publish "$file" --md >> $report_file
+            done
+            cml-send-comment $report_file
+        - name: "Veröffenlichung der Erklärbarkeit des Modells"
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            report_file_activation="report_activation.md"
+            echo "## Erklärbarkeit des Modells" > report_activation.md       
+            for file in test/activation_map/*.png; do
+              echo "Publishing $file"
+              cml-publish "$file" --md >> $report_file_activation
+            done
+            cml-send-comment $report_file_activation    
 
-  #       - name: Generierte Dateien in das Repository pushen
-  #         run: |
-  #           git config --local user.email "Aseuc@github.com"
-  #           git config --local user.name "Aseuc"
-  #           git add model/PyTorch_Trained_Models
-  #           git commit -m "Add trained model" || echo "No changes to commit"
-  #           git push origin main
+        - name: Generierte Dateien in das Repository pushen
+          run: |
+            git config --local user.email "Aseuc@github.com"
+            git config --local user.name "Aseuc"
+            git add model/PyTorch_Trained_Models
+            git commit -m "Add trained model" || echo "No changes to commit"
+            git push origin main
         
         
     
-  # deploy:
-  #   needs: build-and-test
-  #   runs-on: [ubuntu-latest]
-  #   container: docker://dvcorg/cml-py3:latest
-  #   steps:
-  #     - name: Caching von pip Abhängigkeiten
-  #       uses: actions/cache@v3
-  #       with:
-  #         path: ~/.cache/pip
-  #         key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
-  #         restore-keys: |
-  #           ${{ runner.os }}-pip-
-  #       env:
-  #         GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+  deploy:
+    needs: build-and-test
+    runs-on: [ubuntu-latest]
+    container: docker://dvcorg/cml-py3:latest
+    steps:
+      - name: Caching von pip Abhängigkeiten
+        uses: actions/cache@v3
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+        env:
+          GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
 
-  #     - uses: actions/checkout@v2
-  #       env:
-  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
+      - uses: actions/checkout@v2
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
       
-  #     - name: ML-Modell auf streamlit deployen
-  #       run: |
-  #         git pull origin main
-  #         git push origin main
-  #         git config --local user.email "Aseuc@github.com"
-  #         git config --local user.name "Aseuc"
-  #         git add .
-  #         git commit -m "Add generated file" -a || echo "No changes to commit"
-  #         git push origin main
+      - name: ML-Modell auf streamlit deployen
+        run: |
+          git pull origin main
+          git push origin main
+          git config --local user.email "Aseuc@github.com"
+          git config --local user.name "Aseuc"
+          git add .
+          git commit -m "Add generated file" -a || echo "No changes to commit"
+          git push origin main

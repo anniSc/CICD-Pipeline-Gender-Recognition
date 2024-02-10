@@ -6,6 +6,12 @@ import sys
 import pandas as pd
 sys.path.insert(0, "data\dataprep_scripts\datapreparation.py")
 sys.path.append("data\dataprep_scripts\datapreparation.py")    
+    
+import unittest
+import pandas as pd
+import matplotlib.pyplot as plt
+import numpy as np
+from datapreparation import DataPreparation
 
 # class TestDataPreparation(unittest.TestCase):
 
@@ -129,11 +135,8 @@ class TestDataTest(unittest.TestCase):
         # Add assertions here
 data = "data/source_csv/list_attr_celeba.csv"
 if __name__ == '__main__':
-    unittest.main()import unittest
-import pandas as pd
-import matplotlib.pyplot as plt
-import numpy as np
-from datapreparation import DataPreparation
+    unittest.main()
+
 
 class TestDataPreparation(unittest.TestCase):
 
