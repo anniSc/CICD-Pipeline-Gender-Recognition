@@ -17,8 +17,17 @@ jobs:
               ${{ runner.os }}-pip-
           env:
             GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+        
+        - uses: actions/checkout@v4
+        - uses: actions/setup-python@v5
+          with:
+            python-version: '3.9'
+            cache: 'pip' # caching pip dependencies
+        - run: |          
+            python -m pip install --upgrade pip
+            pip install -r requirements.txt
 
-        - uses: actions/checkout@v3
+        # - uses: actions/checkout@v3
           # with:
           #   sparse-checkout: |
           #     .github/workflows/*
@@ -50,13 +59,13 @@ jobs:
           #     report_rotation.md
           #     model/*
 
-          env:
-            repo_token: ${{ secrets.GITHUB_TOKEN }}
+        #   env:
+        # #     repo_token: ${{ secrets.GITHUB_TOKEN }}
 
-        - name: Abhängigkeiten installieren
-          run: |
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
+        # - name: Abhängigkeiten installieren
+        #   run: |
+        #     python -m pip install --upgrade pip
+        #     pip install -r requirements.txt
 
         - name: 'Datenaufbereitung und -tests'
           run: |
