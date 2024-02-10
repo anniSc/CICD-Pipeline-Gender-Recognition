@@ -13,3 +13,4 @@ pydqc
 fairlearn
 torchcam
 scikit-image
+psutil

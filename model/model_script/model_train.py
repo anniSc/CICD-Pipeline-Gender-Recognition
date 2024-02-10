@@ -156,6 +156,8 @@ class Trainer:
             "Gespeicherter Pfad: ",
             f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
         )
+        self.plot_cpu_memory_usage(cpu_percentages, memory_percentages, time_stamps)
+        
     def plot_cpu_memory_usage(self, cpu_percentages, memory_percentages, time_stamps):
         plt.plot(time_stamps, cpu_percentages, label="CPU Usage")
         plt.plot(time_stamps, memory_percentages, label="Memory Usage")
