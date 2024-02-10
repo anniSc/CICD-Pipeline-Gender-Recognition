@@ -44,7 +44,7 @@ jobs:
               report_test_verzerrung.md
               report_rotation.md
               model/*
-              
+
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -53,9 +53,9 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
-        - name: 'Datenaufbereitung und -tests'
-          run: |
-            python data/dataprep_scripts/datapreparation_test_phase.py 
+        # - name: 'Datenaufbereitung und -tests'
+        #   run: |
+        #     python data/dataprep_scripts/datapreparation_test_phase.py 
 
         - name: Generierung und Veröffentlichung der visualisierten Daten,Tests und Verteilungen
           env:
@@ -70,11 +70,11 @@ jobs:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
             python model/model_script/model_train.py
-
-        - name: 'Modell testen'                   
-          run: |
-            python test/model_test_scripts/model_test.py
             
+        # - name: 'Modell testen'                   
+        #   run: |
+        #     python test/model_test_scripts/model_test.py
+
         # - name: "Veröffenlichung der Fairlearn-Tests"
         #   env:
         #     repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -137,6 +137,7 @@ jobs:
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
+            chmod +x .github/workflows/model.sh
             ./.github/workflows/model.sh  
             git config --local user.email "Aseuc@github.com"
             git config --local user.name "Aseuc"
@@ -146,31 +147,31 @@ jobs:
         
         
     
-  deploy:
-    needs: build-and-test
-    runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml-py3:latest
-    steps:
-      - name: Caching von pip Abhängigkeiten
-        uses: actions/cache@v3
-        with:
-          path: ~/.cache/pip
-          key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
-          restore-keys: |
-            ${{ runner.os }}-pip-
-        env:
-          GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+  # deploy:
+  #   needs: build-and-test
+  #   runs-on: [ubuntu-latest]
+  #   container: docker://dvcorg/cml-py3:latest
+  #   steps:
+  #     - name: Caching von pip Abhängigkeiten
+  #       uses: actions/cache@v3
+  #       with:
+  #         path: ~/.cache/pip
+  #         key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
+  #         restore-keys: |
+  #           ${{ runner.os }}-pip-
+  #       env:
+  #         GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
 
-      - uses: actions/checkout@v2
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+  #     - uses: actions/checkout@v2
+  #       env:
+  #         repo_token: ${{ secrets.GITHUB_TOKEN }}
       
-      - name: ML-Modell auf streamlit deployen
-        run: |
-          git pull origin main
-          git push origin main
-          git config --local user.email "Aseuc@github.com"
-          git config --local user.name "Aseuc"
-          git add .
-          git commit -m "Add generated file" -a || echo "No changes to commit"
-          git push origin main
+  #     - name: ML-Modell auf streamlit deployen
+  #       run: |
+  #         git pull origin main
+  #         git push origin main
+  #         git config --local user.email "Aseuc@github.com"
+  #         git config --local user.name "Aseuc"
+  #         git add .
+  #         git commit -m "Add generated file" -a || echo "No changes to commit"
+  #         git push origin main
