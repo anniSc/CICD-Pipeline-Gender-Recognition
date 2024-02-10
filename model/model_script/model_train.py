@@ -419,8 +419,8 @@ class class_finder(ImageClassificationBase):
 
 
 if __name__ == "__main__":
-    # model = SimpleCNN()
-    model = class_finder()
+    model = SimpleCNN()
+    # model = class_finder()
     # model = class_finder()
     batch_size = 64
     import torch.optim as optim
