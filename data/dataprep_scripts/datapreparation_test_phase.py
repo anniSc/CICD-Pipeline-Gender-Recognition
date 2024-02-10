@@ -607,7 +607,7 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
     save_exponential_distribution_path_txt = (
         "data/reports_data/exponential_distribution.txt"
     )
-
+    
     def run_all(self):
         DataTest.run_datatest(
             self.save_binomial_distribution_path_txt,

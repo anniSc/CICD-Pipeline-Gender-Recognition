@@ -8,15 +8,15 @@ jobs:
       runs-on: [ubuntu-latest]
       container: docker://dvcorg/cml-py3:latest
       steps:
-        # - name: Caching von pip Abhängigkeiten
-        #   uses: actions/cache@v3
-        #   with:
-        #     path: ~/.cache/pip
-        #     key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
-        #     restore-keys: |
-        #       ${{ runner.os }}-pip-
-        #   env:
-        #     GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+        - name: Caching von pip Abhängigkeiten
+          uses: actions/cache@v3
+          with:
+            path: ~/.cache/pip
+            key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
+            restore-keys: |
+              ${{ runner.os }}-pip-
+          env:
+            GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
 
         - uses: actions/checkout@v3
           with:
@@ -31,6 +31,12 @@ jobs:
               data/reports_data/*
               data/IDs/*
               data/train-test-data/*
+              data/train-test-data/train/*
+              data/train-test-data/test/*
+              data/train-test-data/train/men/*
+              data/train-test-data/train/women/*
+              data/train-test-data/test/women/*
+              data/train-test-data/test/men/*
               data/source_csv/*
               test/*
               data/dataprep_scripts/*
