@@ -54,7 +54,7 @@ jobs:
 
         - name: 'Datenaufbereitung und -tests'
           run: |
-            python data/dataprep_scripts/datapreparation.py 
+            python data/dataprep_scripts/datapreparation_test_phase.py 
 
         - name: Generierung und Veröffentlichung der visualisierten Daten,Tests und Verteilungen
           env:

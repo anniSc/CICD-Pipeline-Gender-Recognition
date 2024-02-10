@@ -10,7 +10,7 @@ from scipy.stats import kstest, shapiro, uniform
 class DataPreparation:
     total_images = 0
     # Variablendeklaration von Bilddateipfaden
-    image_folder = "data/img_align_celeba"
+    # image_folder = "data/img_align_celeba"
     csv_path = "data/source_csv/list_attr_celeba.csv"
     source_csv_all_ids = "data/IDs/source_csv_all_ids.csv"
     source_train_path = "data/train-test-data/"
@@ -63,13 +63,13 @@ class DataPreparation:
         DataPreparation.clear_directory(
             dir_path=DataPreparation.women_image_source_path_train
         )
-        DataPreparation.split_data_random(
-            image_folder=DataPreparation.image_folder,
-            male_csv=DataPreparation.male_csv,
-            female_csv=DataPreparation.female_csv,
-            total_images=total_images,
-            id_column=DataPreparation.id_column,
-        )
+        # DataPreparation.split_data_random(
+        #     image_folder=DataPreparation.image_folder,
+        #     male_csv=DataPreparation.male_csv,
+        #     female_csv=DataPreparation.female_csv,
+        #     total_images=total_images,
+        #     id_column=DataPreparation.id_column,
+        # )
 
     @staticmethod
     def create_directories():
@@ -120,50 +120,50 @@ class DataPreparation:
         ids = df[id_column].tolist()
         return ids
 
-    @staticmethod
-    def split_data_random(
-        image_folder, male_csv, female_csv, total_images, id_column, train_ratio=0.7
-    ):
-        male_ids = DataPreparation.get_ids_from_csv(male_csv, id_column)
-        female_ids = DataPreparation.get_ids_from_csv(female_csv, id_column)
+    # @staticmethod
+    # def split_data_random(
+    #     image_folder, male_csv, female_csv, total_images, id_column, train_ratio=0.7
+    # ):
+    #     male_ids = DataPreparation.get_ids_from_csv(male_csv, id_column)
+    #     female_ids = DataPreparation.get_ids_from_csv(female_csv, id_column)
 
-        num_train = int(total_images * train_ratio)
-        num_test = int(total_images - num_train)
+    #     num_train = int(total_images * train_ratio)
+    #     num_test = int(total_images - num_train)
 
-        test_ids_male = random.sample(male_ids, num_test // 2)
-        test_ids_female = random.sample(female_ids, num_test // 2)
-        test_ids = test_ids_male + test_ids_female
+    #     test_ids_male = random.sample(male_ids, num_test // 2)
+    #     test_ids_female = random.sample(female_ids, num_test // 2)
+    #     test_ids = test_ids_male + test_ids_female
 
-        train_ids_male = set(male_ids) - set(test_ids)
-        train_ids_female = set(female_ids) - set(test_ids)
-        male_ids = sorted(train_ids_male)
-        female_ids = sorted(train_ids_female)
-        female_ids = random.sample(female_ids, num_train // 2)
-        male_ids = random.sample(male_ids, num_train // 2)
+    #     train_ids_male = set(male_ids) - set(test_ids)
+    #     train_ids_female = set(female_ids) - set(test_ids)
+    #     male_ids = sorted(train_ids_male)
+    #     female_ids = sorted(train_ids_female)
+    #     female_ids = random.sample(female_ids, num_train // 2)
+    #     male_ids = random.sample(male_ids, num_train // 2)
 
-        for id in test_ids_male:
-            shutil.copy(
-                os.path.join(image_folder, id),
-                DataPreparation.men_image_source_path_test,
-            )
+    #     for id in test_ids_male:
+    #         shutil.copy(
+    #             os.path.join(image_folder, id),
+    #             DataPreparation.men_image_source_path_test,
+    #         )
 
-        for id in test_ids_female:
-            shutil.copy(
-                os.path.join(image_folder, id),
-                DataPreparation.women_image_source_path_test,
-            )
+    #     for id in test_ids_female:
+    #         shutil.copy(
+    #             os.path.join(image_folder, id),
+    #             DataPreparation.women_image_source_path_test,
+    #         )
 
-        for id in male_ids:
-            shutil.copy(
-                os.path.join(image_folder, id),
-                DataPreparation.men_image_source_path_train,
-            )
+    #     for id in male_ids:
+    #         shutil.copy(
+    #             os.path.join(image_folder, id),
+    #             DataPreparation.men_image_source_path_train,
+    #         )
 
-        for id in female_ids:
-            shutil.copy(
-                os.path.join(image_folder, id),
-                DataPreparation.women_image_source_path_train,
-            )
+    #     for id in female_ids:
+    #         shutil.copy(
+    #             os.path.join(image_folder, id),
+    #             DataPreparation.women_image_source_path_train,
+    #         )
 
 
 class DataTest:
@@ -179,9 +179,9 @@ class DataTest:
         save_norm_distribution_path_txt,
     ):
         DataPreparation.create_directories()
-        DataPreparation.extract_ids_source_data_and_save(
-            directory=DataPreparation.image_folder, csv_path=DataPreparation.data_ids
-        )
+        # DataPreparation.extract_ids_source_data_and_save(
+        #     directory=DataPreparation.image_folder, csv_path=DataPreparation.data_ids
+        # )
         DataPreparation.extract_all_ids(
             csv_path=DataPreparation.csv_path,
             column=DataPreparation.feature_column,
@@ -192,7 +192,7 @@ class DataTest:
             csv1=DataPreparation.data_ids, csv2=DataPreparation.source_csv_all_ids
         )
 
-        DataTest.test_image_extensions(directory=DataPreparation.image_folder)
+        # DataTest.test_image_extensions(directory=DataPreparation.image_folder)
 
         DataTest.check_csv_extension(csv_path=DataPreparation.csv_path)
 
@@ -214,12 +214,12 @@ class DataTest:
         DataTest.detect_anomaly(
             csv_path=DataPreparation.csv_path, id_column=DataPreparation.id_column
         )
-        stat, p = DataTest.test_image_brightness(
-            source_directory=DataPreparation.image_folder, num_images=3, num_pixels=1000
-        )
-        print(
-            f"Kruskal-Wallis-Test result: {stat}, p-value: {p}. A small p-value (typically less than 0.05) indicates that there is likely a significant difference in the brightness values of the selected images."
-        )
+        # stat, p = DataTest.test_image_brightness(
+        #     source_directory=DataPreparation.image_folder, num_images=3, num_pixels=1000
+        # )
+        # print(
+        #     f"Kruskal-Wallis-Test result: {stat}, p-value: {p}. A small p-value (typically less than 0.05) indicates that there is likely a significant difference in the brightness values of the selected images."
+        # )
 
         DataTest.test_normal_distribution(
             data=DataPreparation.csv_path,
