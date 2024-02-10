@@ -33,6 +33,7 @@ jobs:
               data/train-test-data/*
               data/source_csv/*
               test/*
+              data/dataprep_scripts/*
               data/balanced_source_csv/*
               report_activation.md
               report_data_plots.md
