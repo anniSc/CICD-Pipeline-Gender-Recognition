@@ -59,9 +59,9 @@ jobs:
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
-        # - name: 'Datenaufbereitung und -tests'
-        #   run: |
-        #     python data/dataprep_scripts/datapreparation_test_phase.py 
+        - name: 'Datenaufbereitung und -tests'
+          run: |
+            python data/dataprep_scripts/datapreparation.py 
 
         - name: Generierung und Veröffentlichung der visualisierten Daten,Tests und Verteilungen
           env:
