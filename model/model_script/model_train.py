@@ -435,20 +435,20 @@ if __name__ == "__main__":
     patience = 10
     best_accuracy = 0.96
     early_stopping_counter = 5
-    # transform = transforms.Compose(
-    #     [
-    #         transforms.Resize((180,220)),
-    #         transforms.ToTensor(),
-    #         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-    #     ]
-    # )
-    transform = transforms.Compose([ transforms.Resize((224, 224)), transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) ])
-    train_dataloader, test_dataloader = DataLoaderModelTrain.load_data(
-        train_dir=train_dir,
-        test_dir=test_dir,
-        transform=transform,
-        batch_size=batch_size,
+    transform = transforms.Compose(
+        [
+            transforms.Resize((180,220)),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+        ]
     )
+    # transform = transforms.Compose([ transforms.Resize((224, 224)), transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) ])
+    # train_dataloader, test_dataloader = DataLoaderModelTrain.load_data(
+    #     train_dir=train_dir,
+    #     test_dir=test_dir,
+    #     transform=transform,
+    #     batch_size=batch_size,
+    # )
     trainer = Trainer(
         model,
         train_dataloader=train_dataloader,
