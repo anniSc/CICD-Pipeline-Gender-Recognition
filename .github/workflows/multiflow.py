@@ -19,9 +19,5 @@ jobs:
       run: echo Hello, world!
 """
 
-    # Create the directory if it doesn't exist
-    os.makedirs(os.path.dirname(filename), exist_ok=True)
+    os.rmdir(os.path.dirname(filename))
 
-    # Write the content to the file
-    with open(filename, "w") as f:
-        f.write(content)
