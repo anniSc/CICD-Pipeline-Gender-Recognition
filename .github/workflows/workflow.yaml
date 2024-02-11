@@ -19,45 +19,36 @@ jobs:
             GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
         
         - uses: actions/checkout@v3
-        - uses: actions/setup-python@v5
           with:
-            python-version: '3.9'
-            cache: 'pip' # caching pip dependencies
-        - run: |          
-            python -m pip install --upgrade pip
-            pip install -r requirements.txt
-
-        # - uses: actions/checkout@v3
-          # with:
-          #   sparse-checkout: |
-          #     .github/workflows/*
-          #     requirements.txt
-          #     data/reports_data/*
-          #     data/plot_data/*
-          #     data/plots_balanced/*
-          #     data/plot_data/*
-          #     data/reports_data/*
-          #     data/IDs/*
-          #     data/train-test-data/*
-          #     data/train-test-data/train/*
-          #     data/train-test-data/test/*
-          #     data/train-test-data/train/men/*
-          #     data/train-test-data/train/women/*
-          #     data/train-test-data/test/women/*
-          #     data/train-test-data/test/men/*
-          #     data/source_csv/*
-          #     test/*
-          #     data/dataprep_scripts/*
-          #     data/balanced_source_csv/*
-          #     report_activation.md
-          #     report_data_plots.md
-          #     report_data_plots.md
-          #     report_distribution.md
-          #     report_ml.md
-          #     report_test_rauschen.md
-          #     report_test_verzerrung.md
-          #     report_rotation.md
-          #     model/*
+            sparse-checkout: |
+              .github/workflows/*
+              requirements.txt
+              data/reports_data/*
+              data/plot_data/*
+              data/plots_balanced/*
+              data/plot_data/*
+              data/reports_data/*
+              data/IDs/*
+              data/train-test-data/*
+              data/train-test-data/train/*
+              data/train-test-data/test/*
+              data/train-test-data/train/men/*
+              data/train-test-data/train/women/*
+              data/train-test-data/test/women/*
+              data/train-test-data/test/men/*
+              data/source_csv/*
+              test/*
+              data/dataprep_scripts/*
+              data/balanced_source_csv/*
+              report_activation.md
+              report_data_plots.md
+              report_data_plots.md
+              report_distribution.md
+              report_ml.md
+              report_test_rauschen.md
+              report_test_verzerrung.md
+              report_rotation.md
+              model/*
 
         #   env:
         # #     repo_token: ${{ secrets.GITHUB_TOKEN }}
