@@ -12,12 +12,7 @@ from tqdm import tqdm
 import psutil
 import matplotlib.pyplot as plt
 import time
-import math
-# def math(Hin, Win, padding, dilation, kernel_size, stride):
-#     Hout = math.floor((Hin + 2*padding - dilation*(kernel_size-1) - 1) / stride) + 1
-#     Wout = math.floor((Win + 2*padding - dilation*(kernel_size-1) - 1) / stride) + 1
-#     print(Hout, Wout) 
-#     return Hout, Wout
+
 class SimpleCNN(nn.Module):
     """
     Einfaches CNN-Modell zur Klassifizierung von Bildern.
@@ -40,6 +35,7 @@ class SimpleCNN(nn.Module):
         x (torch.Tensor): Ausgabe des Modells.
     """
     def __init__(self):
+        self.name = "SimpleCNN"
         super(SimpleCNN, self).__init__()
         self.conv1 = nn.Conv2d(3, 6, 5)
         self.pool = nn.MaxPool2d(2, 2)
@@ -59,6 +55,53 @@ class SimpleCNN(nn.Module):
         return x
 
 
+class SimpleCNN2(nn.Module):    
+        
+        def __init__(self):
+            self.name = "SimpleCNN2"
+            super(SimpleCNN2, self).__init__()
+            self.conv1 = nn.Conv2d(3, 6, 5)
+            self.pool = nn.MaxPool2d(2, 2)
+            self.conv2 = nn.Conv2d(6, 16, 5)
+            self.pool = nn.MaxPool2d(2, 2)
+            self.fc1 = nn.Linear(33456, 120)
+            self.fc2 = nn.Linear(120, 84)
+            self.fc3 = nn.Linear(84, 2)
+            self.dropout = nn.Dropout(0.5)
+
+        def forward(self, x):
+            x = self.pool(F.relu(self.conv1(x)))
+            x = self.pool(F.relu(self.conv2(x)))
+            x = x.view(x.size(0), -1)
+            x = self.dropout(F.relu(self.fc1(x)))
+            x = self.dropout(F.relu(self.fc2(x)))
+            x = self.fc3(x)
+            return x
+
+
+class SimpleCNN3(nn.Module):    
+    def __init__(self):
+        self.name = "SimpleCNN3"
+        super(SimpleCNN3, self).__init__()
+        self.conv1 = nn.Conv2d(3, 16, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(16, 32, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(66912, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 2)
+        self.dropout = nn.Dropout(0.5)
+        self.bn1 = nn.BatchNorm2d(16)
+        self.bn2 = nn.BatchNorm2d(32)
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.bn1(self.conv1(x))))
+        x = self.pool(F.relu(self.bn2(self.conv2(x))))
+        x = x.view(x.size(0), -1)
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.dropout(F.relu(self.fc2(x)))
+        x = self.fc3(x)
+        return x
 
 class Trainer:
     """
@@ -159,13 +202,13 @@ class Trainer:
             if accuracy > 0.9:
                 torch.save(
                     self.model.state_dict(),
-                    f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+                    f"model/PyTorch_Trained_Models/{model_name}_model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
                 )
 
             if accuracy > 0.95:
                 torch.save(
                     self.model.state_dict(),
-                    f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+                    f"model/PyTorch_Trained_Models/{model_name}_model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
                 )
                 break
 
@@ -182,12 +225,12 @@ class Trainer:
 
         torch.save(
             self.model.state_dict(),
-            f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+            f"model/PyTorch_Trained_Models/{model_name}_model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
         )
         print(f"Training beende. Genauigkeit: {accuracy:.2f}" + f"Epoch: {epoch}")
         print(
             "Gespeicherter Pfad: ",
-            f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+            f"model/PyTorch_Trained_Models/{model_name}_model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
         )
         self.plot_cpu_memory_usage(cpu_percentages, memory_percentages, time_stamps)
     
@@ -327,7 +370,7 @@ class Main(DataLoaderModelTrain):
         for file in files:
             os.remove(file)
 
-    def train_and_save(self, model_test_path="test/model_to_be_tested/"):
+    def train_and_save(self, model_name,model_test_path="test/model_to_be_tested/"):
         """
         Trainiere das Modell und speichere das trainierte Modell.
 
@@ -344,88 +387,24 @@ class Main(DataLoaderModelTrain):
         if self.model_test_path is not None:
             self.clean_up_pth(model_test_path)
             torch.save(
-                self.model.state_dict(), f"{model_test_path}{formatted_now}" + ".pth"
+                self.model.state_dict(), f"{model_test_path}{model_name}_{formatted_now}" + ".pth"
             )
         else:
             torch.save(
-                self.model.state_dict(), f"{model_test_path}{formatted_now}" + ".pth"
+                self.model.state_dict(), f"{model_test_path}{model_name}_{formatted_now}" + ".pth"
             )
 
 
-class ImageClassificationBase(nn.Module):
-    
-    def training_step(self, batch):
-        images, labels = batch 
-        out = self(images)  # Generate predictions
-        loss = F.cross_entropy(out, labels)  # Calculate loss
-        return loss
-
-    def validation_step(self, batch):
-        images, labels = batch 
-        out = self(images)  # Generate predictions
-        loss = F.cross_entropy(out, labels)  # Calculate loss
-        acc = ImageClassificationBase.accuracy(out, labels)  # Calculate accuracy
-        return {'val_loss': loss.detach(), 'val_acc': acc}
-
-    def validation_epoch_end(self, outputs):
-        batch_losses = [x['val_loss'] for x in outputs]
-        epoch_loss = torch.stack(batch_losses).mean()  # Combine losses
-        batch_accs = [x['val_acc'] for x in outputs]
-        epoch_acc = torch.stack(batch_accs).mean()  # Combine accuracies
-        return {'val_loss': epoch_loss.item(), 'val_acc': epoch_acc.item()}
-
-    def epoch_end(self, epoch, result):
-        print("Epoch [{}], train_loss: {:.4f}, val_loss: {:.4f}, val_acc: {:.4f}".format(
-            epoch, result['train_loss'], result['val_loss'], result['val_acc']))
-
-    def accuracy(outputs, labels):
-        _, preds = torch.max(outputs, dim=1)
-        return torch.tensor(torch.sum(preds == labels).item() / len(preds))
-
-
-
-
-class class_finder(ImageClassificationBase):
-    def __init__(self):
-        super().__init__()
-        self.network = nn.Sequential(
-            nn.Conv2d(3, 32, kernel_size=3, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(32, 64, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2),  # output: 64 x 16 x 16
-            nn.Conv2d(64, 128, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(128, 128, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2),  # output: 128 x 8 x 8
-            nn.Conv2d(128, 256, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(),
-            nn.Conv2d(256, 256, kernel_size=3, stride=1, padding=1),
-            nn.ReLU(),
-            nn.MaxPool2d(2, 2),  # output: 256 x 4 x 4
-            nn.Flatten(),
-            nn.Linear(256*4*4, 1024),
-            nn.ReLU(),
-            nn.Linear(1024, 512),
-            nn.ReLU(),
-            nn.Linear(512, 10)
-        )
-
-    def forward(self, x):
-        return self.network(x)
 
 
 
 
 if __name__ == "__main__":
-    # model = SimpleCNN()
-    model = class_finder()
-    # model = class_finder()
-    batch_size = 64
-    import torch.optim as optim
+    model = SimpleCNN3()
+    model_name = model.name
+    batch_size = 32
 
-    epochs = 50
+    epochs = 5
     test_dir = "data/train-test-data/test"
     model_save_path = f"model/PyTorch_Trained_Models/"
     model_test_path = f"test/model_to_be_tested/model_to_be_tested.pth"
@@ -435,14 +414,13 @@ if __name__ == "__main__":
     patience = 10
     best_accuracy = 0.96
     early_stopping_counter = 5
-    # transform = transforms.Compose(
-    #     [
-    #         transforms.Resize((180,220)),
-    #         transforms.ToTensor(),
-    #         transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-    #     ]
-    # )
-    transform = transforms.Compose([ transforms.Resize((224, 224)), transforms.ToTensor(), transforms.Normalize([0.485, 0.456, 0.406], [0.229, 0.224, 0.225]) ])
+    transform = transforms.Compose(
+        [
+            transforms.Resize((178,218)),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+        ]
+    )
     train_dataloader, test_dataloader = DataLoaderModelTrain.load_data(
         train_dir=train_dir,
         test_dir=test_dir,
@@ -473,5 +451,12 @@ if __name__ == "__main__":
         model_save_path=model_save_path,
         model_test_path=model_test_path,
     )
+    script_path = os.path.abspath(__file__)
+
+    with open(script_path, 'r') as file:
+        script_code = file.read()   
+    with open(f"deploy/model_train.py", 'w') as file:
+        file.write(script_code)
+
     trainer.train()
-    m.train_and_save()
+    m.train_and_save(model_name=model_name)

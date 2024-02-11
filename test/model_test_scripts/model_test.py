@@ -15,8 +15,10 @@ from sklearn.metrics import (accuracy_score, f1_score, precision_score,
 from torchcam.methods import GradCAMpp
 from torchvision import transforms
 from torchvision.transforms.functional import normalize, resize
-
-
+import sys 
+sys.path.insert(0, 'model/model_scripts/model_train.py')
+from model_train import SimpleCNN, SimpleCNN2, SimpleCNN3
+import re
 class ModelTester:
     def test_model_robustness(model, test_dataloader, device):
         model.eval()  # Set the model to evaluation mode
@@ -663,15 +665,16 @@ class TestFairness:
 
 
 class ModelExplainability:
-    def __init__(self, model_path, target_layer):
-        self.model = self.load_model(model_path)
+    def __init__(self, model_path, target_layer, model):
+        # self.model_path = self.load_model(model_path)
+        self.model = model
         self.cam_extractor_grad = GradCAMpp(self.model, target_layer)
+ 
 
-    def load_model(self, model_path):
-        model = SimpleCNN()
-        model.load_state_dict(torch.load(model_path))
-        model.eval()
-        return model
+    # def load_model(self, model_path,model):
+    #     model = self.model.load_state_dict(torch.load(model_path))
+    #     model = self.model.eval()
+    #     return model
 
     def get_image_paths(self, dir_path):
         return [os.path.join(dir_path, img) for img in os.listdir(dir_path)]
@@ -700,6 +703,7 @@ class ModelExplainability:
                         for img in os.listdir(women_dir)]
         selected_images = random.sample(
             men_images, 1) + random.sample(women_images, 1)
+        
         for i, img_path in enumerate(selected_images):
             img = torchvision.io.read_image(img_path)
             input_tensor = torchvision.transforms.functional.normalize(
@@ -718,6 +722,11 @@ class ModelExplainability:
 
 
 class Main_Model_Test(ModelTester, TestFairness, ModelExplainability):
+    
+    def extract_model_name(full_path):
+        filename = os.path.basename(full_path)
+        return filename.split("_")[0]
+    
     def run_tests():
         IMAGE_SIZE = (178, 218)
         BATCH_SIZE_FILE = "test/epochs/batch_size.txt"
@@ -731,7 +740,34 @@ class Main_Model_Test(ModelTester, TestFairness, ModelExplainability):
         )  # Replace with your actual model path
         if not os.path.exists(model_path):
             raise FileNotFoundError(f"No model found at {model_path}")
-        model = SimpleCNN()
+        
+        print(model_path)
+        model_name = Main_Model_Test.extract_model_name(model_path)
+        print(model_name)
+        # # model = SimpleCNN()
+        # model = None
+        # if model_name == "SimpleCNN":
+        #     model = SimpleCNN()
+        # elif model_name == "SimpleCNN2":
+        #     model = SimpleCNN2()
+        # elif model_name == "SimpleCNN3":
+        #     model = SimpleCNN3()
+        model_classes = {
+            "SimpleCNN": SimpleCNN,
+            "SimpleCNN2": SimpleCNN2,
+            "SimpleCNN3": SimpleCNN3
+        } 
+        model_name = Main_Model_Test.extract_model_name(model_path)
+        if model_name in model_classes:
+            model = model_classes[model_name]()
+        else:
+            print(f"Unrecognized model name: {model_name}")
+            model = None
+
+        if model is not None:
+            state_dict = torch.load(model_path)
+            model.load_state_dict(state_dict)
+        
         state_dict = torch.load(model_path)
         model.load_state_dict(state_dict)
         model = model.to(device)
@@ -739,7 +775,7 @@ class Main_Model_Test(ModelTester, TestFairness, ModelExplainability):
             with open(BATCH_SIZE_FILE, "r") as f:
                 batch_size = int(f.read())
         else:
-            batch_size = 64
+            batch_size = 32
         transform = transform = transforms.Compose(
             [
                 transforms.Resize((178, 218)),
@@ -765,7 +801,8 @@ class Main_Model_Test(ModelTester, TestFairness, ModelExplainability):
             model, test_dataloader, device, end_angle=270.0, step=10.0
         )
         TestFairness.run_fairness_tests(train_dataloader, model, transform)
-        ModelExplainability(model_path, "conv2").visualize_model_grad()
+        
+        ModelExplainability(model_path, "conv2", model=model).visualize_model_grad()
 
 
 Main_Model_Test.run_tests()

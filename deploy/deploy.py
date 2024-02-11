@@ -1,22 +1,21 @@
 import os
 import sys
-
+from model_train import SimpleCNN,SimpleCNN2,SimpleCNN3
 import streamlit as st
 import torch
 from model_train import SimpleCNN as SCNN
 from PIL import Image
 from torchvision import transforms
+import re
 
-from model_train import SimpleCNN as SCNN
- 
-sys.path.append("model/model_script/model_train.py")
+
 
 class GenderRecognitionPredictor:
     def __init__(self):
         self.model_dir = "model/PyTorch_Trained_Models"
         self.models = os.listdir(self.model_dir)
 
-    def predict(image, model_path):
+    def predict(image, model_path, model_name):
         # Define the transformation
         transform = transforms.Compose(
             [
@@ -32,7 +31,13 @@ class GenderRecognitionPredictor:
         image = image.unsqueeze(0)
 
         # Load the model
-        model = SCNN()
+        if model_name == "SimpleCNN": 
+            model = SimpleCNN()
+        elif model_name == "SimpleCNN2":
+            model = SimpleCNN2()
+        elif model_name == "SimpleCNN3":
+            model = SimpleCNN3()
+
         model.load_state_dict(torch.load(model_path))
         model.eval()
 
@@ -48,6 +53,14 @@ class GenderRecognitionPredictor:
 class MainDeploy(GenderRecognitionPredictor):
     model_dir = "model/PyTorch_Trained_Models/"
     models = os.listdir(model_dir)
+
+    def extract_model_name(filename):
+        match = re.match(r"(\w+)_model.*\.pth", filename)
+        if match:
+            return match.group(1)
+        else:
+            return None
+
 
     def deploy():
         st.title("Gender Recognition CI/CD Pipeline")
@@ -71,10 +84,12 @@ class MainDeploy(GenderRecognitionPredictor):
                 "Wählen Sie ein Modell aus:",
                 MainDeploy.models)
             model_path = os.path.join(MainDeploy.model_dir, model_name)
+            
+            model_name = MainDeploy.extract_model_name(model_name)  
 
             if st.button("Vorhersage Starten!"):
                 prediction, probabilities = GenderRecognitionPredictor.predict(
-                    image, model_path
+                    image, model_path, model_name= model_name
                 )
                 st.write(f"Prediction: {prediction}")
                 st.write(
