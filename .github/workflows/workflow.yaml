@@ -19,36 +19,36 @@ jobs:
             GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
         
         - uses: actions/checkout@v3
-              # with:
-          #   sparse-checkout: |
-          #     .github/workflows/*
-          #     requirements.txt
-          #     data/reports_data/*
-          #     data/plot_data/*
-          #     data/plots_balanced/*
-          #     data/plot_data/*
-          #     data/reports_data/*
-          #     data/IDs/*
-          #     data/train-test-data/*
-          #     data/train-test-data/train/*
-          #     data/train-test-data/test/*
-          #     data/train-test-data/train/men/*
-          #     data/train-test-data/train/women/*
-          #     data/train-test-data/test/women/*
-          #     data/train-test-data/test/men/*
-          #     data/source_csv/*
-          #     test/*
-          #     data/dataprep_scripts/*
-          #     data/balanced_source_csv/*
-          #     report_activation.md
-          #     report_data_plots.md
-          #     report_data_plots.md
-          #     report_distribution.md
-          #     report_ml.md
-          #     report_test_rauschen.md
-          #     report_test_verzerrung.md
-          #     report_rotation.md
-          #     model/*
+          with:
+            sparse-checkout: |
+              .github/workflows/*
+              requirements.txt
+              data/reports_data/*
+              data/plot_data/*
+              data/plots_balanced/*
+              data/plot_data/*
+              data/reports_data/*
+              data/IDs/*
+              data/train-test-data/*
+              data/train-test-data/train/*
+              data/train-test-data/test/*
+              data/train-test-data/train/men/*
+              data/train-test-data/train/women/*
+              data/train-test-data/test/women/*
+              data/train-test-data/test/men/*
+              data/source_csv/*
+              test/*
+              data/dataprep_scripts/*
+              data/balanced_source_csv/*
+              report_activation.md
+              report_data_plots.md
+              report_data_plots.md
+              report_distribution.md
+              report_ml.md
+              report_test_rauschen.md
+              report_test_verzerrung.md
+              report_rotation.md
+              model/*
 
           env:
            repo_token: ${{ secrets.GITHUB_TOKEN }}
