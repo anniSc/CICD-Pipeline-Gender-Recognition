@@ -19,5 +19,6 @@ jobs:
             data/dataprep_scripts/*
       - name: Run benchmark
         run: |
+          pip install radon
           chmod +x radon.sh
           ./.github/workflows/radon.sh
