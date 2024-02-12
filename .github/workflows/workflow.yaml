@@ -1,7 +1,7 @@
 name: Workflow Test
 on:
   push:
-    branches: [sdf]
+    branches: [Gender_Dataset_kaggle_23000]
     
 jobs:
   build-and-test:
@@ -61,6 +61,7 @@ jobs:
 
         - name: 'Datenaufbereitung und -tests'
           run: |
+            
             python data/dataprep_scripts/datapreparation.py 
 
         - name: Generierung und Veröffentlichung der visualisierten Daten,Tests und Verteilungen
