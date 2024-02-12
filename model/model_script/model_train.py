@@ -404,7 +404,7 @@ if __name__ == "__main__":
     model_name = model.name
     batch_size = 32
 
-    epochs = 5
+    epochs = 10
     test_dir = "data/train-test-data/test"
     model_save_path = f"model/PyTorch_Trained_Models/"
     model_test_path = f"test/model_to_be_tested/model_to_be_tested.pth"
