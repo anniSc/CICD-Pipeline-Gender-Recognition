@@ -599,7 +599,7 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
     Die Hauptklasse, die die verschiedenen Funktionen zur Datenverarbeitung, Datenprüfung, Datenbalancierung und Datenvisualisierung enthält.
     """
     def __init__(self):
-            self.total_images = 5000
+            self.total_images = 10
             self.balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
             self.balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
             self.young_column = "Young"

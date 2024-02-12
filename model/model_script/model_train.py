@@ -413,7 +413,8 @@ if __name__ == "__main__":
     criterion = nn.CrossEntropyLoss() 
     patience = 10
     best_accuracy = 0.96
-    early_stopping_counter = 5
+    early_stopping_counter = 0
+    
     transform = transforms.Compose(
         [
             transforms.Resize((178,218)),
