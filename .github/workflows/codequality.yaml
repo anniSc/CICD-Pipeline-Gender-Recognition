@@ -9,14 +9,14 @@ jobs:
     # container: docker://dvcorg/cml-py3:latest
     steps:
       - uses: actions/checkout@v3
-        with:
-          sparse-checkout: |
-            .github/workflows/radon.sh
-            model/model_script/model_train.py
-            deploy/deploy.py
-            test/model_test_scripts/model_test.py 
-            data/dataprep_scripts/datapreparation.py
-            radon_tests/
+        # with:
+        #   sparse-checkout: |
+        #     .github/workflows/radon.sh
+        #     model/model_script/model_train.py
+        #     deploy/deploy.py
+        #     test/model_test_scripts/model_test.py 
+        #     data/dataprep_scripts/datapreparation.py
+        #     radon_tests/
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Code Quality Check
