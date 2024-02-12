@@ -27,3 +27,7 @@ jobs:
           pip install radon
           chmod +x .github/workflows/radon.sh
           ./.github/workflows/radon.sh
+          git config --local user.email "Aseuc@github.com"
+          git config --local user.name "Aseuc"
+          git add radon_tests/*
+          git push origin Gender_Dataset_kaggle_23000
