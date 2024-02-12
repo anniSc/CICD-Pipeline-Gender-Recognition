@@ -1,4 +1,4 @@
-name: Benchmark
+name: Code Quality Check
 on:
   push:
     branches: [Gender_Dataset_kaggle_23000]
@@ -6,7 +6,7 @@ on:
 jobs:
   benchmark:
     runs-on: [ubuntu-latest]
-    # container: docker://dvcorg/cml-py3:latest
+    container: docker://dvcorg/cml-py3:latest
     steps:
       - uses: actions/checkout@v3
         with:
