@@ -1,4 +1,4 @@
-name: Workflow
+name: Workflow Test
 on:
   push:
     branches: [Gender_Dataset_kaggle_23000]

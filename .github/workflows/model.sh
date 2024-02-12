@@ -39,7 +39,7 @@
 # cml-send-comment $report_file_activation
 
 
-function create_report(){
+create_report(){
     local report_file=$1
     local report_title=$2
     local image_dir=$3
@@ -62,7 +62,7 @@ create_single_report(){
     cml-send-comment $report_file
 }
 
-function create_ml_report(){
+create_ml_report(){
     echo "## Model Metriken" > report_ml.md
     cat test/metrics/metrics.txt >> report_ml.md
     echo "\n## Fairlearn Ergebnisse" >> report_ml.md
