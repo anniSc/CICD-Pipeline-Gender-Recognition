@@ -50,6 +50,7 @@ jobs:
               report_rotation.md
               model/*
               reports/*
+              deploy/*
           env:
            repo_token: ${{ secrets.GITHUB_TOKEN }}
 
@@ -115,8 +116,8 @@ jobs:
       
       - name: ML-Modell auf streamlit deployen
         run: |
-          git pull origin main
-          git push origin main
+          git pull origin Gender_Dataset_kaggle_23000
+          git push origin Gender_Dataset_kaggle_23000
           git config --local user.email "Aseuc@github.com"
           git config --local user.name "Aseuc"
           git add .
