@@ -1,41 +1,40 @@
-name: Code Quality Check
+name: Workflow Test
 on:
   push:
-    branches: [Gender_Dataset_kaggle_23000]
-
+    branches: [sdf]
+        
 jobs:
-  benchmark:
-    runs-on: [ubuntu-latest]
-    container: docker://dvcorg/cml-py3:latest
-    steps:
-      - uses: actions/checkout@v3
-        # with:
-        #   sparse-checkout: |
-        #     .github/workflows/radon.sh
-        #     model/model_script/model_train.py
-        #     deploy/deploy.py
-        #     test/model_test_scripts/model_test.py 
-        #     data/dataprep_scripts/datapreparation.py
-        #     radon_tests/
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      - name: Run Code Quality Check
-        env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          python -m pip install --upgrade pip
-          pip install radon
-      - name: Radon
-        env:    
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          chmod +x .github/workflows/radon.sh
-          ./.github/workflows/radon.sh  
-      - name: Push Codequality
-        env:    
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          git config --local user.email "Aseuc@github.com"
-          git config --local user.name "Aseuc"
-          git add radon_tests/*
-          git push origin Gender_Dataset_kaggle_23000
+  build-and-test:
+      runs-on: [ubuntu-latest]
+      container: docker://dvcorg/cml-py3:latest
+      steps:
+        - name: Caching von pip Abhängigkeiten
+          uses: actions/cache@v3
+          with:
+            path: ~/.cache/pip
+            key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
+            restore-keys: |
+              ${{ runner.os }}-pip-
+          env:
+            GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+        - name: Run Code Quality Check
+          env:
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            python -m pip install --upgrade pip
+            pip install radon
+        - name: Radon
+          env:    
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            chmod +x .github/workflows/radon.sh
+            ./.github/workflows/radon.sh  
+        - name: Push Codequality
+          env:    
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+          run: |
+            git config --local user.email "Aseuc@github.com"
+            git config --local user.name "Aseuc"
+            git add radon_tests/*
+            git push origin Gender_Dataset_kaggle_23000
+  
