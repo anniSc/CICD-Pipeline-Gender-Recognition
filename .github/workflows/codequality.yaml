@@ -35,8 +35,8 @@ jobs:
           env:    
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
-            chmod +x .github/workflows/radon.sh
-            ./.github/workflows/radon.sh  
+            chmod +x radon.sh
+            radon.sh  
         - name: Push Codequality
           env:    
             repo_token: ${{ secrets.GITHUB_TOKEN }}

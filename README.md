@@ -29,6 +29,19 @@ Um dieses Projekt zu installieren, folge diesen Schritten:
 - Erstelle eine Datei namens `.env` im Projektverzeichnis und füge deinen Github Personal Access Token als Umgebungsvariable hinzu, z.B. `GITHUB_TOKEN=xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx`.
 - Erstelle eine Datei namens `.github/workflows/cicd.yml` im Projektverzeichnis und füge den folgenden Inhalt hinzu:
 
-#Beispiel.yaml
-Diese Datei ist nur ein Beispiel wie dein CI/CD Workflow aussehen könnte: 
-```yaml
+# Der Workflow
+
+![Workflow Diagram](bpmn/Workflow.png)
+
+
+# Klassendiagramme der Python-Skripte
+
+# UML-Datenaufbereitungsskript
+![Workflow Diagram](uml_diagrams/classes_dataprep_uml.png)
+# UML-Trainingsskript
+![Workflow Diagram](uml_diagrams/classes_model_train_uml.jpg)
+# UML-Testskript
+![Workflow Diagram](uml_diagrams/classes_model_test_uml.jpg)
+# UML-Deployskript
+![Workflow Diagram](uml_diagrams/classes_deploy_uml.png)
+
