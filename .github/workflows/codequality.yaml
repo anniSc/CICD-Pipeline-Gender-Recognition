@@ -5,8 +5,8 @@ on:
 
 jobs:
   benchmark:
-    name: Check performance regeression.
-    runs-on: ubuntu-latest
+    runs-on: [ubuntu-latest]
+    # container: docker://dvcorg/cml-py3:latest
     steps:
       - uses: actions/checkout@v3
         with:
@@ -17,7 +17,11 @@ jobs:
             deploy/dataprep_scripts/*
             test/model_test_scripts/*
             data/dataprep_scripts/*
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Code Quality Check
+        env:
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
           pip install radon
           chmod +x radon.sh
