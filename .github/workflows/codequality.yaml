@@ -18,7 +18,7 @@ jobs:
             data/dataprep_scripts/datapreparation.py
             radon_tests/
         env:
-          repo_token: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Code Quality Check
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
