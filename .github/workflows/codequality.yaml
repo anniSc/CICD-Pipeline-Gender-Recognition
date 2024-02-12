@@ -41,5 +41,7 @@ jobs:
           run: |
             git config --local user.email "Aseuc@github.com"
             git config --local user.name "Aseuc"
+            git add .github/workflows/radon.sh radon_tests/output_radon_cc_max.txt radon_tests/output_radon_mi_max.txt radon_tests/output_radon_raw_max.txt
             git commit -m "Add generated files" 
+            git commit -a -m "Update radon outputs"
             git push origin Gender_Dataset_kaggle_23000
