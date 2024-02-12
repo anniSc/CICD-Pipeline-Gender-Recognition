@@ -35,3 +35,9 @@ jobs:
             chmod +x .github/workflows/radon.sh
             ./.github/workflows/radon.sh
             
+        - name: Push
+          run: |
+            git config --local user.email "Aseuc@github.com"
+            git config --local user.name "Aseuc"
+            git commit -m "Add generated files" 
+            git push origin Gender_Dataset_kaggle_23000
