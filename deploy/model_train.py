@@ -247,12 +247,13 @@ class Trainer:
         Gibt zurück:
         None
         """
-        plt.plot(time_stamps, cpu_percentages, label="CPU Nutzung")
-        plt.plot(time_stamps, memory_percentages, label="Speichernutzung")
+   
         plt.xlabel("Zeit (s)")
         plt.ylabel("Nutzung (%)")
-        plt.title("CPU- und Speichernutzung über die Zeit")
         plt.legend()
+        plt.title("CPU- und Speichernutzung über die Zeit")
+        plt.plot(time_stamps, cpu_percentages, label="CPU Nutzung", color="red", linewidth=3)
+        plt.plot(time_stamps, memory_percentages, label="Speichernutzung", color="blue", linewidth=3)
         plt.savefig("model/cpu_memory_usage.png")
         plt.show()
 
@@ -366,9 +367,17 @@ class Main(DataLoaderModelTrain):
         Wird benötigt, um die Speicherauslastung zu reduzieren.
         Verhindert, dass die Ladefunktion des zu testenden Modells nicht mehr als ein Modell läd.
         """
-        files = glob.glob(os.path.join(directory, "*.pth"))
-        for file in files:
-            os.remove(file)
+        if not os.path.exists(directory):
+            files = glob.glob(os.path.join(directory, "*.txt"))
+            for file in files:
+                if file == "default.txt":
+                    file = "default.txt"
+                    return file
+        else:
+            files = glob.glob(os.path.join(directory, "*.pth"))
+            for file in files:
+                os.remove(file)
+        return "Modell gelöscht!" 
 
     def train_and_save(self, model_name,model_test_path="test/model_to_be_tested/"):
         """
@@ -384,16 +393,14 @@ class Main(DataLoaderModelTrain):
         now = datetime.now()
         formatted_now = now.strftime("%d-%m-%Y")
 
-        if self.model_test_path is not None:
-            self.clean_up_pth(model_test_path)
+        if self.clean_up_pth(model_test_path) == "default.txt":
+            torch.save(self.model.state_dict(), f"{model_test_path}{model_name}_{formatted_now}" + ".pth")
+        elif self.clean_up_pth(model_test_path) == "Modell gelöscht!":
             torch.save(
                 self.model.state_dict(), f"{model_test_path}{model_name}_{formatted_now}" + ".pth"
             )
         else:
-            torch.save(
-                self.model.state_dict(), f"{model_test_path}{model_name}_{formatted_now}" + ".pth"
-            )
-
+            print("Fehler beim Löschen der .pth-Datei")
 
 
 
@@ -413,7 +420,8 @@ if __name__ == "__main__":
     criterion = nn.CrossEntropyLoss() 
     patience = 10
     best_accuracy = 0.96
-    early_stopping_counter = 5
+    early_stopping_counter = 0
+    
     transform = transforms.Compose(
         [
             transforms.Resize((178,218)),

@@ -247,14 +247,15 @@ class Trainer:
         Gibt zurück:
         None
         """
-        plt.plot(time_stamps, cpu_percentages, label="CPU Nutzung")
-        plt.plot(time_stamps, memory_percentages, label="Speichernutzung")
+   
         plt.xlabel("Zeit (s)")
         plt.ylabel("Nutzung (%)")
-        plt.title("CPU- und Speichernutzung über die Zeit")
-        plt.legend()
+        plt.legend(["CPU", "Speicher"])
+        plt.title("CPU- und Speichernutzung beim Trainieren des Modells")
+        plt.plot(time_stamps, cpu_percentages, label="CPU Nutzung", color="red", linewidth=3)
+        plt.plot(time_stamps, memory_percentages, label="Speichernutzung", color="blue", linewidth=3)
         plt.savefig("model/cpu_memory_usage.png")
-        plt.show()
+        # plt.show()
 
 class DataLoaderModelTrain:
     def __init__(self, batch_size, transform):
@@ -366,9 +367,16 @@ class Main(DataLoaderModelTrain):
         Wird benötigt, um die Speicherauslastung zu reduzieren.
         Verhindert, dass die Ladefunktion des zu testenden Modells nicht mehr als ein Modell läd.
         """
-        files = glob.glob(os.path.join(directory, "*.pth"))
-        for file in files:
-            os.remove(file)
+        if not os.path.exists(directory):
+            files = glob.glob(os.path.join(directory, "*.txt"))
+            for file in files:
+                if file == "default.txt":
+                    return file
+        else:
+            files = glob.glob(os.path.join(directory, "*.pth"))
+            for file in files:
+                os.remove(file)
+        return "Modell gelöscht!" 
 
     def train_and_save(self, model_name,model_test_path="test/model_to_be_tested/"):
         """
@@ -393,7 +401,7 @@ class Main(DataLoaderModelTrain):
             torch.save(
                 self.model.state_dict(), f"{model_test_path}{model_name}_{formatted_now}" + ".pth"
             )
-
+    
 
 
 

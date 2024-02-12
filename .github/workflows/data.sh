@@ -17,6 +17,7 @@ update_report() {
   fi
 }
 
+# Function to create a single report
 create_single_report() {
     local report_file=$1
     local report_title=$2
@@ -27,19 +28,27 @@ create_single_report() {
     cml-send-comment $report_file
 }
 
+# Function to update report with data visualization
+update_report_with_visualization() {
+    local report_file=$1
+    local file_directory=$2
 
+    for file in $file_directory; do
+        echo "\n## Datenvisualisierung für $(basename "$file" .png)" >> $report_file
+        cml-publish "$file" --md >> $report_file
+    done
+}
+
+# Update report with distribution data
 for i in ${!distribution_files[@]}; do
   update_report ${distribution_files[$i]} ${distribution_names[$i]}
 done
 
-for file in data/plot_data/*.png; do
-  echo "\n## Datenvisualisierung für $(basename "$file" .png)" >> $report_file
-  cml-publish "$file" --md >> $report_file
-done
+# Update report with data visualization
+update_report_with_visualization $report_file "data/plot_data/*.png"
 
-echo "\n## Balancierte Daten Geschlechter" >> $report_file
-cml-publish data/plots_balanced/Gender_balanced.png --md >> $report_file
-echo "\n## Balancierte Daten Jung und Alt" >> $report_file
-cml-publish data/plots_balanced/Young_balanced.png --md >> $report_file
+# Create single reports
+create_single_report $report_file "Balancierte Daten Geschlechter" "data/plots_balanced/Gender_balanced.png"
+create_single_report $report_file "Balancierte Daten Jung und Alt" "data/plots_balanced/Young_balanced.png"
 
 cml-send-comment $report_file

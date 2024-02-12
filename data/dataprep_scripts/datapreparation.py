@@ -416,6 +416,16 @@ class DataTest:
     def test_uniform_distribution(
         data, save_distribution_path_txt="data/reports_data/uniform_distribution.txt"
     ):
+        """
+        Überprüft, ob die Daten in einem DataFrame eine gleichmäßige Verteilung aufweisen.
+
+        Parameters:
+            data (str): Der Pfad zur CSV-Datei, die die Daten enthält.
+            save_distribution_path_txt (str, optional): Der Pfad zur Textdatei, in der die Ergebnisse gespeichert werden sollen. Standardmäßig "data/reports_data/uniform_distribution.txt".
+
+        Returns:
+            None
+        """
         df = pd.read_csv(data)
         results = []
         for column_name in df.columns:
@@ -440,6 +450,17 @@ class DataTest:
         save_distribution_path_txt="data/reports_data/binomial_distribution.txt",
         p=0.5,
     ):
+        """
+        Überprüft, ob die Daten in einer CSV-Datei einer Binomialverteilung folgen.
+
+        Parameter:
+            csv_path (str): Der Pfad zur CSV-Datei.
+            save_distribution_path_txt (str, optional): Der Pfad zur Textdatei, in der die Ergebnisse gespeichert werden sollen. Standardmäßig "data/reports_data/binomial_distribution.txt".
+            p (float, optional): Der Erfolgswahrscheinlichkeitsparameter der Binomialverteilung. Standardmäßig 0.5.
+
+        Returns:
+            None
+        """
         df = pd.read_csv(csv_path)
         results = []
         for column_name in df.columns:
@@ -471,6 +492,16 @@ class DataTest:
         csv_path,
         save_distribution_path_txt="data/reports_data/exponential_distribution.txt",
     ):
+        """
+        Überprüft, ob die Daten in einer CSV-Datei einer Exponentialverteilung folgen.
+
+        Parameter:
+            csv_path (str): Der Pfad zur CSV-Datei.
+            save_distribution_path_txt (str, optional): Der Pfad zur Textdatei, in der die Ergebnisse gespeichert werden sollen. Standardmäßig "data/reports_data/exponential_distribution.txt".
+
+        Returns:
+            None
+        """
         df = pd.read_csv(csv_path)
         results = []
         for column_name in df.columns:
@@ -492,6 +523,18 @@ class DataTest:
 
     @staticmethod
     def test_image_brightness(source_directory, num_images=3, num_pixels=1000):
+        """
+        Berechnet die Helligkeit von zufällig ausgewählten Bildern im angegebenen Verzeichnis.
+
+        :param source_directory: Das Verzeichnis, in dem die Bilder gespeichert sind.
+        :type source_directory: str
+        :param num_images: Die Anzahl der zufällig ausgewählten Bilder, die verwendet werden sollen. Standardwert ist 3.
+        :type num_images: int
+        :param num_pixels: Die Anzahl der zufällig ausgewählten Pixel pro Bild, die zur Berechnung der Helligkeit verwendet werden sollen. Standardwert ist 1000.
+        :type num_pixels: int
+        :return: Ein Tupel bestehend aus dem Statistikwert und dem p-Wert des Kruskal-Wallis-Tests.
+        :rtype: tuple
+        """
         from PIL import Image
         from scipy.stats import kruskal
 
@@ -514,7 +557,24 @@ class DataTest:
 
 
 class DataBalancing:
+    """
+    Diese Klasse bietet Methoden zum Ausgleichen von Daten in einer CSV-Datei.
+
+    Methoden:
+    - balance_column(csv_path, column_name): Gleicht die Daten in der angegebenen Spalte der CSV-Datei aus.
+    """
+
     def balance_column(csv_path, column_name):
+        """
+        Gleicht die Daten in der angegebenen Spalte der CSV-Datei aus.
+
+        Args:
+        - csv_path (str): Der Pfad zur CSV-Datei.
+        - column_name (str): Der Name der auszugleichenden Spalte.
+
+        Returns:
+        - df_balanced (pandas.DataFrame): Der ausgeglichene DataFrame.
+        """
         df = pd.read_csv(csv_path)
         counts = df[column_name].value_counts()
         min_count = min(counts.get(-1, 0), counts.get(1, 0))
@@ -599,7 +659,7 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
     Die Hauptklasse, die die verschiedenen Funktionen zur Datenverarbeitung, Datenprüfung, Datenbalancierung und Datenvisualisierung enthält.
     """
     def __init__(self):
-            self.total_images = 10000
+            self.total_images = 10
             self.balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
             self.balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
             self.young_column = "Young"
@@ -618,11 +678,8 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
     def collect_usage(self):
         while not self.stop_thread:
             self.memory_usage.append(psutil.virtual_memory().percent)
-
-            # Get CPU usage
             self.cpu_usage.append(psutil.cpu_percent(interval=1))
             self.timestamps.append(time.time())
-            # Wait for a while before collecting again
             time.sleep(1)
         print(self.cpu_usage, self.memory_usage, self.timestamps)
 
@@ -659,8 +716,8 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
         plt.ylabel("Nutzung (%)")
         plt.legend(["CPU-Nutzung", "Speichernutzung"])
         # plt.figure(facecolor="lightgrey")
-        plt.plot(timestamps, cpu_usage, label="CPU Usage", color="red", linewidth=3)
-        plt.plot(timestamps, memory_usage, label="Memory Usage", color="blue",linewidth=3)
+        plt.plot(timestamps, cpu_usage, label="CPU Auslastung", color="red", linewidth=3)
+        plt.plot(timestamps, memory_usage, label="Speicher Nutzung", color="blue",linewidth=3)
         plt.savefig("data/cpu_memory_usage_on_dataprep.png")
         plt.show()
 
