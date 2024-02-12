@@ -13,7 +13,7 @@ jobs:
           sparse-checkout: |
             .github/workflows/*
             deploy/*
-            model/model_scripts/model_train.py
+            model/model_scripts/*
             deploy/dataprep_scripts/*
             test/model_test_scripts/*
             data/dataprep_scripts/*
