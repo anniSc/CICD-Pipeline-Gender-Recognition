@@ -26,6 +26,8 @@ jobs:
           python -m pip install --upgrade pip
           pip install radon
       - name: Radon
+        env:    
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
          python_files=("model/model_script/model_train.py" "deploy/deploy.py" "data/dataprep_scripts/datapreparation.py", "test/model_test_scripts/model_test.py")
 
@@ -51,6 +53,8 @@ jobs:
           done
 
       - name: Push Codequality
+        env:    
+          repo_token: ${{ secrets.GITHUB_TOKEN }}
         run: |
           git config --local user.email "Aseuc@github.com"
           git config --local user.name "Aseuc"
