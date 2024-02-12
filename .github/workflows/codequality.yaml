@@ -11,13 +11,12 @@ jobs:
       - uses: actions/checkout@v3
         with:
           sparse-checkout: |
-            .github/workflows/* --skip-checks
+            .github/workflows/* 
+            model/model_script/* 
             deploy/* --skip-checks
-            model/model_script/* --skip-checks
-            deploy/dataprep_scripts/* --skip-checks
-            test/model_test_scripts/* --skip-checks
-            data/dataprep_scripts/* --skip-checks
-            radon_tests/* --skip-checks
+            test/model_test_scripts/* 
+            data/dataprep_scripts/*
+            radon_tests/* 
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Run Code Quality Check
