@@ -17,6 +17,14 @@ jobs:
               ${{ runner.os }}-pip-
           env:
             GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
+        - name: Restore cached Primes
+          id: cache-primes-restore
+          uses: actions/cache/restore@v3
+          with:
+            path: |
+              path/to/dependencies
+              some/other/dependencies
+            key: ${{ runner.os }}-primes
         - name: Run Code Quality Check
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
