@@ -1,7 +1,7 @@
 name: Workflow Test
 on:
   push:
-    branches: [Gender_Dataset_kaggle_23000]
+    branches: [main]
     
 jobs:
   build-and-test:
