@@ -28,6 +28,7 @@ jobs:
           pip install radon
           chmod +x .github/workflows/radon.sh
           ./.github/workflows/radon.sh
+          git pull
           git config --local user.email "Aseuc@github.com"
           git config --local user.name "Aseuc"
           git add radon_tests/*
