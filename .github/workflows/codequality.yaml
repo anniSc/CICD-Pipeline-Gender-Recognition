@@ -17,7 +17,7 @@ jobs:
             deploy/dataprep_scripts/*
             test/model_test_scripts/*
             data/dataprep_scripts/*
-      - name: Run benchmark
+      - name: Run Code Quality Check
         run: |
           pip install radon
           chmod +x radon.sh
