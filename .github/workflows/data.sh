@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Declare variables
-report_file_distribution="report_distribution.md"
-report_file="report_data_plots.md"
+report_file_distribution="reports/report_distribution.md"
+report_file="reports/report_data_plots.md"
 distribution_files=("data/report_data/exponential_distribution.txt" "data/report_data/binomia_distribution.txt" "data/report_data/norm_distribution.txt" "data/report_data/uniform_distribution.txt")
 distribution_names=("Exponentialverteilung" "Binomialverteilung" "Normalverteilung" "Uniformverteilung")
 
