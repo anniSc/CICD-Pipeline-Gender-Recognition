@@ -4,9 +4,9 @@ run_radon() {
     local python_file=$1
 
     datetime=$(date +%Y%m%d_%H%M%S)
-    output_file_cc="output_cc${python_file}.txt"
-    output_file_raw="output_raw${python_file}.txt"
-    output_file_mi="output_mi${python_file}.txt"
+    output_file_cc="radon_tests/output_cc_max.txt"
+    output_file_raw="radon_tests/output_raw_max.txt"
+    output_file_mi="radon_tests/output_mi_max.txt"
 
     radon cc ${python_file} > ${output_file_cc}
     radon raw ${python_file} > ${output_file_raw}
