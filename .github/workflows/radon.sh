@@ -4,11 +4,12 @@ run_radon() {
     local python_file=$1
 
     datetime=$(date +%Y%m%d_%H%M%S)
-    output_file="output_${datetime}_${python_file}.txt"
-
-    radon cc ${python_file} > ${output_file}
-    radon raw ${python_file} >> ${output_file}
-    radon mi ${python_file} >> ${output_file}
+    output_file_cc="output_${datetime}_${python_file}.txt"
+    output_file_raw="output_${datetime}_${python_file}.txt"
+    output_file_mi="output_${datetime}_${python_file}.txt"
+    radon cc ${python_file} > ${output_file_cc}
+    radon raw ${python_file} >> ${output_file_raw}
+    radon mi ${python_file} >> ${output_file_mi}
 }
 
 # List of python files
