@@ -15,6 +15,7 @@ import time
 
 class SimpleCNN(nn.Module):
     def __init__(self):
+        self.name = "SimpleCNN"
         super(SimpleCNN, self).__init__()
         self.conv1 = nn.Conv2d(3, 6, 5)
         self.pool = nn.MaxPool2d(2, 2)
@@ -33,6 +34,87 @@ class SimpleCNN(nn.Module):
         x = self.fc3(x)
         return x
 
+
+class SimpleCNN2(nn.Module):    
+    """Ein einfaches CNN-Modell zur Klassifikation von Bildern.
+    
+    Dieses Modell besteht aus mehreren Convolutional- und Fully Connected-Schichten.
+    Es wird verwendet, um Bilder in zwei Kategorien zu klassifizieren.
+    
+    Attributes:
+        name (str): Der Name des Modells.
+        conv1 (nn.Conv2d): Die erste Convolutional-Schicht.
+        pool (nn.MaxPool2d): Die Max Pooling-Schicht.
+        conv2 (nn.Conv2d): Die zweite Convolutional-Schicht.
+        fc1 (nn.Linear): Die erste Fully Connected-Schicht.
+        fc2 (nn.Linear): Die zweite Fully Connected-Schicht.
+        fc3 (nn.Linear): Die dritte Fully Connected-Schicht.
+        dropout (nn.Dropout): Die Dropout-Schicht.
+    """
+        
+    def __init__(self):
+        self.name = "SimpleCNN2"
+        super(SimpleCNN2, self).__init__()
+        self.conv1 = nn.Conv2d(3, 6, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(33456, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 2)
+        self.dropout = nn.Dropout(0.5)
+
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(x.size(0), -1)
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.dropout(F.relu(self.fc2(x)))
+        x = self.fc3(x)
+        return x
+
+
+class SimpleCNN3(nn.Module):    
+    def __init__(self):
+        """
+        Einfache CNN-Architektur mit 3 Convolutional-Schichten.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
+        self.name = "SimpleCNN3"
+        super(SimpleCNN3, self).__init__()
+        self.conv1 = nn.Conv2d(3, 16, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(16, 32, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(66912, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 2)
+        self.dropout = nn.Dropout(0.5)
+        self.bn1 = nn.BatchNorm2d(16)
+        self.bn2 = nn.BatchNorm2d(32)
+
+    def forward(self, x):
+        """
+        Führt die Vorwärtsberechnung des Modells durch.
+
+        Args:
+            x (torch.Tensor): Eingabetensor mit den Dimensionen (batch_size, channels, height, width).
+
+        Returns:
+            torch.Tensor: Ausgabetensor mit den Dimensionen (batch_size, num_classes).
+        """
+        x = self.pool(F.relu(self.bn1(self.conv1(x))))
+        x = self.pool(F.relu(self.bn2(self.conv2(x))))
+        x = x.view(x.size(0), -1)
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.dropout(F.relu(self.fc2(x)))
+        x = self.fc3(x)
+        return x
 
 class Trainer:
     """
@@ -124,13 +206,13 @@ class Trainer:
             if accuracy > 0.9:
                 torch.save(
                     self.model.state_dict(),
-                    f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+                    f"model/PyTorch_Trained_Models/{model_name}_model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
                 )
 
             if accuracy > 0.95:
                 torch.save(
                     self.model.state_dict(),
-                    f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+                    f"model/PyTorch_Trained_Models/{model_name}_model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
                 )
                 break
 
@@ -147,29 +229,38 @@ class Trainer:
 
         torch.save(
             self.model.state_dict(),
-            f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+            f"model/PyTorch_Trained_Models/{model_name}_model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
         )
         print(
             f"Training beende. Genauigkeit: {accuracy:.2f}" +
             f"Epoch: {epoch}")
         print(
             "Gespeicherter Pfad: ",
-            f"model/PyTorch_Trained_Models/model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
+            f"model/PyTorch_Trained_Models/{model_name}_model_epoch_{epoch}_accuracy_{accuracy:.2f}_{formatted_now}.pth",
         )
         self.plot_cpu_memory_usage(cpu_percentages, memory_percentages, time_stamps)
         
     def plot_cpu_memory_usage(self, cpu_percentages, memory_percentages, time_stamps):
-        plt.plot(time_stamps, cpu_percentages, label="CPU Usage")
-        plt.plot(time_stamps, memory_percentages, label="Memory Usage")
-        plt.xlabel("Time (s)")
-        plt.ylabel("Usage (%)")
-        plt.title("CPU and Memory Usage Over Time")
-        plt.legend()
+        """
+        Zeichnet die CPU- und Speichernutzung über die Zeit.
+
+        Parameter:
+        cpu_percentages (Liste): Eine Liste von CPU-Nutzungsprozenten. Jedes Element in der Liste repräsentiert die CPU-Nutzung zu einem bestimmten Zeitpunkt.
+        memory_percentages (Liste): Eine Liste von Speichernutzungsprozenten. Jedes Element in der Liste repräsentiert die Speichernutzung zu einem bestimmten Zeitpunkt.
+        time_stamps (Liste): Eine Liste von Zeitstempeln, die den CPU- und Speichernutzungsprozenten entsprechen. Jedes Element in der Liste repräsentiert den Zeitpunkt, zu dem die entsprechenden CPU- und Speichernutzungsprozentsätze aufgezeichnet wurden.
+
+        Gibt zurück:
+        None
+        """
+   
+        plt.xlabel("Zeit (s)")
+        plt.ylabel("Nutzung (%)")
+        plt.legend(["CPU", "Speicher"])
+        plt.title("CPU- und Speichernutzung beim Trainieren des Modells")
+        plt.plot(time_stamps, cpu_percentages, label="CPU Nutzung", color="red", linewidth=3)
+        plt.plot(time_stamps, memory_percentages, label="Speichernutzung", color="blue", linewidth=3)
         plt.savefig("model/cpu_memory_usage.png")
-        plt.show()
-
-
-
+        # plt.show()
 
 class DataLoaderModelTrain:
     def __init__(self, batch_size, transform):
@@ -223,12 +314,40 @@ class Main(DataLoaderModelTrain):
 
     @staticmethod
     def clean_up_pth(directory):
-        files = glob.glob(os.path.join(directory, "*.pth"))
-        for file in files:
-            os.remove(file)
+        """
+        Löscht .pth-Dateien im angegebenen Verzeichnis.
 
-    def train_and_save(self, model_test_path="test/model_to_be_tested/"):
-        self.trainer.train()
+        Args:
+            directory (str): Der Verzeichnispfad.
+
+        Returns:
+            None
+
+        Wird benötigt, um die Speicherauslastung zu reduzieren.
+        Verhindert, dass die Ladefunktion des zu testenden Modells nicht mehr als ein Modell läd.
+        """
+        if not os.path.exists(directory):
+            files = glob.glob(os.path.join(directory, "*.txt"))
+            for file in files:
+                if file == "default.txt":
+                    return file
+        else:
+            files = glob.glob(os.path.join(directory, "*.pth"))
+            for file in files:
+                os.remove(file)
+        return "Modell gelöscht!" 
+
+    def train_and_save(self, model_name,model_test_path="test/model_to_be_tested/"):
+        """
+        Trainiere das Modell und speichere das trainierte Modell.
+
+        Args:
+            model_test_path (str, optional): Der Verzeichnispfad zum Speichern des zu testenden Modells.
+
+        Returns:
+            None
+        """
+  
         now = datetime.now()
         formatted_now = now.strftime("%d-%m-%Y")
 
@@ -243,21 +362,83 @@ class Main(DataLoaderModelTrain):
         if self.model_test_path is not None:
             self.clean_up_pth(model_test_path)
             torch.save(
-                self.model.state_dict(
-                ), f"{model_test_path}{formatted_now}" + ".pth"
+                self.model.state_dict(), f"{model_test_path}{model_name}_{formatted_now}" + ".pth"
             )
         else:
             torch.save(
-                self.model.state_dict(
-                ), f"{model_test_path}{formatted_now}" + ".pth"
+                self.model.state_dict(), f"{model_test_path}{model_name}_{formatted_now}" + ".pth"
             )
+    
 
 
 
 
 
 if __name__ == "__main__":
-    m = Main()
- 
+    model = SimpleCNN3()
+    model_name = model.name
+    batch_size = 32
 
-    m.train_and_save()
+    epochs = 10
+    test_dir = "data/train-test-data/test"
+    model_save_path = f"model/PyTorch_Trained_Models/"
+    model_test_path = f"test/model_to_be_tested/model_to_be_tested.pth"
+    train_dir = "data/train-test-data/train"
+    optimizer = optim.SGD(model.parameters(), lr=0.001, momentum=0.9)   
+    criterion = nn.CrossEntropyLoss() 
+    patience = 10
+    best_accuracy = 0.96
+    early_stopping_counter = 0
+    
+    transform = transforms.Compose(
+        [
+            transforms.Resize((178,218)),
+            transforms.ToTensor(),
+            transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+        ]
+    )
+    train_dataloader, test_dataloader = DataLoaderModelTrain.load_data(
+        train_dir=train_dir,
+        test_dir=test_dir,
+        transform=transform,
+        batch_size=batch_size,
+    )
+    trainer = Trainer(
+        model,
+        train_dataloader=train_dataloader,
+        test_dataloader=test_dataloader,
+        epochs=epochs,
+        batch_size=batch_size,
+        optimizer=optimizer,
+        patience=patience,
+        best_accuracy=best_accuracy,
+        early_stopping_counter=early_stopping_counter,
+        criterion=criterion
+    )
+    m = Main(
+        batch_size=batch_size,
+        epochs=epochs,
+        test_dir=test_dir,
+        transform=transform,
+        train_dir=train_dir,
+        train_dataloader=train_dataloader,
+        test_dataloader=test_dataloader,
+        model=model,
+        model_save_path=model_save_path,
+        model_test_path=model_test_path,
+    )
+    script_path = os.path.abspath(__file__)
+
+    with open(script_path, 'r') as file:
+        script_code = file.read()   
+    with open(f"deploy/model_train.py", 'w') as file:
+        file.write(script_code)
+
+    with open(script_path, 'r') as file:
+        script_code = file.read()   
+    with open(f"test/model_test_scripts/model_train.py", 'w') as file:
+        file.write(script_code)
+
+
+    trainer.train()
+    m.train_and_save(model_name=model_name)

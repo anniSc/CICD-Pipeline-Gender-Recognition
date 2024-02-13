@@ -1,8 +1,8 @@
 #!/bin/bash
 
 # Declare variables
-report_file_distribution="report_distribution.md"
-report_file="report_data_plots.md"
+report_file_distribution="reports/report_distribution.md"
+report_file="reports/report_data_plots.md"
 distribution_files=("data/report_data/exponential_distribution.txt" "data/report_data/binomia_distribution.txt" "data/report_data/norm_distribution.txt" "data/report_data/uniform_distribution.txt")
 distribution_names=("Exponentialverteilung" "Binomialverteilung" "Normalverteilung" "Uniformverteilung")
 
@@ -17,6 +17,7 @@ update_report() {
   fi
 }
 
+# Function to create a single report
 create_single_report() {
     local report_file=$1
     local report_title=$2
@@ -27,28 +28,27 @@ create_single_report() {
     cml-send-comment $report_file
 }
 
+# Function to update report with data visualization
+update_report_with_visualization() {
+    local report_file=$1
+    local file_directory=$2
 
+    for file in $file_directory; do
+        echo "\n## Datenvisualisierung für $(basename "$file" .png)" >> $report_file
+        cml-publish "$file" --md >> $report_file
+    done
+}
 
-
-# Check each distribution file and update report
+# Update report with distribution data
 for i in ${!distribution_files[@]}; do
   update_report ${distribution_files[$i]} ${distribution_names[$i]}
 done
 
-# Iterate over each file in the plot_data directory
-for file in data/plot_data/*.png; do
-  # Update the report
-  echo "\n## Datenvisualisierung für $(basename "$file" .png)" >> $report_file
-  cml-publish "$file" --md >> $report_file
-done
+# Update report with data visualization
+update_report_with_visualization $report_file "data/plot_data/*.png"
 
-# Update report with balanced data
-echo "\n## Balancierte Daten Geschlechter" >> $report_file
-cml-publish data/plots_balanced/Gender_balanced.png --md >> $report_file
-echo "\n## Balancierte Daten Jung und Alt" >> $report_file
-cml-publish data/plots_balanced/Young_balanced.png --md >> $report_file
+# Create single reports
+create_single_report $report_file "Balancierte Daten Geschlechter" "data/plots_balanced/Gender_balanced.png"
+create_single_report $report_file "Balancierte Daten Jung und Alt" "data/plots_balanced/Young_balanced.png"
 
-# Send the report
 cml-send-comment $report_file
-
-create_single_report "report_ml.md" "CPU/Speicherauslastung" "data/cpu_memory_usage_on_dataprep.png"

@@ -1,0 +1,12 @@
+radon cc model/model_script/model_train.py 
+radon cc deploy/deploy.py 
+radon cc data/dataprep_scripts/datapreparation.py 
+radon cc test/model_test_scripts/model_test.py
+radon mi  deploy/deploy.py 
+radon mi model/model_script/model_train.py
+radon mi data/dataprep_scripts/datapreparation.py
+radon mi test/model_test_scripts/model_test.py
+radon raw model/model_script/model_train.py 
+radon raw deploy/deploy.py
+radon raw data/dataprep_scripts/datapreparation.py
+radon raw test/model_test_scripts/model_test.py
