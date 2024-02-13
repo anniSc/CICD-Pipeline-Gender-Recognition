@@ -20,8 +20,39 @@ jobs:
         
         - uses: actions/checkout@v3
           env:
-           repo_token: ${{ secrets.WORKFLOW_TOKEN }}
-
+           repo_token: ${{secrets.WORKFLOW_TOKEN }}
+          with:
+            sparse-checkout: |
+              .github/workflows/*
+              requirements.txt
+              data/reports_data/*
+              data/plot_data/*
+              data/plots_balanced/*
+              data/plot_data/*
+              data/reports_data/*
+              data/IDs/*
+              data/train-test-data/*
+              data/train-test-data/train/*
+              data/train-test-data/test/*
+              data/train-test-data/train/men/*
+              data/train-test-data/train/women/*
+              data/train-test-data/test/women/*
+              data/train-test-data/test/men/*
+              data/source_csv/*
+              test/*
+              data/dataprep_scripts/*
+              data/balanced_source_csv/*
+              report_activation.md
+              report_data_plots.md
+              report_data_plots.md
+              report_distribution.md
+              report_ml.md
+              report_test_rauschen.md
+              report_test_verzerrung.md
+              report_rotation.md
+              model/*
+              reports/*
+              deploy/*
         - name: Abhängigkeiten installieren
           run: |
             python -m pip install --upgrade pip
@@ -30,18 +61,20 @@ jobs:
 
         - name: Radon
           env:
-            repo_token: ${{ secrets.WORKFLOW_TOKEN }}
+            repo_token: ${{secrets.WORKFLOW_TOKEN}}
           run: |
             chmod +x .github/workflows/radon.sh
             ./.github/workflows/radon.sh
             
-        - name: Push
-          env:
-            repo_token: ${{ secrets.WORKFLOW_TOKEN }}
-          run: |
-            git config --local user.email "Aseuc@github.com"
-            git config --local user.name "Aseuc"
-            git add .github/workflows/radon.sh radon_tests/output_radon_cc_max.txt radon_tests/output_radon_mi_max.txt radon_tests/output_radon_raw_max.txt
-            git commit -m "Add generated files" 
-            git commit -a -m "Update radon outputs"
-            git push origin Gender_Dataset_kaggle_23000
+        # - name: Push
+        #   env:
+        #     repo_token: ${{ secrets.WORKFLOW_TOKEN }}
+        #   run: |
+        #     git config --local user.email "Aseuc@github.com"
+        #     git config --local user.name "Aseuc"
+        #     git add radon_tests/output_radon_cc_max.txt 
+        #     git add radon_tests/output_radon_mi_max.txt 
+        #     git add radon_tests/output_radon_raw_max.txt
+        #     git commit -m "Add generated files" 
+        #     git commit -a -m "Update radon outputs"
+        #     git push origin Gender_Dataset_kaggle_23000
