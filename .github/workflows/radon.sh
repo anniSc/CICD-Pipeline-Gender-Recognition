@@ -1,12 +1,12 @@
-radon cc model/model_script/model_train.py 
-radon cc deploy/deploy.py 
-radon cc data/dataprep_scripts/datapreparation.py 
-radon cc test/model_test_scripts/model_test.py
-radon mi  deploy/deploy.py 
-radon mi model/model_script/model_train.py
-radon mi data/dataprep_scripts/datapreparation.py
-radon mi test/model_test_scripts/model_test.py
-radon raw model/model_script/model_train.py 
-radon raw deploy/deploy.py
-radon raw data/dataprep_scripts/datapreparation.py
-radon raw test/model_test_scripts/model_test.py
+radon cc model/model_script/model_train.py > radon_cc_model_train.txt
+radon cc deploy/deploy.py > radon_cc_deploy.txt
+radon cc data/dataprep_scripts/datapreparation.py > radon_cc_datapreparation.txt 
+radon cc test/model_test_scripts/model_test.py >    radon_cc_model_test.txt
+radon mi  deploy/deploy.py >    radon_mi_deploy.txt 
+radon mi model/model_script/model_train.py >   radon_mi_model_train.txt
+radon mi data/dataprep_scripts/datapreparation.py >  radon_mi_datapreparation.txt
+radon mi test/model_test_scripts/model_test.py > radon_mi_model_test.txt
+radon raw model/model_script/model_train.py  >   radon_raw_model_train.txt
+radon raw deploy/deploy.py >    radon_raw_deploy.txt 
+radon raw data/dataprep_scripts/datapreparation.py > radon_raw_datapreparation.txt
+radon raw test/model_test_scripts/model_test.py > radon_raw_model_test.txt 
