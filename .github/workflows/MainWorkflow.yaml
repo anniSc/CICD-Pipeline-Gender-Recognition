@@ -8,10 +8,10 @@ jobs:
       container: docker://dvcorg/cml-py3:latest
       steps:
         - name: Caching von pip Abhängigkeiten
-          uses: actions/cache@v3
+          uses: actions/cache@v2
           with:
             path: ~/.cache/pip
-            key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
+            key: ${{ runner.os }}-pip-${{hashFiles('**/requirements.txt') }}
             restore-keys: |
               ${{ runner.os }}-pip-
           env:
@@ -84,9 +84,33 @@ jobs:
         env:
           GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
 
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v3
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          sparse-checkout: |
+            .github/workflows/*
+            requirements.txt
+            data/reports_data/*
+            data/plot_data/*
+            data/plots_balanced/*
+            data/plot_data/*
+            data/reports_data/*
+            data/IDs/*
+            data/train-test-data/*
+            data/train-test-data/train/*
+            data/train-test-data/test/*
+            data/train-test-data/train/men/*
+            data/train-test-data/train/women/*
+            data/train-test-data/test/women/*
+            data/train-test-data/test/men/*
+            data/source_csv/*
+            test/*
+            data/dataprep_scripts/*
+            model/*
+            reports/*
+            deploy/*
+            radon_tests/*
       
       - name: ML-Modell auf streamlit deployen
         run: |
