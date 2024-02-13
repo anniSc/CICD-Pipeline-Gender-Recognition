@@ -65,11 +65,12 @@ jobs:
             git config --local user.name "Aseuc"
             git add model/PyTorch_Trained_Models
             git add reports/*
+            git add radon_tests/*
             git commit -m "Add trained model" || echo "No changes to commit"
             git push origin main
         
   deploy:
-    needs: [build-and-test, code_quality_check]
+    needs: [build-and-test]
     runs-on: [ubuntu-latest]
     container: docker://dvcorg/cml-py3:latest
     steps:
