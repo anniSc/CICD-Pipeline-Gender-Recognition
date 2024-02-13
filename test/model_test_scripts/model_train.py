@@ -56,31 +56,55 @@ class SimpleCNN(nn.Module):
 
 
 class SimpleCNN2(nn.Module):    
+    """Ein einfaches CNN-Modell zur Klassifikation von Bildern.
+    
+    Dieses Modell besteht aus mehreren Convolutional- und Fully Connected-Schichten.
+    Es wird verwendet, um Bilder in zwei Kategorien zu klassifizieren.
+    
+    Attributes:
+        name (str): Der Name des Modells.
+        conv1 (nn.Conv2d): Die erste Convolutional-Schicht.
+        pool (nn.MaxPool2d): Die Max Pooling-Schicht.
+        conv2 (nn.Conv2d): Die zweite Convolutional-Schicht.
+        fc1 (nn.Linear): Die erste Fully Connected-Schicht.
+        fc2 (nn.Linear): Die zweite Fully Connected-Schicht.
+        fc3 (nn.Linear): Die dritte Fully Connected-Schicht.
+        dropout (nn.Dropout): Die Dropout-Schicht.
+    """
         
-        def __init__(self):
-            self.name = "SimpleCNN2"
-            super(SimpleCNN2, self).__init__()
-            self.conv1 = nn.Conv2d(3, 6, 5)
-            self.pool = nn.MaxPool2d(2, 2)
-            self.conv2 = nn.Conv2d(6, 16, 5)
-            self.pool = nn.MaxPool2d(2, 2)
-            self.fc1 = nn.Linear(33456, 120)
-            self.fc2 = nn.Linear(120, 84)
-            self.fc3 = nn.Linear(84, 2)
-            self.dropout = nn.Dropout(0.5)
+    def __init__(self):
+        self.name = "SimpleCNN2"
+        super(SimpleCNN2, self).__init__()
+        self.conv1 = nn.Conv2d(3, 6, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.conv2 = nn.Conv2d(6, 16, 5)
+        self.pool = nn.MaxPool2d(2, 2)
+        self.fc1 = nn.Linear(33456, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, 2)
+        self.dropout = nn.Dropout(0.5)
 
-        def forward(self, x):
-            x = self.pool(F.relu(self.conv1(x)))
-            x = self.pool(F.relu(self.conv2(x)))
-            x = x.view(x.size(0), -1)
-            x = self.dropout(F.relu(self.fc1(x)))
-            x = self.dropout(F.relu(self.fc2(x)))
-            x = self.fc3(x)
-            return x
+    def forward(self, x):
+        x = self.pool(F.relu(self.conv1(x)))
+        x = self.pool(F.relu(self.conv2(x)))
+        x = x.view(x.size(0), -1)
+        x = self.dropout(F.relu(self.fc1(x)))
+        x = self.dropout(F.relu(self.fc2(x)))
+        x = self.fc3(x)
+        return x
 
 
 class SimpleCNN3(nn.Module):    
     def __init__(self):
+        """
+        Einfache CNN-Architektur mit 3 Convolutional-Schichten.
+
+        Args:
+            None
+
+        Returns:
+            None
+        """
         self.name = "SimpleCNN3"
         super(SimpleCNN3, self).__init__()
         self.conv1 = nn.Conv2d(3, 16, 5)
@@ -95,6 +119,15 @@ class SimpleCNN3(nn.Module):
         self.bn2 = nn.BatchNorm2d(32)
 
     def forward(self, x):
+        """
+        Führt die Vorwärtsberechnung des Modells durch.
+
+        Args:
+            x (torch.Tensor): Eingabetensor mit den Dimensionen (batch_size, channels, height, width).
+
+        Returns:
+            torch.Tensor: Ausgabetensor mit den Dimensionen (batch_size, num_classes).
+        """
         x = self.pool(F.relu(self.bn1(self.conv1(x))))
         x = self.pool(F.relu(self.bn2(self.conv2(x))))
         x = x.view(x.size(0), -1)
@@ -247,14 +280,15 @@ class Trainer:
         Gibt zurück:
         None
         """
-        plt.plot(time_stamps, cpu_percentages, label="CPU Nutzung")
-        plt.plot(time_stamps, memory_percentages, label="Speichernutzung")
+   
         plt.xlabel("Zeit (s)")
         plt.ylabel("Nutzung (%)")
-        plt.title("CPU- und Speichernutzung über die Zeit")
-        plt.legend()
+        plt.legend(["CPU", "Speicher"])
+        plt.title("CPU- und Speichernutzung beim Trainieren des Modells")
+        plt.plot(time_stamps, cpu_percentages, label="CPU Nutzung", color="red", linewidth=3)
+        plt.plot(time_stamps, memory_percentages, label="Speichernutzung", color="blue", linewidth=3)
         plt.savefig("model/cpu_memory_usage.png")
-        plt.show()
+        # plt.show()
 
 class DataLoaderModelTrain:
     def __init__(self, batch_size, transform):
@@ -366,9 +400,16 @@ class Main(DataLoaderModelTrain):
         Wird benötigt, um die Speicherauslastung zu reduzieren.
         Verhindert, dass die Ladefunktion des zu testenden Modells nicht mehr als ein Modell läd.
         """
-        files = glob.glob(os.path.join(directory, "*.pth"))
-        for file in files:
-            os.remove(file)
+        if not os.path.exists(directory):
+            files = glob.glob(os.path.join(directory, "*.txt"))
+            for file in files:
+                if file == "default.txt":
+                    return file
+        else:
+            files = glob.glob(os.path.join(directory, "*.pth"))
+            for file in files:
+                os.remove(file)
+        return "Modell gelöscht!" 
 
     def train_and_save(self, model_name,model_test_path="test/model_to_be_tested/"):
         """
@@ -393,7 +434,7 @@ class Main(DataLoaderModelTrain):
             torch.save(
                 self.model.state_dict(), f"{model_test_path}{model_name}_{formatted_now}" + ".pth"
             )
-
+    
 
 
 
@@ -404,7 +445,7 @@ if __name__ == "__main__":
     model_name = model.name
     batch_size = 32
 
-    epochs = 5
+    epochs = 10
     test_dir = "data/train-test-data/test"
     model_save_path = f"model/PyTorch_Trained_Models/"
     model_test_path = f"test/model_to_be_tested/model_to_be_tested.pth"
@@ -413,7 +454,8 @@ if __name__ == "__main__":
     criterion = nn.CrossEntropyLoss() 
     patience = 10
     best_accuracy = 0.96
-    early_stopping_counter = 5
+    early_stopping_counter = 0
+    
     transform = transforms.Compose(
         [
             transforms.Resize((178,218)),
@@ -457,8 +499,12 @@ if __name__ == "__main__":
         script_code = file.read()   
     with open(f"deploy/model_train.py", 'w') as file:
         file.write(script_code)
+
+    with open(script_path, 'r') as file:
+        script_code = file.read()   
     with open(f"test/model_test_scripts/model_train.py", 'w') as file:
-            file.write(script_code)
-            
+        file.write(script_code)
+
+
     trainer.train()
     m.train_and_save(model_name=model_name)

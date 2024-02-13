@@ -334,6 +334,16 @@ class DataTest:
 
     @staticmethod
     def test_balance_all_columns(csv_path):
+        """
+        Überprüft das Gleichgewicht aller Spalten in einer CSV-Datei.
+
+        Args:
+            csv_path (str): Der Pfad zur CSV-Datei.
+
+        Returns:
+            None
+
+        """
         df = pd.read_csv(csv_path)
         imbalance_report = []
 
@@ -352,6 +362,15 @@ class DataTest:
 
     @staticmethod
     def test_outliers_IQR(df):
+        """
+        Berechnet den Prozentsatz der Ausreißer für numerische Spalten eines DataFrame unter Verwendung des IQR-Verfahrens.
+
+        Parameters:
+            df (pandas.DataFrame): Der DataFrame, für den die Ausreißer berechnet werden sollen.
+
+        Returns:
+            dict: Ein Wörterbuch, das den Prozentsatz der Ausreißer für jede numerische Spalte enthält.
+        """
         outliers_percentage = {}
         for column_name in df.columns:
             if pd.api.types.is_numeric_dtype(df[column_name]):
@@ -372,6 +391,16 @@ class DataTest:
 
     @staticmethod
     def detect_outliers(df, column_name):
+        """
+        Erkennt Ausreißer in einer gegebenen Spalte eines DataFrame.
+
+        Parameters:
+            df (pandas.DataFrame): Der DataFrame, in dem die Ausreißer erkannt werden sollen.
+            column_name (str): Der Name der Spalte, in der die Ausreißer erkannt werden sollen.
+
+        Returns:
+            pandas.DataFrame: Ein DataFrame, der nur die Ausreißer enthält.
+        """
         Q1 = df[column_name].quantile(0.25)
         Q3 = df[column_name].quantile(0.75)
         IQR = Q3 - Q1
@@ -382,6 +411,15 @@ class DataTest:
 
     @staticmethod
     def detect_anomaly(csv_path, id_column):
+        """
+        Erkennt Anomalien in den Daten.
+
+        :param csv_path: Der Pfad zur CSV-Datei mit den Daten.
+        :type csv_path: str
+        :param id_column: Der Name der Spalte, die die IDs enthält.
+        :type id_column: str
+        :raises ValueError: Wenn Anomalien in den Daten gefunden werden.
+        """
         from sklearn.ensemble import IsolationForest
 
         X = pd.read_csv(csv_path)
@@ -396,6 +434,16 @@ class DataTest:
     def test_normal_distribution(
         data, save_distribution_path_txt="data/plot_data/norm_distribution.txt"
     ):
+        """
+        Überprüft, ob die Daten in einem DataFrame einer Normalverteilung folgen.
+
+        Parameters:
+            data (str): Der Pfad zur CSV-Datei, die die Daten enthält.
+            save_distribution_path_txt (str, optional): Der Pfad zur Textdatei, in der die Ergebnisse gespeichert werden sollen. Standardmäßig "data/plot_data/norm_distribution.txt".
+
+        Returns:
+            None
+        """
         df = pd.read_csv(data)
         results = []
         for column_name in df.columns:
@@ -589,12 +637,32 @@ class DataBalancing:
 
 
 class DataVisualization:
+    """
+    Eine Klasse zur Datenvisualisierung.
+
+    Attributes:
+        balanced_gender_path (str): Der Pfad zur gespeicherten ausgeglichenen Gender-Datei.
+        balanced_young_path (str): Der Pfad zur gespeicherten ausgeglichenen Young-Datei.
+    """
+
     balanced_gender_path = ""
     balanced_young_path = ""
 
     def run_datavis(
         balanced_gender_path, balanced_young_path, column_name, feature_column
     ):
+        """
+        Führt die Datenvisualisierung aus.
+
+        Args:
+            balanced_gender_path (str): Der Pfad zur gespeicherten ausgeglichenen Gender-Datei.
+            balanced_young_path (str): Der Pfad zur gespeicherten ausgeglichenen Young-Datei.
+            column_name (str): Der Name der Spalte für die Auswertung.
+            feature_column (str): Der Name der Merkmals-Spalte.
+
+        Returns:
+            None
+        """
         DataVisualization.histogram_all_columns(
             DataPreparation.csv_path, DataPreparation.data_vis_path
         )
@@ -606,7 +674,7 @@ class DataVisualization:
         DataVisualization.plot_histogram(
             df=df_balanced_gender,
             column_name=DataPreparation.feature_column,
-            title="Balanced Distribution of Genders",
+            title="Ausgeglichene Verteilung der Geschlechter",
             save_path=DataPreparation.data_vis_path,
             save_name="balanced_gender.png",
         )
@@ -617,28 +685,51 @@ class DataVisualization:
         DataVisualization.plot_histogram(
             df=df_balanced_young,
             column_name=DataPreparation.feature_column,
-            title="Balanced Distribution of Young and Old",
+            title="Ausgeglichene Verteilung von Jung und Alt",
             save_path=DataPreparation.data_vis_path,
             save_name="balanced_young.png",
         )
 
     def plot_histogram(df, column_name, title, save_path, save_name):
+        """
+        Erstellt ein Histogramm für eine gegebene Spalte und speichert es ab.
+
+        Args:
+            df (pandas.DataFrame): Der DataFrame, der die Daten enthält.
+            column_name (str): Der Name der Spalte.
+            title (str): Der Titel des Histogramms.
+            save_path (str): Der Pfad zum Speichern des Histogramms.
+            save_name (str): Der Name des gespeicherten Histogramms.
+
+        Returns:
+            None
+        """
         counts = df[column_name].value_counts()
         plt.bar(
-            [f"not {column_name}", f"{column_name}"],
+            [f"nicht {column_name}", f"{column_name}"],
             [counts[-1], counts[1]],
             color=["#ff69b4", "#1f77b4"],
         )
         for i, v in enumerate([counts[-1], counts[1]]):
             plt.text(i, v, str(v), fontsize=12, ha="center", va="bottom")
         plt.title(title)
-        plt.xlabel(f"{column_name} or not {column_name}")
-        plt.ylabel("Count")
+        plt.xlabel(f"{column_name} oder nicht {column_name}")
+        plt.ylabel("Anzahl")
         plt.savefig(f"{save_path}/{save_name}.png")
         # plt.show()
         plt.clf()
 
     def histogram_all_columns(csv_path, save_path):
+        """
+        Erstellt Histogramme für alle Spalten im gegebenen CSV und speichert sie ab.
+
+        Args:
+            csv_path (str): Der Pfad zur CSV-Datei.
+            save_path (str): Der Pfad zum Speichern der Histogramme.
+
+        Returns:
+            None
+        """
         df = pd.read_csv(csv_path)
         for column_name in df.columns:
             if np.issubdtype(
@@ -659,6 +750,20 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
     Die Hauptklasse, die die verschiedenen Funktionen zur Datenverarbeitung, Datenprüfung, Datenbalancierung und Datenvisualisierung enthält.
     """
     def __init__(self):
+            """
+            Initialisiert eine Instanz der Klasse DataPreparation.
+
+            Die Methode initialisiert die Attribute der Klasse, einschließlich der Anzahl der Gesamtbilder,
+            der Pfade zu den ausbalancierten CSV-Dateien, der Spaltennamen für das Alter, der Pfade zu den
+            Ausgabedateien für die Verteilungsberichte, der Listen für den Speicher- und CPU-Verbrauch,
+            der Zeitstempel und der Thread-Steuerungsvariablen.
+
+            Parameter:
+            - self: Die Instanz der Klasse DataPreparation.
+
+            Rückgabewert:
+            - None
+            """
             self.total_images = 3000
             self.balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
             self.balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
@@ -676,40 +781,67 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
             self.thread = threading.Thread(target=self.collect_usage)
             self.time = 0
     def collect_usage(self):
-        while not self.stop_thread:
-            self.memory_usage.append(psutil.virtual_memory().percent)
-            self.cpu_usage.append(psutil.cpu_percent(interval=1))
-            self.timestamps.append(time.time())
-            time.sleep(1)
-        print(self.cpu_usage, self.memory_usage, self.timestamps)
+            """
+            Sammelt die CPU- und Speicherauslastung in regelmäßigen Abständen.
+
+            Diese Methode läuft in einer Schleife, bis der stop_thread-Flag gesetzt ist.
+            In jedem Schleifendurchlauf werden die CPU-Auslastung, die Speicherauslastung
+            und der Zeitstempel erfasst und in den entsprechenden Listen gespeichert.
+
+            Args:
+                self: Die Instanz der Klasse.
+
+            Returns:
+                None
+            """
+            while not self.stop_thread:
+                self.memory_usage.append(psutil.virtual_memory().percent)
+                self.cpu_usage.append(psutil.cpu_percent(interval=1))
+                self.timestamps.append(time.time())
+                time.sleep(1)
+            print(self.cpu_usage, self.memory_usage, self.timestamps)
 
     def run_all(self):
-        self.thread.start()
-        start_time = time.time()
-        DataTest.run_datatest(
-            self.save_binomial_distribution_path_txt,
-            self.save_uniform_distribution_path_txt,
-            self.save_exponential_distribution_path_txt,
-            self.save_norm_distribution_path_txt,
-        )
-        DataVisualization.run_datavis(
-            balanced_gender_path=self.balanced_gender_path,
-            balanced_young_path=self.balanced_young_path,
-            column_name=self.young_column,
-            feature_column=DataPreparation.feature_column,
-        )
+            """
+            Führt alle Schritte der Datenverarbeitung aus, einschließlich der Ausführung von DataTest, DataVisualization und DataPreparation.
+            """
+            self.thread.start()
+            start_time = time.time()
+            DataTest.run_datatest(
+                self.save_binomial_distribution_path_txt,
+                self.save_uniform_distribution_path_txt,
+                self.save_exponential_distribution_path_txt,
+                self.save_norm_distribution_path_txt,
+            )
+            DataVisualization.run_datavis(
+                balanced_gender_path=self.balanced_gender_path,
+                balanced_young_path=self.balanced_young_path,
+                column_name=self.young_column,
+                feature_column=DataPreparation.feature_column,
+            )
 
-        DataPreparation.run_dataprep(total_images=self.total_images)
-        
-        self.stop_thread = True
-        self.thread.join()
-        self.plot_usage()
+            DataPreparation.run_dataprep(total_images=self.total_images)
+            
+            self.stop_thread = True
+            self.thread.join()
+            self.plot_usage()
 
 
     def get_usage_collection(self):
-        return self.cpu_usage, self.memory_usage, self.timestamps
+            """
+            Gibt die CPU-Auslastung, den Speicherverbrauch und die Zeitstempel zurück.
+
+            Returns:
+                Tuple: Ein Tupel bestehend aus der CPU-Auslastung, dem Speicherverbrauch und den Zeitstempeln.
+            """
+            return self.cpu_usage, self.memory_usage, self.timestamps
     
     def plot_usage(self):
+        """
+        Plottet die CPU- und Speichernutzung während der Datenvorbereitung.
+
+        :return: None
+        """
         cpu_usage, memory_usage, timestamps = self.get_usage_collection()
         plt.title("CPU und Speichernutzung während der Datenvorbereitung")
         plt.xlabel("Zeit (s)")

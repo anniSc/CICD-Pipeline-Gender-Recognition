@@ -233,11 +233,11 @@ class TestDataVisualization(unittest.TestCase):
     @mock.patch("datapreparation.DataVisualization.histogram_all_columns")
     def test_histogram_all_columns(self, mock_histogram_all_columns):
         """
-        Test case for the histogram_all_columns method.
+        Testfall für die Methode histogram_all_columns.
 
         Args:
-            self: The object instance.
-            mock_histogram_all_columns: The mocked histogram_all_columns method.
+            self: Die Objektinstanz.
+            mock_histogram_all_columns: Die gemockte Methode histogram_all_columns.
 
         Returns:
             None
