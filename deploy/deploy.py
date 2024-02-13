@@ -12,50 +12,86 @@ import re
 
 class GenderRecognitionPredictor:
     def __init__(self):
+        """
+        Initialisiert eine neue Instanz der Deploy-Klasse.
+        Die Methode lädt die verfügbaren Modelle aus dem angegebenen Verzeichnis.
+        """
         self.model_dir = "model/PyTorch_Trained_Models"
         self.models = os.listdir(self.model_dir)
 
     def predict(image, model_path, model_name):
-        # Define the transformation
-        transform = transforms.Compose(
-            [
-                transforms.Resize((178, 218)),
-                transforms.ToTensor(),
-                transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
-            ]
-        )
-        
-        image = image.convert("RGB")
-        image = image.resize((178, 218))
-        # Apply the transformation and add an extra dimension
-        image = transform(image)
-        image = image.unsqueeze(0)
-        
-        # Load the model
-        if model_name == "SimpleCNN": 
-            model = SimpleCNN()
-        elif model_name == "SimpleCNN2":
-            model = SimpleCNN2()
-        elif model_name == "SimpleCNN3":
-            model = SimpleCNN3()
+            """
+            Führt eine Vorhersage für ein gegebenes Bild mit einem bestimmten Modell durch.
 
-        model.load_state_dict(torch.load(model_path))
-        model.eval()
+            Args:
+                image (PIL.Image): Das Eingangsbild, für das die Vorhersage gemacht werden soll.
+                model_path (str): Der Pfad zum gespeicherten Modell.
+                model_name (str): Der Name des Modells.
 
-        # Make the prediction
-        with torch.no_grad():
-            outputs = model(image)
-            probabilities = torch.nn.functional.softmax(outputs[0], dim=0)
-            _, predicted = torch.max(outputs.data, 1)
+            Returns:
+                tuple: Ein Tupel bestehend aus der vorhergesagten Klasse (int) und den Wahrscheinlichkeiten (numpy.ndarray).
+            """
+            # Define the transformation
+            transform = transforms.Compose(
+                [
+                    transforms.Resize((178, 218)),
+                    transforms.ToTensor(),
+                    transforms.Normalize((0.5, 0.5, 0.5), (0.5, 0.5, 0.5)),
+                ]
+            )
+            
+            image = image.convert("RGB")
+            image = image.resize((178, 218))
+            # Apply the transformation and add an extra dimension
+            image = transform(image)
+            image = image.unsqueeze(0)
+            
+            # Load the model
+            if model_name == "SimpleCNN": 
+                model = SimpleCNN()
+            elif model_name == "SimpleCNN2":
+                model = SimpleCNN2()
+            elif model_name == "SimpleCNN3":
+                model = SimpleCNN3()
 
-        return predicted.item(), probabilities.numpy()
+            model.load_state_dict(torch.load(model_path))
+            model.eval()
+
+            # Make the prediction
+            with torch.no_grad():
+                outputs = model(image)
+                probabilities = torch.nn.functional.softmax(outputs[0], dim=0)
+                _, predicted = torch.max(outputs.data, 1)
+
+            return predicted.item(), probabilities.numpy()
 
 
 class MainDeploy(GenderRecognitionPredictor):
+    """
+    Hauptklasse für die Bereitstellung des Gender Recognition CI/CD-Pipelines.
+
+    Diese Klasse erbt von der GenderRecognitionPredictor-Klasse und enthält Methoden zum Hochladen von Bildern,
+    zur Auswahl eines Modells und zur Durchführung von Vorhersagen.
+
+    Attributes:
+        model_dir (str): Der Verzeichnispfad, in dem die Modelle gespeichert sind.
+        models (list): Eine Liste der Modellnamen, die im model_dir gefunden wurden.
+    """
+
     model_dir = "model/PyTorch_Trained_Models/"
     models = os.listdir(model_dir)
 
     def extract_model_name(filename):
+        """
+        Extrahiert den Modellnamen aus dem Dateinamen.
+
+        Args:
+            filename (str): Der Dateiname des Modells.
+
+        Returns:
+            str: Der extrahierte Modellname.
+            None: Wenn kein Modellname gefunden wurde.
+        """
         match = re.match(r"(\w+)_model.*\.pth", filename)
         if match:
             return match.group(1)
@@ -64,6 +100,12 @@ class MainDeploy(GenderRecognitionPredictor):
 
 
     def deploy():
+        """
+        Startet die Gender Recognition CI/CD-Pipeline.
+
+        Diese Methode zeigt ein Upload-Feld für Bilder an, ermöglicht die Auswahl eines Modells
+        und führt die Vorhersage für das hochgeladene Bild mit dem ausgewählten Modell durch.
+        """
         st.title("Gender Recognition CI/CD Pipeline")
 
         uploaded_files = st.file_uploader(
