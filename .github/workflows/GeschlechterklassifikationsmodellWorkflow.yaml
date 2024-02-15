@@ -2,7 +2,7 @@ name: Geschlechterklassifikationsmodell Workflow
 on:
   push: 
     branches: [main]
-jobs:
+jobs: 
   build-and-test:
       runs-on: [ubuntu-latest]
       container: docker://dvcorg/cml-py3:latest
