@@ -1,6 +1,6 @@
 name: Geschlechterklassifikationsmodell Workflow
 on:
-  push:
+  push: 
     branches: [main]
 jobs:
   build-and-test:
