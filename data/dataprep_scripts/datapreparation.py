@@ -45,7 +45,7 @@ class DataPreparation:
 
     # Variablendeklaration in dem die Visualisierungsdaten gespeichert werden
     data_vis_path = "data/plot_data"
-
+    data_vis_path_balanced = "data/plots_balanced/"
     def run_dataprep(total_images):
         DataPreparation.create_directories()
         DataPreparation.extract_ids(
@@ -432,14 +432,14 @@ class DataTest:
 
     @staticmethod
     def test_normal_distribution(
-        data, save_distribution_path_txt="data/plot_data/norm_distribution.txt"
+        data, save_distribution_path_txt="data/reports_data/norm_distribution.txt"
     ):
         """
         Überprüft, ob die Daten in einem DataFrame einer Normalverteilung folgen.
 
         Parameters:
             data (str): Der Pfad zur CSV-Datei, die die Daten enthält.
-            save_distribution_path_txt (str, optional): Der Pfad zur Textdatei, in der die Ergebnisse gespeichert werden sollen. Standardmäßig "data/plot_data/norm_distribution.txt".
+            save_distribution_path_txt (str, optional): Der Pfad zur Textdatei, in der die Ergebnisse gespeichert werden sollen. Standardmäßig "data/reports_data/norm_distribution.txt".
 
         Returns:
             None
@@ -675,8 +675,8 @@ class DataVisualization:
             df=df_balanced_gender,
             column_name=DataPreparation.feature_column,
             title="Ausgeglichene Verteilung der Geschlechter",
-            save_path=DataPreparation.data_vis_path,
-            save_name="balanced_gender.png",
+            save_path=DataPreparation.data_vis_path_balanced,
+            save_name="balanced_gender",
         )
         df_balanced_young = DataBalancing.balance_column(
             csv_path=DataPreparation.csv_path, column_name=column_name
@@ -686,8 +686,8 @@ class DataVisualization:
             df=df_balanced_young,
             column_name=DataPreparation.feature_column,
             title="Ausgeglichene Verteilung von Jung und Alt",
-            save_path=DataPreparation.data_vis_path,
-            save_name="balanced_young.png",
+            save_path=DataPreparation.data_vis_path_balanced,
+            save_name="balanced_young",
         )
 
     def plot_histogram(df, column_name, title, save_path, save_name):
@@ -764,7 +764,7 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
             Rückgabewert:
             - None
             """
-            self.total_images = 50000
+            self.total_images = 10
             self.balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
             self.balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
             self.young_column = "Young"

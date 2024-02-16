@@ -33,14 +33,20 @@ update_report_with_visualization() {
     local report_file=$1
     local file_directory=$2
 
-    for file in $file_directory; do
-        echo "\n## Datenvisualisierung für $("$file" .png)" >> $report_file
+    for file in "$file_directory"/*; do
+        echo "Datenvisualisierung für $(basename "$file" .png)" >> $report_file
         cml-publish "$file" --md >> $report_file
     done
+    cml-send-comment $report_file
 }
 
 
-update_report_with_visualization $report_file "data/plot_data/*.png"
-create_single_report $report_file "Balancierte Daten Geschlechter" "data/plots_balanced/Gender_balanced.png"
-create_single_report $report_file "Balancierte Daten Jung und Alt" "data/plots_balanced/Young_balanced.png"
+update_report_with_visualization $report_file "data/plot_data/"
+create_single_report $report_file "Balancierte Daten Geschlechter" "data/plots_balanced/balanced_gender.png"
+create_single_report $report_file "Balancierte Daten Jung und Alt" "data/plots_balanced/balanced_young.png"
+
+create_single_report $report_file_distribution "Verteilung der Daten" "data/reports_data/binomial_distribution.txt"
+create_single_report $report_file_distribution "Verteilung der Daten" "data/reports_data/norm_distribution.txt"
+create_single_report $report_file_distribution "Verteilung der Daten" "data/reports_data/exponential_distribution.txt"
+create_single_report $report_file_distribution "Verteilung der Daten" "data/reports_data/uniform_distribution.txt"
 cml-send-comment $report_file
