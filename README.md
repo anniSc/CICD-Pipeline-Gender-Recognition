@@ -46,17 +46,25 @@ Der Workflow wird in der folgenden Grafik kompakt dargestellt, um einen Überbli
 
 # UML-Datenaufbereitungsskript
 
+Im folgenden Bild wird das Datenaufbereitungsskript aufgezeigt mit allen Funktionen, Klassen und Vererbungen. Unter folgenden Link hast du die Möglichkeit die komplette Dokumentation zu diesem Skript hier anzuschauen: [Datenaufbereitungsskript](documentation/deploy_docu.md)
+
 ![plot](./uml_diagrams/classes_dataprep_uml.png?raw=true "Datenaufbereitungsskript")
 
 
 # UML-Trainingsskript
-Hier ist das Trainingsskript zusehen, welches dafür da ist das Modell zu trainieren. Durch einen Klick auf das Bild, kannst du das Bild direkt vergrößern lassen und unter folgenden Link kannst du die Dokumentation zu diesem Skript sehen.
 
-![plot](./uml_diagrams/classes_model_train_uml.jpg?raw=true "Datenaufbereitungsskript")
+Im folgenden Bild wird das Trainingsskript aufgezeigt mit allen Funktionen, Klassen und Vererbungen. Unter folgenden Link hast du die Möglichkeit die komplette Dokumentation zu diesem Skript hier anzuschauen: [Trainingsskript](documentation/model_train_docu.md)
+
+![plot](./uml_diagrams/classes_model_train_uml.jpg?raw=true "Trainingsskript")
 
 # UML-Testskript
 
-![plot](./uml_diagrams/classes_model_test_uml.jpg?raw=true "Datenaufbereitungsskript")
+Im folgenden Bild wird das Trainingsskript aufgezeigt mit allen Funktionen, Klassen und Vererbungen. Unter folgenden Link hast du die Möglichkeit die komplette Dokumentation zu diesem Skript hier anzuschauen: [Testskript](documentation/model_test_docu.md)
+
+![plot](./uml_diagrams/classes_model_test_uml.jpg?raw=true "Testskript")
 
 # UML-Deployskript
+
+Im folgenden Bild wird das Deployskript aufgezeigt mit allen Funktionen und Vererbungen. Unter folgenden Link hast du die Möglichkeit die komplette Dokumentation zu diesem Skript hier anzuschauen: [Deployskript](documentation/deploy_docu.md)
+
 ![plot](./uml_diagrams/classes_deploy_uml.png?raw=true "Deployskript")
