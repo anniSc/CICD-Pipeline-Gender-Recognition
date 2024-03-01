@@ -36,7 +36,9 @@ Um dieses Projekt zu installieren, folge diesen Schritten:
 - Erstelle eine Workflowdatei z. B. `.github/workflows/cicd.yml` im Projektverzeichnis un
 
 # Der Workflow
+
 Der Workflow wird in der folgenden Grafik kompakt dargestellt, um einen Überblick über die relevanten Schritte zu erhalten. 
+
 ![Workflow Diagram](bpmn/Workflow.png?raw=true "Workflow")
 
 
