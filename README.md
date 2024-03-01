@@ -48,7 +48,7 @@ Der Workflow wird in der folgenden Grafik kompakt dargestellt, um einen Überbli
 
 # UML-Datenaufbereitungsskript
 
-Im folgenden Bild wird das Datenaufbereitungsskript aufgezeigt mit allen Funktionen, Klassen und Vererbungen. Unter folgenden Link hast du die Möglichkeit die komplette Dokumentation zu diesem Skript hier anzuschauen: [Datenaufbereitungsskript](documentation/deploy_docu.md)
+Im folgenden Bild wird das Datenaufbereitungsskript aufgezeigt mit allen Funktionen, Klassen und Vererbungen. Unter folgenden Link hast du die Möglichkeit die komplette Dokumentation zu diesem Skript hier anzuschauen: [Datenaufbereitungsskript](documentation/dataprep_docu.md)
 
 ![plot](./uml_diagrams/classes_dataprep_uml.png?raw=true "Datenaufbereitungsskript")
 

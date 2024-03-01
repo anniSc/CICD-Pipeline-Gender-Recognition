@@ -1,3 +1,53 @@
+# Inhaltsverzeichnis für die Dokumentation des Skriptes model_test.py
+
+
+- [Klasse ModelTester](#klasse-modeltester)
+  - [Methode: test_model_robustness](#methode-test_model_robustness)
+  - [Methode: evaluate_model](#methode-evaluate_model)
+  - [Methode: test_predicts](#methode-test_predicts)
+  - [Methode: test_noise_robustness](#methode-test_noise_robustness)
+  - [Methode: add_distortion](#methode-add_distortion)
+  - [Methode: test_distortion_robustness](#methode-test_distortion_robustness)
+  - [Methode: rotate_and_convert](#methode-rotate_and_convert)
+  - [Methode: test_model_robustness_rotation](#methode-test_model_robustness_rotation)
+  - [Methode: rotate_tensor_image](#methode-rotate_tensor_image)
+  - [Methode: test_rotation_robustness](#methode-test_rotation_robustness)
+
+---
+
+- [Klasse: TestFairness](#klasse-testfairness)
+    - [Beschreibung](#beschreibung-5)
+    - [Methoden](#methoden)
+      - [Methode: get_sensitive_features](#methode-get_sensitive_features)
+      - [Methode: get_fairness_metrics](#methode-get_fairness_metrics)
+      - [Methode: create_gender_labelled_csv](#methode-create_gender_labelled_csv)
+      - [Methode: plot_bar_fairnesscheck](#methode-plot_bar_fairnesscheck)
+      - [Methode: analyze_metrics](#methode-analyze_metrics)
+      - [Methode: clear_file](#methode-clear_file)
+      - [Methode: run_fairness_tests](#methode-run_fairness_tests)
+
+---
+
+- [Klasse: ModelExplainability](#klasse-modelexplainability)
+    - [Beschreibung](#beschreibung-13)
+  - [Methoden](#methoden)
+    - [`__init__(self, model_path, target_layer, model)`](#__init__self-model_path-target_layer-model)
+
+    - [Methoden: get_image_paths, select_images, process_image](#methoden-get_image_paths-select_images-process_image)
+    - [Methode: get_image_paths](#methode-get_image_paths)
+    - [Methode: select_images](#methode-select_images)
+    - [Methode: process_image](#methode-process_image)
+
+    - [Methode: visualize_model_grad](#methode-visualize_model_grad)
+
+    ---
+
+- [Klasse: Main_Model_Test](#klasse-main_model_test)
+  - [Beschreibung](#beschreibung-15)
+  - [Verwendung](#verwendung)
+  - [Methode: extract_model_name](#methode-extract_model_name)
+  - [Methode: run_tests](#funktion-run_tests)
+
 # Klasse ModelTester
 
 Die `ModelTester` Klasse stellt Methoden zum Testen und Evaluieren eines Modells bereit.
@@ -32,6 +82,8 @@ print(f"Recall: {recall}")
 print(f"F1-Score: {f1}")
 ``` 
 
+---
+
 # Methode: evaluate_model
 
 Die Methode `evaluate_model` bewertet das Modell anhand des Testdatensatzes und gibt die Metriken zurück.
@@ -61,6 +113,7 @@ print(f"Präzision: {precision}")
 print(f"Recall: {recall}")
 print(f"F1-Score: {f1}")
 ``` 
+---
 
 # Methode: test_predicts
 
@@ -85,6 +138,7 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # Gerät
 
 test_predicts(model, test_dataloader, device)
 ``` 
+---
 
 # Methode: test_noise_robustness
 
@@ -113,6 +167,9 @@ device = torch.device("cuda" if torch.cuda.is_available() else "cpu")  # Gerät
 
 test_noise_robustness(model, test_dataloader, device)
 ``` 
+---
+
+
 # Methode: add_distortion
 
 Die Methode `add_distortion` fügt eine Verzerrung zum Bild hinzu.
@@ -154,6 +211,8 @@ Die Methode `test_distortion_robustness` testet die Robustheit des Modells gegen
 
 Die Methode führt einen Test durch, um die Robustheit des Modells gegenüber Verzerrungen zu bewerten. Sie verändert den Verzerrungsfaktor schrittweise von `start_distortion` bis `end_distortion` und testet das Modell mit jedem Schritt. Die Testergebnisse (Genauigkeit, Präzision, Recall und F1-Score) werden zusammen mit einem Beispielbild für jede Verzerrungsstufe ausgegeben und gespeichert. Der Test wird abgebrochen, wenn die Genauigkeit unter 70% fällt.
 
+---
+
 # Methode: rotate_and_convert
 
 Die Methode `rotate_and_convert` dreht das Bild um den angegebenen Winkel und konvertiert es in ein anderes Format.
@@ -180,6 +239,8 @@ from PIL import Image
 image = Image.open('path_to_image.jpg')
 rotate_and_convert(image, 45, 'path_to_test_images')
 ``` 
+
+---
 
 # Methode: test_model_robustness_rotation
 
@@ -208,6 +269,9 @@ device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 
 accuracy, precision, recall, f1 = test_model_robustness_rotation(model, test_dataloader, device)
 ``` 
+
+---
+
 # Methode: rotate_tensor_image
 
 Die Methode `rotate_tensor_image` rotiert ein Bildtensor um den angegebenen Winkel.
@@ -233,6 +297,10 @@ angle = 45  # Der Rotationswinkel in Grad
 
 rotated_image = rotate_tensor_image(image_tensor, angle)
 ``` 
+
+---
+
+
 # Methode: test_rotation_robustness
 
 Die Methode `test_rotation_robustness` testet die Robustheit des Modells gegenüber Rotationen.
@@ -264,6 +332,12 @@ device = 'cuda' if torch.cuda.is_available() else 'cpu'
 
 test_rotation_robustness(model, test_dataloader, device)
 ``` 
+
+
+---
+
+
+
 # Klasse: TestFairness
 
 Die Klasse `TestFairness` stellt Methoden zur Durchführung von Fairness-Tests für ein Modell bereit.
@@ -292,6 +366,10 @@ Die Klasse `TestFairness` stellt Methoden zur Durchführung von Fairness-Tests f
 
 Die Klasse `TestFairness` ist dafür konzipiert, Fairness-Tests auf einem Modell durchzuführen. Sie bietet Methoden zum Erhalten sensibler Merkmale, Berechnen von Fairness-Metriken, Erstellen von gelabelten CSV-Dateien, Plotten von Fairness-Checks, Analysieren von Metriken und Durchführen von Fairness-Tests.
 
+
+---
+
+
 # Methode: get_sensitive_features
 
 Die Methode `get_sensitive_features` gibt die sensiblen Merkmale zurück.
@@ -316,6 +394,11 @@ Die Methode liest eine kombinierte CSV-Datei ein, die die sensiblen Merkmale ent
 merged_csv = "test/csv/gender_labelled.csv"
 sensitive_features = get_sensitive_features(merged_csv)
 ```
+
+
+---
+
+
 # Methode: get_fairness_metrics
 
 Die Methode `get_fairness_metrics` berechnet die Fairness-Metriken.
@@ -348,6 +431,9 @@ sensitive_features = ["men", "women"]
 metrics, y_test, y_pred = get_fairness_metrics(merged_csv, train_dataloader, model, transform, sensitive_features)
 ``` 
 
+---
+
+
 # Methode: create_gender_labelled_csv
 
 Die Methode `create_gender_labelled_csv` erstellt eine CSV-Datei mit den gelabelten Daten.
@@ -377,6 +463,10 @@ output_csv = "data/train/gender_labelled.csv"
 
 output_path = create_gender_labelled_csv(men_folder, women_folder, output_csv)
 ```
+
+---
+
+
 # Methode: plot_bar_fairnesscheck
 
 Die Methode `plot_bar_fairnesscheck` erstellt ein Balkendiagramm der Fairness-Metriken.
@@ -400,6 +490,10 @@ metrics = ...  # Ein MetricFrame-Objekt
 
 plot_bar_fairnesscheck(groups, accuracies, metrics)
 ```
+
+---
+
+
 # Methode: analyze_metrics
 
 Die Methode `analyze_metrics` analysiert die Fairness-Metriken.
@@ -429,6 +523,10 @@ y_pred = [1, 1, -1, 1, -1, -1]
 
 metric_frame = analyze_metrics(sensitive_features, y_test, y_pred)
 ```
+
+---
+
+
 # Methode: clear_file
 
 Die Methode `clear_file` löscht den Inhalt einer Datei.
@@ -448,6 +546,8 @@ file_path = "data/test.txt"
 
 clear_file(file_path)
 ```
+---
+
 
 # Methode: run_fairness_tests
 
@@ -472,6 +572,10 @@ transform = ...  # Ein torchvision.transforms.Compose-Objekt
 
 run_fairness_tests(train_dataloader, model, transform)
 ```
+
+
+---
+
 # Klasse: ModelExplainability
 
 Die Klasse `ModelExplainability` dient zur Erklärung von Modellvorhersagen.
@@ -502,7 +606,11 @@ model = ...  # Ein Modellobjekt
 model_explainability = ModelExplainability(model_path, target_layer, model)
 ```
 
+---
+
 # Methoden: get_image_paths, select_images, process_image
+
+
 
 ## Methode: get_image_paths
 
@@ -529,6 +637,9 @@ Die Methode `select_images` wählt zufällig ein Bild aus dem Männerverzeichnis
 
 - Eine Liste der ausgewählten Bildpfade (list[str]).
 
+---
+
+
 ## Methode: process_image
 
 Die Methode `process_image` verarbeitet das Bild anhand des angegebenen Bildpfads.
@@ -552,6 +663,10 @@ image_paths = get_image_paths(men_dir)
 selected_images = select_images(men_dir, women_dir)
 processed_image = process_image(img_path)
 ```
+
+---
+
+
 # Methode: visualize_model_grad
 
 Die Methode `visualize_model_grad` visualisiert das Modell anhand ausgewählter Bilder aus den Männer- und Frauenverzeichnissen.
@@ -588,8 +703,9 @@ Die Klasse `Main_Model_Test` kann verwendet werden, um ein Modell auf verschiede
 
 Um die Klasse `Main_Model_Test` zu verwenden, erstellen Sie eine Instanz der Klasse und rufen Sie die gewünschten Testmethoden auf. Die spezifischen Methoden, die aufgerufen werden, hängen von den spezifischen Tests ab, die Sie auf Ihrem Modell ausführen möchten.
 
+---
 
-# Funktion: extract_model_name
+# Methode: extract_model_name
 
 Die Funktion `extract_model_name` extrahiert den Modellnamen aus dem angegebenen vollständigen Pfad.
 
@@ -613,7 +729,7 @@ model_name = extract_model_name(full_path)
 ```
 
 
-# Funktion: run_tests
+# Methode: run_tests
 
 Die Funktion `run_tests` führt verschiedene Tests auf dem Modell aus.
 

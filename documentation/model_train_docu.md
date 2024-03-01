@@ -1,8 +1,59 @@
-# Klassen: SimpleCNN, SimpleCNN2 und SimpleCNN3
+
+
+# Inhaltsverzeichnis für die Dokumentation des Trainingsskriptes
+
+
+- [Dokumentation der SimpleCNNs](#dokumentation-der-simplecnns)
+  - [Dokumentation der Klasse SimpleCNN](#dokumentation-der-klasse-simplecnn)
+    - [Attribute](#attribute)
+    - [Methoden](#methoden)
+  - [SimpleCNN2](#simplecnn2)
+    - [Attribute](#attribute-1)
+    - [Methoden](#methoden-1)
+  - [SimpleCNN3](#simplecnn3)
+    - [Attribute](#attribute-2)
+    - [Methoden](#methoden-2)
+
+---
+
+- [Klasse: Trainer](#klasse-trainer)
+    - [Methoden: `train` und `plot_cpu_memory_usage`](#methoden-train-und-plot_cpu_memory_usage)
+        - [Methode: `train`](#methode-train)
+        - [Methode: `train`](#methode-plot_cpu_memory_usage)
+
+---
+
+- [Klasse: `DataLoaderModelTrain`](#klasse-dataloadermodeltrain)
+  - [Methode: `__init__`](#methode-__init__)
+  - [Methode: `load_data`](#methode-load_data)
+
+---
+
+- [Klasse: `DataLoaderModelTrain`](#klasse-dataloadermodeltrain)
+  - [Methode: `__init__`](#methode-__init__)
+  - [Methode: `load_data`](#methode-load_data)
+
+---
+
+- [Klasse: `Main`](#klasse-main)
+  - [Methode: `__init__`](#methode-__init__)
+  - [Methode: `clean_up_pth`](#methode-clean_up_pth)
+  - [Methode: `train_and_save`](#methode-train_and_save)
+
+--- 
+
+- [Python-Script: `model_train.py`](#python-script-model_trainpy)
+  - [Hauptablauf](#hauptablauf)
+
+
+
+
+
+# Dokumentation der SimpleCNNs
 
 Diese Klassen definieren drei einfache Convolutional Neural Network (CNN) Modelle zur Klassifizierung von Bildern.
 
-## SimpleCNN
+## Dokumentation der Klasse SimpleCNN
 
 ### Attribute
 
@@ -140,39 +191,6 @@ Diese Methode lädt die Trainings- und Testdaten und erstellt DataLoader-Objekte
 ### Gibt zurück
 
 - `tuple`: Ein Tupel bestehend aus den Trainings- und Test-DataLoader-Objekten.
-
-# Klasse: `DataLoaderModelTrain`
-
-Diese Klasse ist verantwortlich für das Laden von Trainings- und Testdaten und das Erstellen von DataLoader-Objekten.
-
-## Methode: `__init__`
-
-Diese Methode initialisiert die `DataLoaderModelTrain`-Klasse.
-
-### Parameter
-
-- `batch_size` (int): Die Batch-Größe für den DataLoader.
-- `transform` (torchvision.transforms): Die Transformationen, die auf die Daten angewendet werden sollen.
-
-### Gibt zurück
-
-None
-
-## Methode: `load_data`
-
-Diese Methode lädt die Trainings- und Testdaten und erstellt DataLoader-Objekte.
-
-### Parameter
-
-- `test_dir` (str): Der Pfad zum Verzeichnis mit den Testdaten.
-- `train_dir` (str): Der Pfad zum Verzeichnis mit den Trainingsdaten.
-- `transform` (torchvision.transforms): Die Transformationen, die auf die Daten angewendet werden sollen.
-- `batch_size` (int): Die Batch-Größe für den DataLoader.
-
-### Gibt zurück
-
-- `tuple`: Ein Tupel bestehend aus den Trainings- und Test-DataLoader-Objekten.
-
 
 
 # Klasse: `Main`

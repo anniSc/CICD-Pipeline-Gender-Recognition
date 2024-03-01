@@ -1,3 +1,17 @@
+## Inhaltsverzeichnis für das Skript deploy.py 
+
+- [Python-Klasse: `MainDeploy`](#python-klasse-maindeploy)
+  - [Attribute](#attribute)
+  - [Methoden](#methoden)
+    - [`extract_model_name`](#extract_model_name)
+    - [`deploy`](#deploy)
+- [Python-Klasse: `GenderRecognitionPredictor`](#python-klasse-genderrecognitionpredictor)
+  - [Methoden](#methoden-1)
+    - [`__init__`](#1)
+    - [`predict`](#predict)
+
+
+
 # Python-Klasse: `MainDeploy`
 
 Diese Klasse ist verantwortlich für die Bereitstellung der Gender Recognition CI/CD-Pipeline. Sie erbt von der `GenderRecognitionPredictor`-Klasse und enthält Methoden zum Hochladen von Bildern, zur Auswahl eines Modells und zur Durchführung von Vorhersagen.
@@ -41,7 +55,7 @@ Diese Klasse ist verantwortlich für das Laden und Vorhersagen von Geschlechtser
 
 ## Methoden
 
-### `__init__` {#init}
+### `__init__` {#1}
 
 Diese Methode initialisiert eine neue Instanz der `GenderRecognitionPredictor`-Klasse. Sie lädt die verfügbaren Modelle aus dem angegebenen Verzeichnis.
 
