@@ -37,8 +37,7 @@ Um dieses Projekt zu installieren, folge diesen Schritten:
 
 # Der Workflow
 Der Workflow wird in der folgenden Grafik kompakt dargestellt, um einen Überblick über die relevanten Schritte zu erhalten. 
-![Workflow Diagram](bpmn/Workflow.png)
-
+![Workflow Diagram](bpmn/Workflow.png?raw=true "Workflow")
 
 
 
@@ -47,19 +46,17 @@ Der Workflow wird in der folgenden Grafik kompakt dargestellt, um einen Überbli
 
 # UML-Datenaufbereitungsskript
 
-<a target="_blank" rel="noopener noreferrer nofollow" href="https://raw.githubusercontent.com/Aseuc/CICD-Pipeline-Gender-Recognition/main/uml_diagrams/classes_dataprep_uml.png?token=GHSAT0AAAAAACNPVS2PGITKCLRPLDR7FEASZPB55BA"><img src="https://raw.githubusercontent.com/Aseuc/CICD-Pipeline-Gender-Recognition/main/uml_diagrams/classes_dataprep_uml.png?token=GHSAT0AAAAAACNPVS2PGITKCLRPLDR7FEASZPB55BA" alt="example" style="max-width: 100%;"></a>
+![plot](./uml_diagrams/classes_dataprep_uml.png?raw=true "Datenaufbereitungsskript")
 
 
 # UML-Trainingsskript
 Hier ist das Trainingsskript zusehen, welches dafür da ist das Modell zu trainieren. Durch einen Klick auf das Bild, kannst du das Bild direkt vergrößern lassen und unter folgenden Link kannst du die Dokumentation zu diesem Skript sehen.
 
-<a target="_blank" rel="noopener noreferrer nofollow" href="https://raw.githubusercontent.com/Aseuc/CICD-Pipeline-Gender-Recognition/main/uml_diagrams/classes_model_train_uml.jpg?token=GHSAT0AAAAAACNPVS2OIP55ML5RYWP3ZWDQZPB6ACA"><img src="https://raw.githubusercontent.com/Aseuc/CICD-Pipeline-Gender-Recognition/main/uml_diagrams/classes_model_train_uml.jpg?token=GHSAT0AAAAAACNPVS2OIP55ML5RYWP3ZWDQZPB6ACA" alt="example" style="max-width: 100%;"></a>
+![plot](./uml_diagrams/classes_model_train_uml.jpg?raw=true "Datenaufbereitungsskript")
 
 # UML-Testskript
 
-<a target="_blank" rel="noopener noreferrer nofollow" href="https://raw.githubusercontent.com/Aseuc/CICD-Pipeline-Gender-Recognition/main/uml_diagrams/classes_model_test_uml.jpg?token=GHSAT0AAAAAACNPVS2OXBITPQVLGD2GLWTMZPB56IA"><img src="https://raw.githubusercontent.com/Aseuc/CICD-Pipeline-Gender-Recognition/main/uml_diagrams/classes_model_test_uml.jpg?token=GHSAT0AAAAAACNPVS2OXBITPQVLGD2GLWTMZPB56IA" alt="example" style="max-width: 100%;"></a>
-
+![plot](./uml_diagrams/classes_model_test_uml.jpg?raw=true "Datenaufbereitungsskript")
 
 # UML-Deployskript
-![Workflow Diagram](uml_diagrams/classes_deploy_uml.png)
-
+![plot](./uml_diagrams/classes_deploy_uml.png?raw=true "Deployskript")
