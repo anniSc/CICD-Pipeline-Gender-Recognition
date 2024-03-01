@@ -1,2 +1,2 @@
 ## Balancierte Daten Jung und Alt
-![](https://asset.cml.dev/f74f33109b164c7d436fb0b76981ceb7df190d23?cml=png)
+![](https://asset.cml.dev/aaf453011c2cdd24d6b975d03c8140d8c7bd072c?cml=png)
