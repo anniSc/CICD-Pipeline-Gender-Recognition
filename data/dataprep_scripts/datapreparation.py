@@ -169,11 +169,34 @@ class DataPreparation:
 
 
 class DataTest:
+    """
+    Eine Klasse, die verschiedene Tests und Überprüfungen auf den Daten durchführt.
+
+    Attributes:
+        save_norm_distribution_path_txt (str): Der Pfad zum Speichern der Normalverteilungsdaten.
+        save_binomial_distribution_path_txt (str): Der Pfad zum Speichern der Binomialverteilungsdaten.
+        save_uniform_distribution_path_txt (str): Der Pfad zum Speichern der Gleichverteilungsdaten.
+        save_exponential_distribution_path_txt (str): Der Pfad zum Speichern der Exponentialverteilungsdaten.
+    """
+     
     save_norm_distribution_path_txt = ""
     save_binomial_distribution_path_txt = ""
     save_uniform_distribution_path_txt = ""
     save_exponential_distribution_path_txt = ""
 
+
+    """
+        Führt verschiedene Tests und Überprüfungen auf den Daten aus.
+
+        Args:
+            save_binomial_distribution_path_txt (str): Der Pfad zum Speichern der Binomialverteilungsdaten.
+            save_uniform_distribution_path_txt (str): Der Pfad zum Speichern der Gleichverteilungsdaten.
+            save_exponential_distribution_path_txt (str): Der Pfad zum Speichern der Exponentialverteilungsdaten.
+            save_norm_distribution_path_txt (str): Der Pfad zum Speichern der Normalverteilungsdaten.
+
+        Returns:
+            None
+    """
     def run_datatest(
         save_binomial_distribution_path_txt,
         save_uniform_distribution_path_txt,
