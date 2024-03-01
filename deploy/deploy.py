@@ -121,7 +121,7 @@ class MainDeploy(GenderRecognitionPredictor):
                 image,
                 caption="Hochgeladenes Bild.",
                 use_column_width=True)
-            st.write("Bild erfolgreich hochgeladen.")
+            st.write('<style>img { max-width: 50%; height: auto; }</style>', unsafe_allow_html=True)
 
             # Use the list of models as options for the selectbox
             model_name = st.selectbox(
