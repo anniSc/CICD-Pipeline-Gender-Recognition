@@ -1,3 +1,3 @@
 ## Erklärbarkeit
-![](https://asset.cml.dev/44c371052b8ec2ebfc14d746246343a5be7a1670?cml=png)
-![](https://asset.cml.dev/6faff818fcf9f4566ca04bb0047bcf38759e8004?cml=png)
+![](https://asset.cml.dev/f3b99eb39cae2e9d3bccf7a4d566160c73d75dbf?cml=png)
+![](https://asset.cml.dev/faa97a833c15d41425270f64f71612df1140da0c?cml=png)
