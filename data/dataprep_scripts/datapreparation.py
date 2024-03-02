@@ -787,7 +787,7 @@ class Main(DataPreparation, DataTest, DataBalancing, DataVisualization):
             Rückgabewert:
             - None
             """
-            self.total_images = 10
+            self.total_images = 2000
             self.balanced_gender_path = "data/balanced_source_csv/gender_balanced.csv"
             self.balanced_young_path = "data/balanced_source_csv/young_balanced.csv"
             self.young_column = "Young"

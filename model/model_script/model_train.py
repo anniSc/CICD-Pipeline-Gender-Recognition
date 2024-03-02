@@ -443,7 +443,7 @@ class Main(DataLoaderModelTrain):
 if __name__ == "__main__":
     model = SimpleCNN3()
     model_name = model.name
-    batch_size = 32
+    batch_size = 64
 
     epochs = 10
     test_dir = "data/train-test-data/test"
