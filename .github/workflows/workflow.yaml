@@ -1,12 +1,23 @@
+# Name des Workflows
 name: Geschlechterklassifikationsmodell Workflow
+
+# Der Workflow wird ausgelöst, wenn ein Push auf den `main` Branch erfolgt
 on:
   push: 
     branches: [main]
+
+# Definition der Jobs
 jobs: 
   build-and-test:
+      # Das Betriebssystem, auf dem der Workflow ausgeführt wird
       runs-on: [ubuntu-latest]
+
+      # Verwendung des Docker-Containers von dvcorg/cml-py3
       container: docker://dvcorg/cml-py3:latest
+      
+      # Definition der Schritte
       steps:
+        # Caching von pip Abhängigkeiten
         - name: Caching von pip Abhängigkeiten
           uses: actions/cache@v2
           with:
@@ -18,45 +29,57 @@ jobs:
           env:
             GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
         
+        # Herunterladen des Repositories, um die Dateien verwenden zu können
         - uses: actions/checkout@v3
           env:
-           repo_token: ${{ secrets.GITHUB_TOKEN }}
-
+           # Der Token wird benötigt, um das Repository herunterzuladen
+            repo_token: ${{ secrets.GITHUB_TOKEN }}
+   
+        # Installieren der Abhängigkeiten
         - name: Abhängigkeiten installieren
           run: |
             python -m pip install --upgrade pip
             pip install -r requirements.txt
 
+        # Ausführen der Datenaufbereitung und -tests
         - name: 'Datenaufbereitung und -tests'
           run: |
-            
             python data/dataprep_scripts/datapreparation.py 
 
-        - name: Generierung und Veröffentlichung der visualisierten Daten,Tests und Verteilungen
+        # Generierung und Veröffentlichung der visualisierten Daten, Tests und Verteilungen
+        - name: Generierung und Veröffentlichung der visualisierten Daten, Tests und Verteilungen
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
+            # Ausführung der data.sh Datei um die Daten zu generieren und zu veröffentlichen
             chmod +x .github/workflows/data.sh
             ./.github/workflows/data.sh
             
-       
+       # Modell trainieren, Testberichte erstellen und Metriken veröffentlichen 
         - name: 'Modell trainieren'
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
           run: |
+            # Ausführung der model_train.py Datei um das Modell zu trainieren
             python model/model_script/model_train.py
+            
+            # Ausführung der resource_model_train.sh Datei um die Metriken zu generieren und zu veröffentlichen
             chmod +x .github/workflows/resource_model_train.sh
             ./.github/workflows/resource_model_train.sh
             
+        # Modell testen auf Robustheit, Genauigkeit, Recall, F1-Score    
         - name: 'Modell testen'                   
           run: |
+            # Ausführung der model_test.py Datei um das Modell zu testen           
             python test/model_test_scripts/model_test.py
         
+        # Herunterladen der Code Qualitätstests
         - name: Code Qualitätstests Herunterladen
           uses: actions/download-artifact@v2
           with:
             name: test-results
 
+        # Veröffentlichung der Modellmetriken und Hinzufügen neuer Modelle in das Repository
         - name: "Veröffenlichung der Modellmetriken und hinzufügen neuer Modelle in das Repository"
           env:
             repo_token: ${{ secrets.GITHUB_TOKEN }}
@@ -71,25 +94,37 @@ jobs:
             git commit -m "Add trained model" || echo "No changes to commit"
             git push origin main
         
+  # Definiert den Job "deploy", der nach dem Job "build-and-test" ausgeführt wird
   deploy:
+    # Der Job benötigt den Job "build-and-test"
     needs: [build-and-test]
+    # Der Job wird auf einem Ubuntu-Latest-Runner ausgeführt
     runs-on: [ubuntu-latest]
+    # Der Job wird in einem Docker-Container mit dem Image "dvcorg/cml-py3:latest" ausgeführt
     container: docker://dvcorg/cml-py3:latest
     steps:
+      # Der erste Schritt ist das Caching von pip-Abhängigkeiten
       - name: Caching von pip Abhängigkeiten
+        # Verwendet die GitHub Action "actions/cache@v3" zum Caching
         uses: actions/cache@v3
         with:
+          # Der Pfad zum Cache-Verzeichnis
           path: ~/.cache/pip
+          # Der Schlüssel für den Cache
           key: ${{ runner.os }}-pip-${{hashFiles('requirements.txt') }}
+          # Die Schlüssel zum Wiederherstellen des Caches
           restore-keys: |
             ${{ runner.os }}-pip-
+        # Setzt die Umgebungsvariable GITHUB_TOKEN
         env:
           GITHUB_TOKEN: "${{secrets.GITHUB_TOKEN}}"
 
+      # Der zweite Schritt ist das Auschecken des Codes
       - uses: actions/checkout@v3
         env:
           repo_token: ${{ secrets.GITHUB_TOKEN }}
         with:
+          # Die Dateien, die ausgecheckt werden sollen
           sparse-checkout: |
             .github/workflows/*
             requirements.txt
@@ -113,7 +148,8 @@ jobs:
             reports/*
             deploy/*
             radon_tests/*
-      
+
+      # Der dritte Schritt ist das Deployment des ML-Modells auf Streamlit
       - name: ML-Modell auf streamlit deployen
         run: |
           git pull origin main
@@ -124,10 +160,12 @@ jobs:
           git commit -m "Add generated file" -a || echo "No changes to commit"
           git push origin main
 
+  # Definiert den Job "code_quality_check", der auf einem Ubuntu-Latest-Runner ausgeführt wird
   code_quality_check:
       runs-on: [ubuntu-latest]
       container: docker://dvcorg/cml-py3:latest
       steps:
+        # Der erste Schritt ist das Caching von pip-Abhängigkeiten
         - name: Caching von pip Abhängigkeiten
           uses: actions/cache@v3
           with:
@@ -137,7 +175,8 @@ jobs:
               ${{ runner.os }}-pip-
           env:
             GITHUB_TOKEN: "${{secrets.WORKFLOW_TOKEN}}"
-        
+
+        # Der zweite Schritt ist das Auschecken des Codes
         - uses: actions/checkout@v3
           env:
             repo_token: ${{secrets.WORKFLOW_TOKEN }}
@@ -165,18 +204,22 @@ jobs:
               reports/*
               deploy/*
               radon_tests/*
+
+        # Der dritte Schritt ist das Installieren der Abhängigkeiten
         - name: Abhängigkeiten installieren
           run: |
             python -m pip install --upgrade pip
             pip install radon 
 
+        # Der vierte Schritt ist das Ausführen von Radon zur Code-Qualitätsprüfung
         - name: Radon
           env:
             repo_token: ${{secrets.WORKFLOW_TOKEN}}
           run: |
             chmod +x .github/workflows/radon.sh
             ./.github/workflows/radon.sh
-          
+
+        # Der fünfte Schritt ist das Hochladen der Testergebnisse zu GitHub
         - name: Upload test results to GitHub
           uses: actions/upload-artifact@v2
           with:
