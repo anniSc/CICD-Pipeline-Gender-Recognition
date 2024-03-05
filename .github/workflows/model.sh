@@ -1,3 +1,4 @@
+# Funktion um den Report zu aktualisieren, zu senden und zu erstellen
 create_report(){
     local report_file=$1
     local report_title=$2
@@ -11,6 +12,8 @@ create_report(){
     cml-send-comment $report_file
 }
 
+
+# Funktion um einzelnen Report zu erstellen, zu aktualisieren und zu senden
 create_single_report(){
     local report_file=$1
     local report_title=$2
@@ -21,6 +24,7 @@ create_single_report(){
     cml-send-comment $report_file
 }
 
+# Funktion um den spezifischen Report zu aktualisieren, zu senden und zu erstellen
 create_ml_report(){
     echo "## Model Metriken" > report_ml.md
     cat test/metrics/metrics.txt >> report_ml.md
