@@ -1,4 +1,3 @@
 ## Modellmetriken
-![](https://asset.cml.dev/2898bd78b144d971255a186036d162d0c183ad90?cml=png)
-![](https://asset.cml.dev/ec96ecc6cb3e7ae297cb201781b86fb032d221b6?cml=png)
-![](https://asset.cml.dev/db79d211fa8ac7a73dd2bb165baad17451e817e5?cml=png)
+![](https://asset.cml.dev/9f17ba6ebcc2a100aeb026dd4e2d3216b5c83318?cml=png)
+![](https://asset.cml.dev/8149dd4238daf09f5871b880ca63b3afab467baa?cml=png)
