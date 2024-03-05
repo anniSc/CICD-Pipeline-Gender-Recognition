@@ -89,6 +89,11 @@ class TestModelTrain(unittest.TestCase):
     """
 
     def __init__(self, methodName: str = "runTest") -> None:
+        """
+        Initialisiert eine Instanz der TestModelTrain-Klasse.
+
+        :param methodName: Der Name der Testmethode.
+        """
         super().__init__(methodName)
         self.model = SimpleCNN()
         self.model2 = SimpleCNN2()

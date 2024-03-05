@@ -137,10 +137,10 @@ class MainDeploy(GenderRecognitionPredictor):
                 )
                 st.write(f"Prediction: {prediction}")
                 st.write(
-                    f"Wahrscheinlichkeit das auf dem Bilde ein Mann ist: {probabilities[0]*100}%"
+                    f"Wahrscheinlichkeit das auf dem Bild ein Mann ist: {probabilities[0]*100}%"
                 )
                 st.write(
-                    f"Wahrscheinlichkeit das auf dem Bilde eine Frau ist: {probabilities[1]*100}%"
+                    f"Wahrscheinlichkeit das auf dem Bild eine Frau ist: {probabilities[1]*100}%"
                 )
 
 
