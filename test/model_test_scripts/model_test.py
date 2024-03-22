@@ -38,6 +38,7 @@ class ModelTester:
         Returns:
             tuple: Ein Tupel mit den berechneten Metriken (Genauigkeit, Präzision, Recall, F1-Score).
         """
+        print("Testing Robustness")
         model.eval()  # Setze das Modell in den Evaluationsmodus
         true_labels = []
         predicted_labels = []
